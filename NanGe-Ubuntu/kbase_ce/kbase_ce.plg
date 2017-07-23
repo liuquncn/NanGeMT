@@ -1,0 +1,38 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: kbase_ce - Win32 DebugWork--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "c:\windows\TEMP\RSPB1A3.TMP" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "KBMS" /Fo"DebugWork/" /Fd"DebugWork/" /FD /GZ /c 
+"D:\lang\program\mtprogram\kbase_ce\chncutrbase.cpp"
+"D:\lang\program\mtprogram\kbase_ce\chndictn.cpp"
+"D:\lang\program\mtprogram\kbase_ce\chnprsrbase.cpp"
+"D:\lang\program\mtprogram\kbase_ce\engbldrbase.cpp"
+"D:\lang\program\mtprogram\kbase_ce\engmakrbase.cpp"
+"D:\lang\program\mtprogram\kbase_ce\lexdbase.cpp"
+]
+Creating command line "cl.exe @c:\windows\TEMP\RSPB1A3.TMP" 
+Creating command line "link.exe -lib /nologo /out:"..\mtoutput\DebugWork\kbase_ce.lib"  .\DebugWork\chncutrbase.obj .\DebugWork\chndictn.obj .\DebugWork\chnprsrbase.obj .\DebugWork\engbldrbase.obj .\DebugWork\engmakrbase.obj .\DebugWork\lexdbase.obj "
+<h3>Output Window</h3>
+Compiling...
+chncutrbase.cpp
+chndictn.cpp
+chnprsrbase.cpp
+engbldrbase.cpp
+engmakrbase.cpp
+lexdbase.cpp
+Generating Code...
+Creating library...
+
+
+
+<h3>Results</h3>
+kbase_ce.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

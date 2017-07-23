@@ -1,0 +1,61 @@
+这是一个小型机器翻译系统，由复旦大学计算机科学计算学院陶晓鹏开发，这是一个基于规则的翻译系统，采用的知识库主要来自北京大学计算语言研究所，我把这个系统称为through。使用者请注明来源，并请尊重陶晓鹏和北京大学计算语言研究所的知识产权。
+
+现在这一套程序包含C++和Python（2.7.3）两个版本（Python版本还未完全完成，英语的词形变化还未完成）。C++版本可以同时在windows和ubuntu下编译和运行（感谢现在的不同平台的c++编译器越来越接近了）。输入句子放在文件chnsent.txt中，翻译结果直接显示在屏幕上。
+
+--如果在Windows下运行
+
+解压后，找到其中的through.sln文件，在vs2010中打开，就可以编译和运行了。
+如果要在命令行运行，在through这个主目录下输入，
+
+>debug\through.exe
+
+就可以运行了。
+
+--如果在Ubuntu下，则用
+
+>make
+
+先编译，然后运行
+
+>through
+
+就可以了。
+
+--如果使用python版本，无论在Windows还是Ubuntu下，直接输入
+>./through.py
+
+---------------
+
+需要补充说明的是，windows和ubuntu都需要加装第三方软件boost，
+
+ubuntu很简单，输入
+
+sudo apt-get install libboost-regex-dev
+
+就可以了。windows稍复杂，3个步骤，
+
+1）下载boost，链接如下
+
+http://sourceforge.net/projects/boost/files/boost/1.53.0/
+
+2）解压后，安装boost，两个步骤，
+  2.1） 点击windows 开始-->visual studio 2010-->visual studio tools-->visual studio 命令提示
+  2.2)  cd 到boost解压后的主目录，依次运行
+     >bootstrap.bat
+     >.\b2
+
+3) 用vs2010打开project4工程文件后，
+  3.1) 点击 项目-->属性-->配置属性-->C/C++ -->常规 设置附加的包含目录  ~\boost_1_53_0
+  3.2) 点击 项目-->属性-->配置属性-->链接器-->常规 设置附加库目录 ~\boost_1_53_0\stage\lib
+
+谢谢尝试，有问题请发电子邮件给我，xptao@fudan.edu.cn
+
+----------
+
+This machine translate system, we called "through", is very small. It can be used as a example to show how machine translation based on rules runs. It is developed by TAO Xiaopeng, from School of Computer Science, Fudan Univ. The knowledge base is from the Institute of Computational Linguistics at Peking University. There are two versions of the system, Python and C++. The system of C++ can be compiled and run both on VS 2010 of Windows and gcc of Ubuntu. It uses uses the boost-regex library. The system of Python is not finished for the flexion of English word. 
+
+The input sentences are in the file, named "chnsent.txt", the output is shown on the screen directly. To install boost-regex on ubuntu, use the following command
+
+>sudo apt-get install libboost-regex-dev
+
+Thank you for trying it and you can send email to me (xptao@fudan.edu.cn) if you have any problem of "through".

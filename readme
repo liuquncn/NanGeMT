@@ -1,0 +1,7 @@
+NanGe - A Rule-based Chinese-English Machine Translation System
+
+A Chinese-English Machine Translation System based on Knowledge (NanGe)
+
+这个汉英机器翻译软件来自中科院计算所和北大计算语言所大约于2000年合作完成的汉英机器翻译系统，系统主要设计者为中科院计算所的刘群，语言知识库的主要完成者为北大计算语言所的詹卫东。特别地，使用了北大计算语言所俞士汶教授主持完成的现代汉语语法信息词典。当时的系统使用了Windows下的VC6.0集成环境，是一个多窗口的运行程序，现在经过他们的同意，由陶晓鹏将核心代码抽取出来，改编成运行在 Ubuntu（32-bit）和 Windows 系统下的命令行式的程序，并命名为南阁（NanGe）。
+
+This Chinese-English machine translation program is extracted from the system developed by Institute of Computing Technology at Chinese Academy of Sciences (ICT) and Institute of Computational Linguistics at Peking University (ICL) in during 1993-1998. The main designer and developer of the whole system is LIU Qun, who is from ICT. The main contributor of the knowledgebase is ZHAN Weidong, who is from ICL. Specially, the knowledgebase includes “Modern Chinese Syntax Features Dictionary”, which is finished in ICL under the lead of Professor YU Shiwen. The original system was developed in VC 6.0, which is a Microsoft IDE running on Windows. Now TAO Xiaopeng extraced these core codes and rewrote and transformed them to be a command program running in Ubuntu (32-bit) and Windows terminal under the warrant of LIU Qun and ZHAN Weidong, and gave a name as NanGe (Chinese Pinyin for South House).

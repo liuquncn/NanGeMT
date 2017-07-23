@@ -1,0 +1,280 @@
+
+/* @@  的(u) 
+       CONDITION  SELECT u  */
+@@ 比(n-v-p)
+       CONDITION FIND(L,NEXT,X){%X.yx=的|之} SELECT n
+       OTHERWISE SELECT v-p
+
+@@ 差(n-v-a)
+       CONDITION FIND(L,NEXT,X){%X.yx=很|太|更|最|极|非常|挺|怪|至|这么|那么|十分|特别}  SELECT  a
+       CONDITION FIND(L,NEXT,X){%X.yx=的|之} SELECT n
+      OTHERWISE SELECT v-n-a
+@@ 要(c-v)
+       CONDITION FIND(L,NEXT,X){%X.yx=一定|可能|可以|愿|愿意|可|肯定|必须|必定|定} SELECT v
+       OTHERWISE SELECT c-v
+@@ 象(n-v-p)
+       CONDITION FIND(R,NEXT,X){%X.yx=~一样},FIND(R,NEAR,X){%X.yx=一样}SELECT p
+       OTHERWISE SELECT v-p-n
+@@ 试验(n-v)
+       CONDITION FIND(L,NEXT,X){%X.yx=个|次} SELECT n
+       OTHERWISE SELECT v-n
+/*做这个试验->lw*/
+@@ 信(n-v)
+       CONDITION FIND(L,NEXT,X){%X.yx=的|封|写|看|读} SELECT n
+       OTHERWISE SELECT v-n
+@@ 本(n-r-q)
+       CONDITION FIND(L,NEXT,X){%X.ccat=m} SELECT q
+ FIND(L,NEXT,X){%X.yx=这|那} SELECT q
+      OTHERWISE SELECT n-q-r
+@@ 正(b-a-v-d)
+      CONDITION FIND(R,NEXT,X){%X.ccat=v|p,%X.ccat=~n} SELECT d
+      CONDITON FIND(L,NEXT,X){%X.yx=很|太|更|最|极|非常|挺|怪|至|这么|那么|十分|特别} SELECT a
+      OTHERWISE SELECT b-a-v-d
+@@  一(m-d)
+    CONDITION FIND(R,NEXT,X+Y) {%X.ccat =a, %Y.ccat =q}  SELECT m
+@@  一边(c-s)
+      CONDITION   FIND(LR,FAR,X) {%X.yx = 一边 } SELECT c
+      OTHERWISE  SELECT s 
+/*
+@@  可能(n-v)
+      CONDITION  FIND(L,NEXT,X) {%X.yx=种 } SELECT n
+      CONDITION  FIND(R,NEXT,X) {%X.yx=的 } SELECT n
+      CONDITION   FIND(R,NEXT,X) {%X.ccat = a|v|d|t } SELECT v
+      OTHERWISE  SELECT v
+*/
+
+@@  一边(c-s)
+      CONDITION   FIND(LR,FAR,X) {%X.yx = 一边 } SELECT c
+      OTHERWISE  SELECT s 
+
+@@ 从(d-p)
+      CONDITION   NOFIND(R,NEXT,X) {%X.yx = 不 } SELECT p
+      
+@@  了(y-u) /*(v-y-u)*/
+      CONDITION  FIND(L,NEXT,X) {%X.yx =得 }  SELECT u
+      CONDITION  FIND(L,NEXT,X) {%X.yx =不 } SELECT u
+      CONDITION  FIND(L,NEXT,X) {%X.ccat =v|a}  SELECT u
+      CONDITION  FIND(R,NEXT,X) {%X.ccat =w}  SELECT y
+      CONDITION  FIND(R,NEXT,X) {%X.ccat =y}  SELECT y
+
+@@  过(d-u-v)
+            CONDITION FIND(L,NEXT,X) {%X.ccat =v|a}, FIND(R,NEXT,X) {%X.ccat =w} SELECT u
+ CONDITION FIND(L,NEXT,X) {%X.ccat =v|a}, NOFIND(R,NEXT,X) {%X.ccat =v}  SELECT u-v
+CONDITION FIND(R,NEXT,X) {%X.ccat =a} SELECT d
+            OTHERWISE  SELECT   v  
+
+@@  着(n-v-u)
+      CONDITION  FIND(L,NEXT,X) {%X.ccat =a| m } SELECT n
+      CONDITION   FIND(L,NEXT,X) {%X.ccat =v}, NOFIND(R,NEXT,X) {%X.yx =了}  SELECT u
+       OTHERWISE  SELECT v-u
+
+@@  光(n-d-v)
+      CONDITION   FIND(L,NEXT,X) {%X.ccat =a|b}  SELECT n
+      CONDITION   FIND(R,NEXT,X) {%X.ccat =a|v}  SELECT d-n
+      OTHERWISE SELECT v-n
+
+@@  象(n-p-v)
+      CONDITION   FIND(L,NEXT,X) {%X.ccat =a|b}  SELECT n
+      CONDITION   FIND(L,NEXT,X) {%X.ccat =d}  SELECT v
+      CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=v,%Y.yx=起来|上去} SELECT p  /* 看起来象   听上去象 */
+      CONDITION   FIND(R,NEAR,X) {%X.yx=一样|这样|那样|似的} SELECT p-v
+      CONDITION   NOFIND(R,NEAR,X) {%X.yx=一样|这样|那样|似的} SELECT v-n
+
+ @@  在(p-d-v)
+       CONDITION  FIND(R,NEAR,X) {%X.ccat =f}  SELECT p-v 
+        CONDITION   FIND(R,NEAR,X)  {%X.ccat =t}  SELECT p-v
+        CONDITION  FIND(R,NEAR,X) {%X.yx =时|时候}  SELECT p-v
+ /*       
+@@  上(f-v)
+         CONDITION  FIND(L,NEAR,X){%X.ccat=p},FIND(L,NEAR,X) {%X.yx=在}  SELECT f
+       在屋里装上了电灯  
+@@  下(f-v)
+         CONDITION  FIND(L,NEAR,X) {%X.ccat=p},FIND(L,NEAR,X) {%X.yx=在}  SELECT f
+    */     
+@@  好(v-d-a)
+      CONDITION   FIND(R,NEXT,X) {%X.yx =表现|摔交|动}  SELECT v
+      CONDITION   FIND(R,NEXT,X) {%X.ccat =a |m } SELECT d-a
+       OTHERWISE  SELECT a 
+
+@@  就(d-v)
+      CONDITION  FIND(R,NEXT,X) {%X.ccat =v |a |b |m}  SELECT d
+      CONDITION  FIND(R,NEXT,X) {%X.ccat =n |u}  SELECT v
+
+@@  得(u-v)
+       CONDITION  FIND(L,NEXT,X) {%X.ccat =d}  SELECT v
+       CONDITION   FIND(L,NEXT,X) {%X.ccat =v |a } SELECT u
+       OTHERWISE  SELECT v
+
+@@  地(u-n)
+      CONDITION   FIND(L,NEXT,X) {%X.ccat =a |d |z}  SELECT u
+      CONDITION   FIND(L,NEXT,X) {%X.ccat =v |n}, FIND(R,NEXT,X) {%X.ccat =a |v |p}  SELECT u
+ 
+@@  用(v-p-n)
+       CONDITION   FIND(L,NEXT,X) {%X.ccat =q}  SELECT n
+       CONDITION   NOFIND(L,NEXT,X) {%X.ccat =v}  SELECT n
+       OTHERWISE SELECT v-p
+      
+@@ 到(v-p)
+    /*CONDITION FIND(L,NEAR,X) {%X.yx =从}  SELECT p   从房间里捉到耗子的猫
+    CONDITION FIND(L,NEXT,X) {%X.ccat=v} SELECT p 捉到*/
+    CONDITION FIND(R,NEAR,X) {%X.yx=来|去} SELECT p
+OTHERWISE SELECT v-p
+
+@@  来(m-v)
+       CONDITION   FIND(L,NEXT,X) {%X.ccat =m}, FIND(R,NEXT,X) {%X.ccat =q}  SELECT m
+       
+
+@@  打(q-p-v)
+        CONDITION  FIND(L,NEXT,X) {%X.ccat =m}, FIND(R,NEXT,X) {%X.ccat =n } SELECT q
+        CONDITION $.yx =打, FIND(R,NEAR,X+Y)   {%X.ccat =n|f|s|t,  %Y.yx=往|到|起 } SELECT p 
+        OTHERWISE SELECT v 
+
+@@  多(m-d-v-a)
+      CONDITION  FIND(L,NEXT,X) {%X.ccat =m |q}  SELECT m
+      CONDITION  FIND(R,NEXT,X) {%X.ccat =a |p |v}  SELECT d
+      OTHERWISE SELECT v-a
+
+@@  上(f-v)
+      CONDITION  FIND(L,NEXT,X) {%X.ccat =v}, FIND(R,NEXT,X) {%X.yx =的}  SELECT f
+      CONDITION  FIND(L,NEXT,X+Y) {%X.yx =的, %Y.ccat =v}  SELECT f
+      CONDITION  FIND(L,NEXT,X) {%X.ccat =n}, FIND(R,NEXT,X) {%X.yx =来|去}  SELECT f
+
+@@  等(u-v)
+      CONDITION   FIND(R,NEXT,X) {%X.ccat =w}  SELECT u
+      CONDITION   FIND(L,NEAR,X) {%X.yx =和|与|同|或|跟}  SELECT u
+      
+
+@@  和(v-p-c)
+     CONDITION  FIND(R,NEXT,X) {%X.yx =来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去|了|着|过}  SELECT v
+      CONDITION  FIND(R,NEXT,X) {%X.yx =面|泥}  SELECT v
+      CONDITION  FIND(L,NEXT,X) {%X.ccat =d,%X.yx=~光}  SELECT p
+/*光和热*/
+      CONDITION  FIND(R,NEAR,X) {%X.yx = 一起|一样}  SELECT p
+       OTHERWISE SELECT c-p 
+
+@@  对(v-c)
+       CONDITION  FIND(R,NEXT,X) {%X.yx =来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去|了|着|过}  SELECT v
+        OTHERWISE SELECT c
+
+@@  中(f-v)
+      CONDITION  FIND(L,NEAR,X) {%X.ccat =p}  SELECT f
+
+@@  把(v-p-q)
+    CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+    CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+    CONDITION  FIND(L,NEXT,X) {%X.ccat=v},FIND(R,NEXT,X){%X.ccat=n} SELECT q /* 有把椅子 */
+    CONDITION  FIND(R,NEXT,X) {%X.ccat =u}  SELECT v
+    CONDITION  FIND(R,NEXT,X) {%X.yx =门}  SELECT v
+    OTHERWISE SELECT p
+
+/*
+@@ *(Ng)  
+     CONDITION   FIND(L,NEXT,X) {%X.ccat=m}, FIND(R,NEXT,X) {X.ccat=n}  SELECT q
+     CONDITION   FIND(L,NEXT,X) {%X.ccat=m}, FIND(R,NEXT,X) {%X.ccat=w } SELECT q 
+
+@@ *(q)
+     CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+     CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+
+@@ *(a)
+       CONDITION FIND(L,NEXT,X) {%X.yx=很|太|最|极|非常|挺|怪|至|这么|那么|十分|特别}  SELECT a
+
+@@ *(d)
+    CONDITION FIND(R,NEXT,X) {%X.ccat=a}  SELECT d
+
+@@ *(b)
+       CONDITION FIND(R,NEXT,X) {%X.ccat=n}  SELECT b
+
+@@ *(v)
+       CONDITION FIND(L,NEXT,X) {%X.yx=不 } SELECT v
+       CONDITION FIND(R,NEXT,X) {%X.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去}, $.ccat=~u, $.ccat=~d  SELECT v  
+*/
+
+@@ *(a-q)
+     CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+     CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个|一些},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+    OTHERWISE SELECT a
+
+@@ *(p-q)
+     CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+     CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个|一些},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+    OTHERWISE SELECT p
+
+@@ *(v-q)
+     CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+     CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个|一些},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+    OTHERWISE SELECT v-q
+
+@@ *(n-q)
+     CONDITION $.yx=班 SELECT n-q
+     CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+     CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个|一些},NOFIND(L,NEAR,X){%X.yx= 第},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+/* 第一句 */
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+    OTHERWISE SELECT n-q
+
+@@ *(v-p)
+    CONDITION $.yx=在|让|到|当|叫|借 SELECT v-p
+    CONDITION FIND(L,NEXT,X) {%X.yx=不 } SELECT v-p
+    CONDITION FIND(R,NEXT,X) {%X.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去}, $.ccat=~u, $.ccat=~d  SELECT v  
+    /*
+    CONDITION $.yx=给,FIND(L,NEXT,X){%X.yx=没有} SELECT v-p 
+    CONDITION $.yx =给|叫|让,FIND(L,NEXT,X) {%X.ccat =d}  SELECT v
+    CONDITION $.yx =给|叫|让, FIND(L,NEXT,X) {%X.yx =为什么|怎么|如何 } SELECT v
+    CONDITION $.yx =给, FIND(L,NEXT,X) {%X.ccat =v}  SELECT v
+    */
+    CONDITION  FIND(R,NEXT,X) {%X.yx =成|得|不}  SELECT v
+    CONDITION  FIND(R,NEXT,X) {%X.ccat =p}  SELECT v
+    CONDITION  FIND(R,NEAR,X) {%X.ccat =f | t } SELECT p
+    CONDITION  FIND(R,NEAR,X) {%X.ccat =v}, NOFIND(R,NEAR,X) {%X.ccat =u}, NOFIND(R,NEAR,X) {%X.ccat =n} SELECT p 
+
+@@ *(v-a)
+    CONDITION FIND(L,NEXT,X) {%X.yx=很|太|最|极|非常|挺|怪|至|这么|那么|十分|特别}  SELECT a
+    CONDITION FIND(L,NEXT,X) {%X.ccat =q}, FIND(R,NEXT,X) {%X.ccat =n}  SELECT a
+    CONDITION FIND(L,NEXT,X) {%X.ccat =v}, FIND(R,NEXT,X) {%X.ccat =u |n } SELECT a
+
+@@ *(v-n)
+   /* CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+    CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q */
+    CONDITION $.yx=报|工作 SELECT v-n
+    CONDITION FIND(L,NEXT,X) {%X.yx =地}  SELECT v
+    CONDITION FIND(L,NEXT,X) {%X.ccat=t|s}  SELECT v
+    CONDITION FIND(L,NEXT,X) {%X.yx =这|那|这个|那个|这些|那些|哪些}  SELECT n
+    CONDITION FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=q}  SELECT n
+    CONDITION FIND(L,NEXT,X) {%X.yx =把}  SELECT n
+    CONDITION FIND(R,NEXT,X) {%X.ccat =f}, NOFIND(R,NEXT,X) {%X.ccat =v}  SELECT n
+    CONDITION FIND(L,NEXT,X) {%X.ccat = b/*|a*/ }, NOFIND(L,NEXT,X) {%X.ccat =d}  SELECT n  /* 迫切希望 */
+    CONDITION FIND(L,NEXT,X) {%X.ccat =v, %X.音节=~1~2~3}, NOFIND(R,NEXT,X) {%X.ccat =v}  SELECT n
+
+@@ *(r-n)
+    CONDITION FIND(L,NEXT,X) {%X.ccat =q |a } SELECT n
+    OTHERWISE  SELECT r
+
+@@ *(d-a)
+    CONDITION $.yx=真|肯定|快|一般|多 SELECT d-a
+    CONDITION FIND(R,NEXT,X) {%X.ccat =a |v |p |d}, NOFIND(L,NEXT,X) {%X.ccat =u}, NOFIND(L,NEXT,X) {%X.ccat =v}  SELECT d
+    OTHERWISE  SELECT a-d
+
+@@ *(d-v-q)
+    CONDITION    FIND(L,NEXT,X) {%X.yx=这|那|哪|多少|每|此|各|某|儿},$.ccat=~p  SELECT q
+    CONDITION    FIND(L,NEXT,X) {%X.ccat=m},NOFIND(L,NEXT,X) {%X.yx=一个},FIND(L,NEXT,X) {%X.音节=0|1|2|3|4}  SELECT q
+    CONDITION   FIND(L,NEXT,X+Y) {%X.ccat=m,%Y.ccat=a}  SELECT q
+    CONDITION FIND(R,NEXT,X) {%X.ccat =a}  SELECT d
+    CONDITION FIND(R,NEXT,X+Y) {%X.yx =不, %Y.ccat =v |a } SELECT v
+    CONDITION FIND(R,NEXT,X) {%X.ccat =v |d,%X.yx=一}  SELECT d
+    OTHERWISE  SELECT v-d
+
+@@ *(a-n)
+    CONDITION FIND(L,NEXT,X) {%X.yx=很|太|更|最|极|非常|挺|怪|至|这么|那么|十分|特别}  SELECT a
+    CONDITION FIND(L,NEXT,X) {%X.ccat =d,%X.yx=~将}  SELECT a
+
+
+
+
+

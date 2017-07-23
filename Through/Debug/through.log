@@ -1,0 +1,67 @@
+﻿生成启动时间为 2013/3/23 0:19:33。
+     1>项目“C:\txp\prg\through\through.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>_PrepareForClean:
+         正在删除文件“Debug\through.lastbuildstate”。
+       InitializeBuildStatus:
+         正在创建“Debug\through.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IC:\temp\boost_1_53_0 /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt agree.cc chongdie.cc enagree.cc generate.cc parse.cc postag.cc prsrbase.cc segment.cc through.cc transform.cc unity.cc
+         unity.cc
+         transform.cc
+         through.cc
+         segment.cc
+         prsrbase.cc
+         postag.cc
+         parse.cc
+         generate.cc
+         enagree.cc
+         chongdie.cc
+         agree.cc
+         正在生成代码...
+     1>c:\txp\prg\through\agree.cc(187): warning C4715: “aagree”: 不是所有的控件路径都返回值
+     1>c:\txp\prg\through\agree.cc(416): warning C4715: “pureagree”: 不是所有的控件路径都返回值
+     1>c:\txp\prg\through\enagree.cc(356): warning C4715: “trnaagree”: 不是所有的控件路径都返回值
+     1>c:\txp\prg\through\generate.cc(746): warning C4715: “genefindedge”: 不是所有的控件路径都返回值
+     1>c:\txp\prg\through\generate.cc(761): warning C4715: “genefindroot”: 不是所有的控件路径都返回值
+     1>c:\txp\prg\through\unity.cc(290): warning C4715: “findval”: 不是所有的控件路径都返回值
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\through.exe.embed.manifest.res" Debug\through_manifest.rc 
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\txp\prg\through\Debug\through.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\temp\boost_1_53_0\stage\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\through.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\txp\prg\through\Debug\through.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\txp\prg\through\Debug\through.lib" /MACHINE:X86 Debug\through.exe.embed.manifest.res
+         Debug\agree.obj
+         Debug\chongdie.obj
+         Debug\enagree.obj
+         Debug\generate.obj
+         Debug\parse.obj
+         Debug\postag.obj
+         Debug\prsrbase.obj
+         Debug\segment.obj
+         Debug\through.obj
+         Debug\transform.obj
+         Debug\unity.obj
+       Manifest:
+         正在删除文件“Debug\through.exe.embed.manifest”。
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\through.exe.embed.manifest" /manifest Debug\through.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\through.exe.embed.manifest.res" Debug\through_manifest.rc 
+       LinkEmbedManifest:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\txp\prg\through\Debug\through.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\temp\boost_1_53_0\stage\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\through.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\txp\prg\through\Debug\through.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\txp\prg\through\Debug\through.lib" /MACHINE:X86 Debug\through.exe.embed.manifest.res
+         Debug\agree.obj
+         Debug\chongdie.obj
+         Debug\enagree.obj
+         Debug\generate.obj
+         Debug\parse.obj
+         Debug\postag.obj
+         Debug\prsrbase.obj
+         Debug\segment.obj
+         Debug\through.obj
+         Debug\transform.obj
+         Debug\unity.obj
+         through.vcxproj -> C:\txp\prg\through\Debug\through.exe
+       FinalizeBuildStatus:
+         正在删除文件“Debug\through.unsuccessfulbuild”。
+         正在对“Debug\through.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“C:\txp\prg\through\through.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:43.23

@@ -1,0 +1,86 @@
+这个汉英机器翻译软件来自中科院计算所和北大计算语言所大约于2000年合作完成的汉英机器翻译系统，系统主要设计者为中科院计算所的刘群，语言知识库的主要完成者为北大计算语言所的詹卫东。特别地，使用了北大计算语言所俞士汶教授主持完成的现代汉语语法信息词典。当时的系统使用了Windows下的VC6.0集成环境，是一个多窗口的运行程序，现在经过他们的同意，由陶晓鹏将核心代码抽取出来，改编成运行在Windows系统下的命令行式的程序，并命名为南阁（NanGe）。具体环境是Windows 7和Visual Studio 2010 for C++。
+
+这是一个基于规则的机器翻译系统，因此，整个程序包包含两部分内容：知识库和程序代码。知识库放置在目录mtoutput/kbase下，包括如下方面的知识：
+
+bldrbase  
+dictn  
+dictnref  
+lexdbase  
+makrbase  
+model  
+ovlrbase  
+prsrbase  
+segrbase  
+statbase  
+tagrbase  
+template
+
+分别为分词、词类标注、句法分析、句法转换、句子生成等子过程提供知识。其中，最重要的知识是
+
+model
+dictn
+prsrbase
+
+它们又分别被称为
+
+语言模型（不同于现在统计自然语言处理的同名术语）
+词典
+分析转换规则库
+
+所有这些知识的表达形式都是纯文本，每个方面的知识分别体现在目录mtoutput/kbase下相应子目录中的.TXT文件中，另外有一个.CFG文件简要描述对应.TXT文件的属性。
+
+为了让翻译程序高效地使用知识库中的知识，没有将.TXT的数据直接提供给翻译程序，而是用知识库管理程序先将.TXT的纯文本变成有结构信息的，且以二进制方式存储的文件，有些知识库还建有例如索引文件这样的一些辅助文件，这些文件都是依据.TXT和.CFG得到的，管理程序名称为kbms。因此，一旦.TXT文件有变动，都要运行kbms，更新所有的辅助文件。翻译程序名称为cemt，因此整个程序包包括两个程序：kbms和cemt，我们认为它们几乎是同等重要的。
+
+kbms和cemt的编译使用vs2010的solution文件就可以进行了，分别是kbms/kbms.sln和cemt/cemt.sln，特别要注意，编译参数要添加KBMS，具体方法是在vs2010中进入
+
+项目 -> 属性 -> 配置属性 -> C/C++ -> 预处理器 -> 预处理器定义
+
+在其中添加“KBMS”。编译完成后，由于数据文件的路径问题，不能在vs 2010集成环境中直接运行这两个程序，必须进入Window的command窗口，进入相应的目录，两个执行程序分别位于目录kbms/debug和cemt/debug下，然后就可以运行它们了。运行时都不需要带任何参数。cemt所翻译的汉语源文来自mtoutput/chnsent.txt，翻译的结果英语句子直接显示在屏幕上。需要特别说明的是，本系统处理的中文编码体系是GB2312。
+
+最后要说明的是，源码从Windows多窗口程序源码中抽取，还带有一些Windows窗口程序的痕迹，这些代码留在程序中，但是它们不会被激活和运行，它们成了一种垃圾代码。把它们从各个角落中找出并清除掉需要不少精力，因此在这个版本中我们保留了许多这样的“垃圾”代码，希望使用者阅读源码时不至于太困惑。
+
+欢迎大家使用，有问题或者想法，请联系陶晓鹏，xptao@fudan.edu.cn。谢谢。
+
+---------- 
+
+This Chinese-English machine translation program is extracted from the system developed by Institute of Computing Technology at Chinese Academy of Sciences (ICT) and Institute of Computational Linguistics at Peking University (ICL) in during 1993-1998. The main designer and developer of the whole system is LIU Qun, who is from ICT. The main contributor of the knowledgebase is ZHAN Weidong, who is from ICL. Specially, the knowledgebase includes “Modern Chinese Syntax Features Dictionary”, which is finished in ICL under the lead of Professor YU Shiwen. The original system was developed in VC 6.0, which is a Microsoft IDE running on Windows. Now TAO Xiaopeng extraced these core codes and rewrote and transformed them to be a command program running in Windows terminal under the warrant of LIU Qun and ZHAN Weidong, and gave a name as NanGe (Chinese Pinyin for South Building). The development environment was Windows 7 and Visual Studio 2010 for C++.
+
+
+This is a rule-based machine translation system, so this package includes two partes: knowledgebase files and program code files. These knowledge files is put on the directory mtoutput/kbase, including many kinds of knowledge:
+
+bldrbase  
+dictn  
+dictnref  
+lexdbase  
+makrbase  
+model  
+ovlrbase  
+prsrbase  
+segrbase  
+statbase  
+tagrbase  
+template
+
+Each one has a subdirectory at mtoutput/kbase. The most important knowledgebases are 
+
+model
+dictn
+prsrbase
+
+They are also called the following names respectively,
+
+language model (different from the same named term in statistical NLP)
+dictionary
+parsing and transfer rules
+
+All the knowledges are expressed in text format (.TXT), which are manually written by human expert. Another manually created file are .CFG files, which record simple information of .TXT files. Before translation, all the .TXT files will be transformed to other formats, which includes structure information and are easy for computer. And some knowledgebase are so big, program need index files to use them efficiently. Those auxiliary files are created by a program, named "kbms". So once the .TXT files are changed, we must run "kbms" again to update those auxiliary files. The name of translation program is "cemt", so this package includes two program: kbms and cemt. We think they are same important as each other.
+
+It is easy to compile these source code by these .sln files under VS 2010. The two .sln files for the above two programs are kbms/kbms.sln and cemt/cemt.sln respectively. There is one importation statement for the compiler parameter: "KBMS" must be used. The method is opening the menu as following 
+
+project -> property -> configuration property -> C/C++ -> preprocessor -> preprocessor definition
+
+then adding "KBMS". You cannot run the programs in VS 2010, you must open Windows terminal (or called command window), and go to the programs' directory, then run them. The directories for "kbms" and "cemt" are kbms/debug and cemt/debug respectively. Running "kbms" and "cemt" are very simple. Both they don't need any parameters. The input Chinese sentences for "cemt" are stored in file mtoutput/chnsent.txt, the translation English sentences are printed on screen directly. The Chinese encode system is GB2312, not UTF-8 here.
+
+The last important comment is, since the original codes are developed in Windows and its style is multiple windows, now these codes running in Ubuntu terminal with heavy Windows features. This kind of codes just leaves in our source codes, they will not execute, we call them a kind of "garbage codes". But cleaning all these "garbage codes" is a heavy work. In this version, we have to keep them, and hope they will not bring big troubles for your reading and understanding our core codes.
+
+If you have any problems and ideas, please feel free to contact TAO Xiaopeng, xptao@fudan.edu.cn. Thanks.

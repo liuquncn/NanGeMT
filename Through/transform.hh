@@ -1,0 +1,93 @@
+#ifndef transform_h
+#define transform_h
+
+#include <map>
+#include "unity.hh"
+
+void transform();
+void recurtransform(edgec & edge, string & redcat, size_t loc, vector<edgec> & enedges);
+void parseonerule(edgec & iniedge, vector<edgec> & chart, vector<edgec> & edges);
+void getentry(string & word, string & entry);
+void getcatentry(string & catid, string & entry, string & catentry);
+void gettranentry(edgec & edge, string & catentry, string & tranentry);
+void initialedge(edgec & edge, vector<string> & transet, size_t loc, vector<edgec> & enedges);
+void getrule(char & source, string & prsid, string & rule);
+void separate(string & switran, string & swi, string & tran);
+void sepatranentry(string & tranentry, string & tranid, string & trancfg, string & tranbind);
+void getitemset(string & trancfg, string & enred, vector<string> & itemset);
+void getsonecat(edgec & edge, string & item, edgec & sone, string & encat);
+void addtoenchart(vector<edgec> & enchart, vector<edgec> & edgeset);
+void getenedge(edgec & edge,string & enred, vector<string> & itemset, string & tranbind, edgec & enedge);
+void gettranset(string & entry, string & redcat, vector<string> & transet);
+void getswiset(string & entry, vector<string> & swiset);
+void gettranred(string & tran, string & tranred);
+void assignfather(edgec & root);
+void seekfeatval(edgec & edge, string & featname, string & featval, string & valtype, vector< vector<string> > & valset);
+void procfeatval(edgec & edge, string & featname, string & featval, string & valtype, vector< vector<string> > & valset);
+void findenedges(int & chsonid, string & encat, vector<edgec> & enedges);
+void findrootedge(edgec & edge, edgec & root);
+void recurassign(edgec & edge);
+bool entransition(edgec & edge, string & feat);
+void basentran(edgec & edge, string & bind, string & feat);
+void entransmit(edgec & edge, string & feat);
+void enfindedge(int eid, edgec & edge);
+void trnprinttree(edgec & edge);
+void trnshowtree(edgec & edge, int spanum);
+//void printtrans(edgec & root);
+void trnprintsent(edgec & edge);
+void createatomedge(string & tranitem, edgec & aedge);
+void operatran(string & opera, string & colon);
+int findsonid(edgec & edge, string & nota);
+void findsonedges(regionc & sentreg, int & sonid, string & encat, vector<edgec> & sonedges);
+void resetenglobvar();
+void atransform(edgec & edge, vector<edgec> & enedges);
+void prsrtranedge(edgec & edge, vector<string> & transet, vector<edgec> & enedges);
+bool getsonidcat(edgec & edge, string & item, int & sonid, string & encat);
+//void addenchartidx(map<int,enchartidxc> & enchartidx, int eeid, int eid, size_t begin, size_t end);
+void choosebest(int bpos, int epos, vector<edgec> & tranedges);
+bool isword(int start, int end);
+void removeruleid(string & entry, string & ruleid);
+void removedeep(edgec & edge, string & trancfg, string & flatcfg, vector<edgec> & locchart);
+void flattranedge(edgec & edge, string & trancfg, string & tranbind, vector<edgec> & locchart, vector<edgec> & enedges);
+bool hastranedge(int start, int end);
+bool gettranedge(int start, int end, edgec & enedge);
+bool transformtree(edgec & root);
+void extracttree(int father, edgec & root, vector<edgec> & edges);
+void feattransition(edgec & root, vector<edgec> & edges);
+void transformedge(edgec & edge, vector<edgec> & enedges);
+void modifytrnsresult(regionc reg,vector<int> & trnsresult);
+void choosebesttrns(map<int, vector<edgec> > & enchart, vector<int> & trnsresult);
+void printenchart(map< int, vector<edgec> > & enchart);
+void printtranchart(vector<edgec> & tranchart);
+void printtrantree(edgec & edge);
+void findtranedge(int eid, edgec & edge);
+void gettranchart(map< int, vector<edgec> > & enchart, vector<edgec> & tranchart);
+void marktrnsresult(vector<edgec> & tranchart);
+bool forestdesc(int eid, vector<edgec> & forest);
+bool treedesc(int eid, edgec & edge);
+void assignfathertran(vector<edgec> & tranchart, edgec & edge);
+void recurassigntran(vector<edgec> & tranchart, edgec & edge);
+void assignfatherparse(vector<edgec> & chart, edgec & root);
+void recurassignparse(vector<edgec> & chart, edgec & edge);
+bool sentregin(regionc & sreg, regionc & reg);
+void choosetrnsresult(vector<int> & trnsresult);
+void addsentreg(int eid, vector<int> & trnsresult);
+void printtrnsresult(vector<int> & trnsresult);
+void gettranchart(map< int, vector<edgec> > & enchart, int eid, vector<edgec> & tranchart);
+void trnrecurposttravel(int fid, edgec & edge, vector<edgec> & tranchart);
+void printtranchart(vector<edgec> & tranchart);
+void printtrnssent(vector<int> & trnsresult);
+edgec & enfindedge(int eeid);
+void setancesilence(edgec & edge, vector<edgec> & edges);
+void modifeatval(edgec & ce, string & featname, string & nval);
+void transition(edgec & edge);
+void recurmodify(edgec & edge, string & nameval, string & featval, string & nval, vector<edgec> & edges);
+void modifyone(edgec & edge, string & nameval, string & featval, string & nval);
+void getheadpart(vector<string> & itemset, size_t & head, vector<string> & part);
+void getatomlocchart(edgec & edge, string & atomtran, size_t loc, vector<edgec> & locchart);
+void getcomplocchart(edgec & edge, string & comptran, size_t loc, vector<edgec> & locchart);
+void getflatcfg(string & trancfg, string & enred, vector<string> & parts, string & flatcfg);
+void prsronetran(edgec & edge, string & trancfg, string & tranbind, vector<edgec> & enedges);
+void addtrnsresult(edgec & root, vector<int> & trnsresult);
+
+#endif

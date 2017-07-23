@@ -1,0 +1,77 @@
+4.5 如下约束的“连接成分”有问题，在model.txt中属性“连接成分”没有数据类型，要特殊处理。
+
+IF %np.连接成分=Yes,%%np.连接成分=Yes THEN %np.作照应=前,%%np.作照应=后 ENDIF
+
+4.9 edge.id==51965
+
+Breakpoint 2, backward (tags=..., edge=...) at parse.cc:233
+(gdb) p ice.id
+$1 = 57
+(gdb) p edge.id
+$2 = 35300
+
+35300有问题
+
+boost regex
+
+c	Match the literal character c once, unless it is one of the special characters.
+^	Match the beginning of a line.
+.	Match any character that isn't a newline.
+$	Match the end of a line.
+|	Logical OR between expressions.
+()	Group subexpressions.
+[]	Define a character class.
+*	Match the preceding expression zero or more times.
++	Match the preceding expression one ore more times.
+?	Match the preceding expression zero or one time.
+{n}	Match the preceding expression n times.
+{n,}	Match the preceding expression at least n times.
+{n, m}	Match the preceding expression at least n times and at most m times.
+\d	Match a digit.
+\D	Match a character that is not a digit.
+\w	Match an alpha character, including the underscore.
+\W	Match a character that is not an alpha character.
+\s	Match a whitespace character (any of \t, \n, \r, or \f).
+\S	Match a non-whitespace character.
+\t	Tab.
+\n	Newline.
+\r	Carriage return.
+\f	Form feed.
+\m	Escape m, where m is one of the metacharacters described above: ^, ., $, |, (), [], *, +, ?, \, or /.
+
+-----
+
+增加新的转换规则，比如
+
+NP->g g g => NP->N/g N//g+N///g （表示后面两个译文没有空格）
+mp->m q => NP->T/m ... N/q （表示两个译文之间插入外部成分的译文） 
+
+-------
+
+through.4.23.founder.tar.gz
+
+1) sentreg以字节为单位，而不是以词为单位，这样多种分词结果可以同时进入分析器
+2） transform仍然是递归的形式，，准备改成bottom-up的形式。
+
+4.29
+
+由于使用的都是 & 方式传送参数，因此函数不要修改传入的参数
+函数开始时的参数是什么，离开时参数值不变
+
+5.3
+
+先完成makrbase和bldrbase的应用
+再调整全局，调高速度。
+
+5.27
+
+237 tp7 (sentreg 0,0) (dotreg 0,0) 与 54号重叠，仍然被加进去了
+edgekeyc做map的key还需要再探究怎么回事。
+
+5.29.13
+
+采用了新的parse，agenda，chart，用vector，然后大量使用索引（即map）。
+新的修改准备将unity、agree、enunity合并成一个函数，合一函数，unify。
+
+6.24
+转到ubuntu 64bit下工作。

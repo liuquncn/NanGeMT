@@ -1,0 +1,261 @@
+## { NPRR0 } NP(!R R) %R.RCASE=OBJ,%%R.RSUBC=RREFL
+	=> NP(R//R) /*him himself => himself*/
+
+## { NPNP1 } NP(!NP(!NP C<that> VP) W<","> C<and> NP)
+	=> NP(!NP/NP(!NP//NP C//C NP///NP) C/C VP/VP) 
+## { NPNP2 } NP(VP !NP(T !NP))    /* lost that book => that lost book */
+	=> NP(!NP/NP(T/T VP/VP !NP//NP))
+
+## { NPATN1 } NP(AP(!A) !NP(T !N))
+	=> NP(T/T !NP/NP(AP/AP(!A/A) !N/N))
+## { NPATN2 } NP(AP(!A) !NP(T !NP))
+	=> NP(T/T !NP/NP(AP/AP(!A/A) !NP//NP))
+## {NPAPTN1} NP(AP(!AP(!A)) !NP(T !N))
+	=> NP(T/T !NP/NP(AP/AP(!AP//AP(!A/A)) !N/N))
+## {NPAPTN2} NP(AP(!AP) !NP(T !N))
+	=> NP(T/T !NP/NP(AP/AP(!AP//AP) !N/N))
+
+## { NPAPPPNP } NP(AP(!AP PP) !NP)
+	=> NP(AP/AP(!AP//AP) !NP/NP PP/PP) /* more than America population */
+
+## { VPVP1 } VP(!VP(!VP) NP)
+	=> VP(!VP/VP(!VP//VP NP/NP))
+
+## { VPCVP1 } VP( C<either> VP)
+	=> VP ( C<neither> &D%%VP VP/VP ) %D.YX=not
+## { VPCVP2 } VP( C<or> VP)
+	=> VP ( C<nor> &D%%VP VP/VP ) %D.YX=not
+
+## { NPMP1 } NP(T !NP(T !N))	/* this a kind => this kind */
+	=> NP(T/T !NP/NP(!N/N))
+## { NPMP2 } NP(R !NP(T !N))	/* which a kind => which kind  */
+	=> NP(R/R !NP/NP(!N/N))
+## { NPMP3 } NP(T !NP(T !NP))	/* this a book => this book */
+	=> NP(T/T !NP/NP(!NP//NP))
+## { NPMP4 } NP(R !NP(T !NP))	/* which a book => which book  */
+	=> NP(R/R !NP/NP(!NP//NP))
+## { NPMP5 } NP(A !NP(T !NP))	/* which a book => which book  */
+	=> NP(A/A !NP/NP(!NP//NP))
+## { NPMP6 } NP(T !NP(NP(T !N) P !NP))	/* this a kind of book=> this kind... */
+	=> NP(T/T !NP/NP(NP//NP(!N/N) P/P !NP///NP))
+## { NPMP7 } NP(R !NP(NP(T !N) P !NP))	/* which a kind of book=> which kind  */
+	=> NP(R/R !NP/NP(NP//NP(!N/N) P/P !NP///NP))
+## { NPMP7 } NP(A !NP(NP(T !N) P !NP))	/* which a kind of book=> which kind  */
+	=> NP(A/A !NP/NP(NP//NP(!N/N) P/P !NP///NP))
+
+## { VPVP2 } VP(!VP(!VP P<to> VP) NP)
+	=> VP(!VP/VP(!VP//VP NP/NP) P/P VP///VP)
+
+## { VPPPDP} VP(!VP(!VP PP) DP) %DP.YX=~ago
+	=> VP(!VP/VP(!VP//VP DP/DP) PP/PP)
+
+## { VPPPNP1 } VP(!VP(!V PP) NP)
+	=> VP(!VP/VP(!V/V NP/NP) PP/PP)
+## { VPPPNP2 } VP(!VP(!VP PP) NP)
+	=> VP(!VP/VP(!VP//VP NP/NP) PP/PP)
+## {VPPNPNP} VP(!VP(!VP(!VP P) NP) NP) %%%VP.VSUBC=VO
+	=> VP(!VP/VP(!VP//VP(!VP///VP NP//NP) P/P NP/NP)) 
+			/*put into drawer magaine=>put magaine into drawer*/ 
+
+## { CSPPNP1 } CS(NP !VP(!V PP) NP)
+	=> CS(NP/NP !VP/VP(!V/V NP//NP) PP/PP)
+
+## { CSPPNP2 } CS(NP !VP(!VP PP) NP)
+	=> CS(NP/NP !VP/VP(!VP//VP NP//NP) PP/PP)
+
+## { VPPP } VP(!VP(!VP P) NP)
+	=> VP(!VP/VP(!VP//VP) PP(P/P NP/NP))
+
+## { VPDPNP1 } VP(!VP(!V DP) NP)
+	=> VP(!VP/VP(!V/V NP/NP) DP/DP)
+
+## { VPDPNP2 } VP(!VP(!VP DP) NP)
+	=> VP(!VP/VP(!VP//VP NP/NP) DP/DP)
+
+## {VPCSPP} VP(!VP(!VP C CS) PP)
+	=> VP(!VP/VP(!VP//VP PP/PP C/C CS/CS))
+
+## { CSDPNP1 } CS(NP !VP(!V DP) NP)
+	=> CS(NP/NP !VP/VP(!V/V NP//NP) DP/DP)
+
+## { CSDPNP2 } CS(NP !VP(!VP DP) NP)
+	=> CS(NP/NP !VP/VP(!VP//VP NP//NP) DP/DP)
+
+## { CSNP } CS(!CS(NP !VP) NP) 
+	=> CS(!CS/CS(NP/NP !VP/VP NP//NP))
+
+## { VPNOT1 } VP(D<not> !VP) %VP.FORM=FF,%VP.YX=be
+	=> VP(#V%VP D/D !VP/VP) %V.YX=be
+
+## { VPNOT2 } VP(D<not> !VP) %VP.FORM=FF,%VP.YX=~be,%VP.VOICE=PASS
+	=> VP(#V%VP D/D !VP/VP) %V.YX=be
+
+## { VPNOT3 } VP(D<not> !VP) %VP.FORM=FF|RT,%VP.YX=~be,%VP.VOICE=ACTI
+	=> VP(#U%VP D/D !VP/VP) %VP.AUXV=YES
+
+## { VPNOT4 } VP(DP(!D<not>) !VP) %VP.FORM=FF,%VP.YX=be
+	=> VP(#V%VP DP/DP(!D/D) !VP/VP) %V.YX=be,%VP.AUXV=YES
+
+## { VPNOT5 } VP(DP(!D<not>) !VP) %VP.FORM=FF,%VP.YX=~be,%VP.VOICE=PASS
+	=> VP(#V%VP DP/DP(!D/D) !VP/VP) %V.YX=be
+
+## { VPNOT6 } VP(DP(!D<not>) !VP) %VP.FORM=FF|RT,%VP.YX=~be,%VP.VOICE=ACTI
+	=> VP(#U%VP DP/DP(!D/D) !VP/VP) %VP.AUXV=YES
+
+/* AUX V ================================================================ */
+
+## { UCONT } U() $=[URFLX:UN,USUBC:~UMOD,CONT:YES]
+	=> U(U<be> !U)	%%U=[URFLX:VG],
+					%U=[CONT:NO],
+					$==%U @PERF @FUTR @PAST @NPER @NNUM
+## { UPERF } U() $=[URFLX:UN,CONT:NO,USUBC:~UMOD,PERF:YES]
+	=> U(U<have> !U) %%U=[URFLX:VN],
+					 %U=[CONT:NO,PERF:NO],
+					 $==%U @FUTR @PAST @NPER @NNUM
+## { UFUTR1 } U() $=[URFLX:UN,CONT:NO,USUBC:~UMOD,PERF:NO,FUTR:YES,NPER:1]
+	=> U(U<shall> !U) %%U=[URFLX:RT],
+					  %U=[CONT:NO,PERF:NO,FUTR:NO],
+					  $==%U @PAST
+## { UFUTR2 } U() $=[URFLX:UN,CONT:NO,USUBC:~UMOD,PERF:NO,FUTR:YES,NPER:2|3]
+	=> U(U<will> !U) %%U=[URFLX:RT],
+					 %U=[CONT:NO,PERF:NO,FUTR:NO],
+					 $==%U @PAST
+## { UPAST1 } U() $=[URFLX:UN,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:YES]
+	=> U(!U) %U=[URFLX:VD]
+## { UPAST2 } U() $=[URFLX:UN,YX:be|do|have,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:3,NNUM:SNGL]
+	=> U(!U) %U=[URFLX:VS]
+/*-----------------------------------------------------
+## { UPAST3 } U() $=[URFLX:UN,USUBC:~UMOD,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:3,NNUM:PLUR]
+	=> U(!U) %U=[URFLX:RT]
+## { UPAST4 } U() $=[URFLX:UN,USUBC:~UMOD,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:1|2]
+	=> U(!U) %U=[URFLX:RT]
+## { UPAST5 } U() $=[URFLX:UN,USUBC:UMOD,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO]
+	=> U(!U) %U=[URFLX:RT]
+-----------------------------------------------------*/
+
+/* ================================================================ AUX V */
+
+
+/* VERB ================================================================= */
+
+## { VPASS } V() $=[VRFLX:UN,VOICE:PASS]
+	=> V(V<be> !V)	%%V=[VRFLX:VN],
+					$==%V @FORM @CONT @PERF @FUTR @PAST @NPER @NNUM
+/*-----------------------------------------------------
+## { RT   } V() $=[VRFLX:UN,FORM:RT]
+	=> V(!V) %V=[VRFLX:RT]
+-----------------------------------------------------*/
+## { VG   } V() $=[VRFLX:UN,FORM:VG]
+	=> V(!V)		%V=[VRFLX:VG]
+## { VN   } V() $=[VRFLX:UN,FORM:VN]
+	=> V(!V)		%V=[VRFLX:VN]
+## { VCONT } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					CONT:YES]
+	=> V(U<be> !V)	%V=[VRFLX:VG],
+					%U=[CONT:NO],
+					$==%U @PERF @FUTR @PAST @NPER @NNUM
+## { VPERF } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					CONT:NO,PERF:YES]
+	=> V(U<have> !V) %V=[VRFLX:VN],
+					 %U=[CONT:NO,PERF:NO],
+					 $==%U @FUTR @PAST @NPER @NNUM
+## { VFUTR1 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:YES,NPER:1]
+	=> V(U<shall> !V) $!=%V @FORM,%V=[FORM:RT],
+					  %U=[CONT:NO,PERF:NO,FUTR:NO],
+					  $==%U @PAST
+## { VFUTR2 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:YES,NPER:2|3]
+	=> V(U<will> !V) $!=%V @FORM,%V=[FORM:RT],
+					 %U=[CONT:NO,PERF:NO,FUTR:NO],
+					 $==%U @PAST
+## { VPAST1 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:YES,AUXV:NO]
+	=> V(!V) %V=[VRFLX:VD]
+## { VPAST2 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:YES,AUXV:YES]
+	=> V(!V) %V=[VRFLX:VD,YX:be]
+	=> V(U<do> !V) %U=[URFLX:VD],%V=[VRFLX:RT,YX:~be]
+## { VPRES1 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:3,NNUM:SNGL,AUXV:NO]
+	=> V(!V) %V=[VRFLX:VS]
+## { VPRES2 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:3,NNUM:SNGL,AUXV:YES]
+	=> V(!V) %V=[VRFLX:VS,YX:be]
+	=> V(U<do> !V) %U=[URFLX:VS],%V=[VRFLX:RT,YX:~be],
+				   $==%U @NPER @NNUM
+/*-----------------------------------------------------
+## { VPRES3 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:3,NNUM:PLUR,AUXV:NO]
+	=> V(!V) %V=[VRFLX:RT]
+-----------------------------------------------------*/
+## { VPRES4 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:3,NNUM:PLUR,AUXV:YES]
+	=> V(!V) %V=[VRFLX:RT,YX:be]
+	=> V(U<do> !V) %U=[VRFLX:RT],%V=[VRFLX:RT,YX:~be],
+				   $==%U @NPER @NNUM
+/*-----------------------------------------------------
+## { VPRES5 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:1|2,AUXV:NO]
+	=> V(!V) %V=[VRFLX:RT]
+-----------------------------------------------------*/
+## { VPRES6 } V() $=[VRFLX:UN,FORM:FF,VOICE:ACTI,
+					 CONT:NO,PERF:NO,FUTR:NO,PAST:NO,NPER:1|2,AUXV:YES]
+	=> V(!V) %V=[VRFLX:RT,YX:be]
+	=> V(U<do> !V) %U=[VRFLX:RT],%V=[VRFLX:RT,YX:~be],
+				   $==%U @NPER @NNUM
+
+/* ================================================================= VERB */
+
+
+/* NOUN ================================================================= */
+
+## { NPLURPOSS1 } N() $=[NRFLX:UN,NSUBC:NCONT,NNUM:PLUR,NCASE:POSS]
+	=> N(!N N<"'s">) %N=[NRFLX:NS], %%N=[NRFLX:RT]
+## { NPLURPOSS2 } N() $=[NRFLX:UN,NSUBC:NUCNT,NNUM:PLUR,NCASE:POSS]
+	=> N(!N N<"'s">) %N=[NRFLX:RT], %%N=[NRFLX:RT]
+## { NSNGLPOSS } N() $=[NRFLX:UN,NNUM:SNGL,NCASE:POSS]
+	=> N(!N N<"'s">) %N=[NRFLX:RT], %%N=[NRFLX:RT]
+## { NPLURCOMM } N() $=[NRFLX:UN,NSUBC:NCONT,NNUM:PLUR,NCASE:COMM]
+	=> N(!N) %N=[NRFLX:NS]
+/*-----------------------------------------------------
+## { NSNGLCOMM } N() $=[NRFLX:UN,NNUM:SNGL,NCASE:COMM]
+	=> N(!N) %N=[NRFLX:RT]
+-----------------------------------------------------*/
+
+/* ================================================================= NOUN */
+
+
+/* ADJ ================================================================== */
+
+## { AMORE } A() $=[ARFLX:UN,AMORF:PREF,DEGR:COMP]
+	=> A(D<more> !A) %D=[DRFLX:RT], %A=[ARFLX:RT]
+## { AMOST } A() $=[ARFLX:UN,AMORF:PREF,DEGR:SUPE]
+	=> A(D<most> !A) %D=[DRFLX:RT], %A=[ARFLX:RT]
+## { AER } A() $=[ARFLX:UN,AMORF:SUFF|IREG,DEGR:COMP]
+	=> A(!A) %A=[ARFLX:ER]
+## { AEST } A() $=[ARFLX:UN,AMORF:SUFF|IREG,DEGR:SUPE]
+	=> A(!A) %A=[ARFLX:EST]
+
+/* ================================================================== ADJ */
+
+
+/* ADV ================================================================== */
+
+## { DMORE } D() $=[DRFLX:UN,DMORF:PREF,DEGR:COMP]
+	=> D(D<more> !D) %D=[DRFLX:RT], %%D=[DRFLX:RT]
+## { DMOST } D() $=[DRFLX:UN,DMORF:PREF,DEGR:SUPE]
+	=> D(D<most> !D) %D=[DRFLX:RT], %%D=[DRFLX:RT]
+## { DER } D() $=[DRFLX:UN,DMORF:SUFF|IREG,DEGR:COMP]
+	=> D(!D) %D=[DRFLX:ER]
+## { DEST } D() $=[DRFLX:UN,DMORF:SUFF|IREG,DEGR:SUPE]
+	=> D(!D) %D=[DRFLX:EST]
+
+/* ================================================================== ADV */
+
+

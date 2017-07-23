@@ -1,0 +1,1994 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=gb_2312-80">
+<meta name="Author" content="Liu Qun">
+<meta name="Description" content="数据格式">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>数据格式</title>
+</head>
+
+<body>
+
+<h1 align="center"><font size="6">汉英机译系统数据说明</font>
+</h1>
+
+<blockquote>
+    <h2><a href="#sec0"><font size="4">§0 数据文件的词法</font></a>
+    </h2>
+    <h2><a href="#sec1"><font size="4">§1 语言模型</font></a>
+    </h2>
+    <h5><a href="#sec1.1"><font size="4">§1.1 语义分类<br>
+    </font></a><a href="#sec1.2"><font size="4">§1.2
+    语义特征<br>
+    </font></a><a href="#sec1.3"><font size="4">§1.3
+    语义关联<br>
+    </font></a><a href="#sec1.4"><font size="4">§1.4
+    词语分类<br>
+    </font></a><a href="#sec1.5"><font size="4">§1.5
+    词语的语法特征<br>
+    </font></a><a href="#sec1.6"><font size="4">§1.6
+    短语句子分类<br>
+    </font></a><a href="#sec1.7"><font size="4">§1.7
+    短语句子的语法特征<br>
+    </font></a><a href="#sec1.8"><font size="4">§1.8
+    句法关联<br>
+    </font></a><a href="#sec1.9"><font size="4">§1.9
+    特殊字段处理</font></a><font size="4"> </font></h5>
+    <h1><a href="#sec2"><font size="4">§2
+    描述语言知识的基本形式</font></a> </h1>
+    <h1><a href="#sec2.1"><font size="4">§2.1 原子<br>
+    </font></a><a href="#sec2.2"><font size="4">§2.2
+    特征结构<br>
+    </font></a><a href="#sec2.3"><font size="4">§2.3
+    树和森林<br>
+    </font></a><a href="#sec2.4"><font size="4">§2.4 约束</font></a><font
+    size="4"> </font></h1>
+    <h1><a href="#sec3"><font size="4">§3 析句规则</font></a>
+    </h1>
+    <h1><a href="#sec4"><font size="4">§4 造句规则</font></a>
+    </h1>
+    <h1><a href="#sec5"><font size="4">§5 词典</font></a> </h1>
+    <h1><a href="#sec6"><font size="4">§6 汉语重叠词规则</font></a>
+    </h1>
+    <h1><a href="#sec7"><font size="4">§7 汉语切分规则</font></a>
+    </h1>
+    <h1><a href="#sec8"><font size="4">§</font><font size="4"
+    face="宋体">8</font><font size="4"> 英语构词规则</font></a>
+    </h1>
+</blockquote>
+
+<pre><font size="4">        本说明详细介绍汉英机译系统所使用的各类数据文件格式。</font></pre>
+
+<pre><font size="4">        在本说明中，括在尖括号中的部分，如 &lt;</font><a
+href="#Ident"><font size="4">Ident</font></a><font size="4">&gt;，表示 Ident 是本说明中用到的概
+    念。而尖括号中如果出现冒号，如 &lt;</font><a
+href="#Ident"><font size="4">Ident:LexCat</font></a><font
+size="4">&gt;，则表示 LexCat 是对概念 Ident
+    的一些限定。</font></pre>
+
+<pre><font size="4">        以下例子介绍本文在说明一个概念时所采用的形式：</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="PhrAtt"><font
+size="4">PhrAtt</font></a><font size="4">&gt;:
+                 PhrAtt : { &lt;</font><a href="#Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt; }
+                 PhrAtt &lt;</font><a href="#Condition"><font
+size="4">Condition</font></a><font size="4">&gt; : { &lt;</font><a
+href="#Att_Set"><font size="4">Att_Set</font></a><font size="4">&gt; }</font></pre>
+
+<pre><font size="4">        在这个例子中，第一行表示被说明的概念是&lt;</font><a
+href="#PhrAtt"><font size="4">PhrAtt</font></a><font size="4">&gt;，后面两行表示这个概念有两
+    种形式。后面两行中又用到了关键字 PhrAtt, PhrCat, 分隔符 ( ) { } : , 和其它几
+    个概念：&lt;</font><a href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt;, &lt;</font><a href="#Att_Set"><font size="4">Att_Set</font></a><font
+size="4">&gt;, 和 &lt;</font><a href="#Condition"><font size="4">Condition</font></a><font
+size="4">&gt;。</font></pre>
+
+<blockquote>
+    <h2><a name="sec0"><font size="4">§0 数据文件的词法</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        在本系统的数据文件中用到以下词法单元：</font></pre>
+
+<pre><font size="4">        关键字：</font></pre>
+<div align="center"><center>
+
+<table border="0" width="60%" cols="4">
+    <tr>
+        <td><font size="4">SemModel</font></td>
+        <td><font size="4">SynModel</font></td>
+        <td><font size="4">EndModel</font></td>
+        <td>　</td>
+    </tr>
+    <tr>
+        <td><font size="4">SemCat </font></td>
+        <td><font size="4">SemAtt </font></td>
+        <td><font size="4">SemVal</font></td>
+        <td>　</td>
+    </tr>
+    <tr>
+        <td><font size="4">LexCat </font></td>
+        <td><font size="4">LexAtt </font></td>
+        <td><font size="4">LexVal</font></td>
+        <td>　</td>
+    </tr>
+    <tr>
+        <td><font size="4">PhrCat </font></td>
+        <td><font size="4">PhrAtt </font></td>
+        <td><font size="4">PhrVal</font></td>
+        <td>　</td>
+    </tr>
+    <tr>
+        <td><font size="4">SemAssAtt </font></td>
+        <td><font size="4">SemAssVal </font></td>
+        <td><font size="4">SynAssAtt </font></td>
+        <td><font size="4">SynAssVal</font></td>
+    </tr>
+    <tr>
+        <td><font size="4">BaseForm </font></td>
+        <td><font size="4">VaryForm </font></td>
+        <td><font size="4">Static </font></td>
+        <td><font size="4">Dynamic</font></td>
+    </tr>
+    <tr>
+        <td><font size="4">Limited </font></td>
+        <td><font size="4">Unlimited </font></td>
+        <td><font size="4">RelMode </font></td>
+        <td><font size="4">Default</font></td>
+    </tr>
+    <tr>
+        <td><font size="4">Hierar </font></td>
+        <td><font size="4">Symbol </font></td>
+        <td><font size="4">Number </font></td>
+        <td><font size="4">Boolean</font></td>
+    </tr>
+    <tr>
+        <td><font size="4">Field </font></td>
+        <td><font size="4">Digit </font></td>
+        <td><font size="4">Punct </font></td>
+        <td><font size="4">Other</font></td>
+    </tr>
+    <tr>
+        <td><font size="4">IF </font></td>
+        <td><font size="4">TRUE </font></td>
+        <td><font size="4">FALSE</font></td>
+        <td>　</td>
+    </tr>
+    <tr>
+        <td><font size="4">THEN </font></td>
+        <td><font size="4">ELSE </font></td>
+        <td><font size="4">ENDIF</font></td>
+        <td>　</td>
+    </tr>
+    <tr>
+        <td><font size="4">CONDITION </font></td>
+        <td><font size="4">OTHERWISE</font></td>
+        <td><font size="4">SELECT</font></td>
+        <td>　</td>
+    </tr>
+</table>
+</center></div>
+
+<pre><font size="4">        标识符：</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Ident"><font
+size="4">Ident</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#NrmIdent"><font size="4">NrmIdent</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#StrIdent"><font size="4">StrIdent</font></a><font
+size="4">&gt;
+        &lt;</font><a name="NrmIdent"><font size="4">NrmIdent</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Alpha"><font size="4">Alpha</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#NrmIdent"><font size="4">NrmIdent</font></a><font
+size="4">&gt;&lt;</font><a href="#Alpha"><font size="4">Alpha</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#NrmIdent"><font size="4">NrmIdent</font></a><font
+size="4">&gt;&lt;</font><a href="#Digit"><font size="4">Digit</font></a><font
+size="4">&gt;
+        &lt;</font><a name="StrIdent"><font size="4">StrIdent</font></a><font
+size="4">&gt;:
+                 &quot;&lt;</font><a href="#String"><font
+size="4">String</font></a><font size="4">&gt;&quot;
+        &lt;</font><a name="Alpha"><font size="4">Alpha</font></a><font
+size="4">&gt;:
+                 _
+                 &lt;</font><a href="#ChnChar"><font size="4">ChnChar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LtnChar"><font size="4">LtnChar</font></a><font
+size="4">&gt;
+        &lt;</font><a name="LtnChar"><font size="4">LtnChar</font></a><font
+size="4">&gt;:
+                 A-Z
+                 a-z
+        &lt;</font><a name="ChnChar"><font size="4">ChnChar</font></a><font
+size="4">&gt;:
+                 汉字
+        &lt;</font><a name="Digit"><font size="4">Digit</font></a><font
+size="4">&gt;:
+                 0-9
+        &lt;</font><a name="String"><font size="4">String</font></a><font
+size="4">&gt;:
+                 任意字符串, 其中的双引号(&quot;)重复一次</font></pre>
+
+<pre><font size="4">        数：</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Integ"><font
+size="4">Integ</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#Digit"><font size="4">Digit</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Integ"><font size="4">Integ</font></a><font
+size="4">&gt;&lt;</font><a href="#Digit"><font size="4">Digit</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        分隔符：</font></pre>
+
+<pre><font size="4">                 . , ; : = | ~
+                     ( ) &lt; &gt; [ ] { }
+                 ^ &amp;&amp; ## $$ ** ! $ / &amp; * + -&gt; =&gt; == != :: &lt;&lt; &gt;&gt;   -- ||
+                 % %% %%% %%%%
+                 / // /// ////</font></pre>
+
+<pre><font size="4">        注释：</font></pre>
+
+<pre><font size="4">                 位于 /* 和 */ 之间的字符串</font></pre>
+
+<pre><font size="4">        语言代码:</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="LangCode"><font
+size="4">LangCode</font></a><font size="4">&gt;:
+                 CHINESE
+                 ENGLISH</font></pre>
+
+<pre><font size="4">        除了以字母(包括汉字和下横线)开头的字母数字串以外，括在双引号中的任意字符
+    串也可以作为标识符使用，用于表示标点符号等特殊符号。双引号内的字符串中如果又
+    出现双引号(&quot;)应重复一次, 用两个双引号(&quot;&quot;)表示。 除非在双引号内，否则标识符中
+    不允许出现空白符号。两个标识符之间必须有空白或其它符号分隔。</font></pre>
+
+<blockquote>
+    <h2><a name="sec1"><font size="4">§1 语言模型</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        语言模型文件（缺省文件名为MODEL）定义本系统中所有的描述用的符号。包括词、
+    短语、句子的分类及属性，词的语法语义关联等。它包括以下几项内容：</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Model"><font
+size="4">Model</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#SemModel"><font size="4">SemModel</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Model"><font size="4">Model</font></a><font
+size="4">&gt; &lt;</font><a href="#SynModel"><font size="4">SynModel</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="SemModel"><font
+size="4">SemModel</font></a><font size="4">&gt;:
+                 SemModel &lt;</font><a href="#SemModelBody"><font
+size="4">SemModelBody</font></a><font size="4">&gt; EndModel
+        &lt;</font><a name="SemModelBody"><font size="4">SemModelBody</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#SemCat"><font size="4">SemCat</font></a><font
+size="4">&gt; &lt;</font><a href="#SemFeat"><font size="4">SemFeat</font></a><font
+size="4">&gt; &lt;</font><a href="#SemAss"><font size="4">SemAss</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="SynModel"><font
+size="4">SynModel</font></a><font size="4">&gt;:
+                 SynModel ( &lt;</font><a href="#LangCode"><font
+size="4">LangCode</font></a><font size="4">&gt; ) &lt;</font><a
+href="#SynModelBody"><font size="4">SynModelBody</font></a><font
+size="4">&gt; EndModel
+        &lt;</font><a name="SynModelBody"><font size="4">SynModelBody</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LexCat"><font size="4">LexCat</font></a><font
+size="4">&gt; &lt;</font><a href="#LexFeat"><font size="4">LexFeat</font></a><font
+size="4">&gt; &lt;</font><a href="#PhrCat"><font size="4">PhrCat</font></a><font
+size="4">&gt; &lt;</font><a href="#PhrFeat"><font size="4">PhrFeat</font></a><font
+size="4">&gt; &lt;</font><a href="#SynAss"><font size="4">SynAss</font></a><font
+size="4">&gt; &lt;</font><a href="#SpecialField"><font size="4">SpecialField</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        其中SemModel和EndModel之间的是语义模型，SynModel和EndModel之间是句法模型。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.1"><font size="4">§1.1 语义分类</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="SemCat"><font
+size="4">SemCat</font></a><font size="4">&gt;:
+                 SemCat : &lt;</font><a href="#Attribute"><font
+size="4">Attribute</font></a><font size="4">&gt; : { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }</font></pre>
+
+<pre><font size="4">        语义分类是一个多级分类系统。
+        语义分类属性的类型为符号型，活跃模式为静态，相关模式为不相关。
+        在特征结构描述中，被说明为 SemCat 的属性之值应为 &lt;</font><a
+href="#Ident"><font size="4">Ident:SemCat</font></a><font
+size="4">&gt;。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.2"><font size="4">§1.2 语义特征</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="SemFeat"><font
+size="4">SemFeat</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#SemAtt"><font size="4">SemAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SemVal"><font size="4">SemVal</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SemFeat"><font size="4">SemFeat</font></a><font
+size="4">&gt; &lt;</font><a href="#SemFeat"><font size="4">SemFeat</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="SemAtt"><font
+size="4">SemAtt</font></a><font size="4">&gt;:
+                 SemAtt : { &lt;</font><a href="#Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt; }
+                 SemAtt &lt;</font><a href="#Condition"><font
+size="4">Condition</font></a><font size="4">&gt; : { &lt;</font><a
+href="#Att_Set"><font size="4">Att_Set</font></a><font size="4">&gt; }</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="SemVal"><font
+size="4">SemVal</font></a><font size="4">&gt;:
+                 SemVal ( &lt;</font><a href="#Ident"><font
+size="4">Ident:SemAtt</font></a><font size="4">&gt; ) : &lt;</font><a
+href="#AtomVal"><font size="4">AtomVal</font></a><font size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Condition"><font
+size="4">Condition</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#Fest"><font size="4">Fest</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="AtomVal"><font
+size="4">AtomVal</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#AtomValType"><font size="4">AtomValType</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#AtomValType"><font size="4">AtomValType</font></a><font
+size="4">&gt; &lt;</font><a href="#ValMode"><font size="4">ValMode</font></a><font
+size="4">&gt;
+        &lt;</font><a name="AtomValType"><font size="4">AtomValType</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#AtomType"><font size="4">AtomType</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#AtomType"><font size="4">AtomType</font></a><font
+size="4">&gt; &lt;</font><a href="#DefAtom"><font size="4">DefAtom</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ValMode"><font size="4">ValMode</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#ActMode"><font size="4">ActMode</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#RelMode"><font size="4">RelMode</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ActMode"><font size="4">ActMode</font></a><font
+size="4">&gt; &lt;</font><a href="#RelMode"><font size="4">RelMode</font></a><font
+size="4">&gt;
+        &lt;</font><a name="DefAtom"><font size="4">DefAtom</font></a><font
+size="4">&gt;:
+                 Default = &lt;</font><a href="#Atom"><font
+size="4">Atom</font></a><font size="4">&gt;
+        &lt;</font><a name="ActMode"><font size="4">ActMode</font></a><font
+size="4">&gt;:
+                 Static
+                 Dynamic
+        &lt;</font><a name="RelMode"><font size="4">RelMode</font></a><font
+size="4">&gt;:
+                 RelMode = 0
+                 RelMode = 1</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Att_Set"><font size="4">Att_Set</font></a><font
+size="4">&gt; , &lt;</font><a href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Att_Name"><font size="4">Att_Name</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt; = &lt;</font><a href="#Att_Alias"><font size="4">Att_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Att_Name"><font size="4">Att_Name</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Att_Alias"><font size="4">Att_Alias</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="AtomType"><font
+size="4">AtomType</font></a><font size="4">&gt;:
+                 Hierar Unlimited
+                 Hierar Unlimited { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }
+                 Hierar Limited   { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }
+                 Symbol Unlimited
+                 Symbol Unlimited { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }
+                 Symbol Limited   { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }
+                 Number Unlimited
+                 Number Unlimited { &lt;</font><a
+href="#Number_Set"><font size="4">Number_Set</font></a><font
+size="4">&gt; }
+                 Number Limited   { &lt;</font><a
+href="#Number_Set"><font size="4">Number_Set</font></a><font
+size="4">&gt; }
+                 Boolean
+                 Boolean { &lt;</font><a href="#Boolean_Set"><font
+size="4">Boolean_Set</font></a><font size="4">&gt; }
+        &lt;</font><a name="HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#HieSym_Atom"><font size="4">HieSym_Atom</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; , &lt;</font><a href="#HieSym_Atom"><font size="4">HieSym_Atom</font></a><font
+size="4">&gt;
+        &lt;</font><a name="HieSym_Atom"><font size="4">HieSym_Atom</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Atom_Name"><font size="4">Atom_Name</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#HieSym_Atom"><font size="4">HieSym_Atom</font></a><font
+size="4">&gt; = &lt;</font><a href="#Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Atom_Name"><font size="4">Atom_Name</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Number_Set"><font size="4">Number_Set</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Number_Atom"><font size="4">Number_Atom</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Number_Set"><font size="4">Number_Set</font></a><font
+size="4">&gt; , &lt;</font><a href="#Number_Atom"><font size="4">Number_Atom</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Number_Atom"><font size="4">Number_Atom</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Integ"><font size="4">Integ</font></a><font
+size="4">&gt; = &lt;</font><a href="#Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Number_Atom"><font size="4">Number_Atom</font></a><font
+size="4">&gt; = &lt;</font><a href="#Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Boolean_Set"><font size="4">Boolean_Set</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Boolean_Atom"><font
+size="4">Boolean_Atom</font></a><font size="4">&gt;
+                 &lt;</font><a href="#Boolean_Set"><font size="4">Boolean_Set</font></a><font
+size="4">&gt; , &lt;</font><a href="#Boolean_Atom"><font size="4">Boolean_Atom</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Boolean_Atom"><font size="4">Boolean_Atom</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#True"><font size="4">True</font></a><font
+size="4">&gt; = &lt;</font><a href="#Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#False"><font size="4">False</font></a><font
+size="4">&gt; = &lt;</font><a href="#Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Boolean_Atom"><font
+size="4">Boolean_Atom</font></a><font size="4">&gt; = &lt;</font><a
+href="#Atom_Alias"><font size="4">Atom_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="True"><font size="4">True</font></a><font
+size="4">&gt;:
+                 是
+                 Yes
+                 YES
+        &lt;</font><a name="False"><font size="4">False</font></a><font
+size="4">&gt;:
+                 否
+                 No
+                 NO</font></pre>
+
+<pre><font size="4">        &lt;</font><a href="#SemAtt"><font
+size="4">SemAtt</font></a><font size="4">&gt; 是属性说明，用于列出所有的语义属性：
+                SemCat 类的属性只有一个，用于表示语义分类，其类型为层次型，取值范围
+                为前面&lt;</font><a href="#SemCat"><font
+size="4">SemCat</font></a><font size="4">&gt;中所说明的语义分类；
+                &lt;</font><a href="#Condition"><font size="4">Condition</font></a><font
+size="4">&gt;后列出该条件成立时所具有的属性。
+        &lt;</font><a href="#SemVal"><font size="4">SemVal</font></a><font
+size="4">&gt; 是属性值说明，说明语义属性的类型、范围、缺省值和模式。
+        &lt;</font><a href="#AtomVal"><font size="4">AtomVal</font></a><font
+size="4">&gt; 是原子属性的取值说明。
+        &lt;</font><a href="#AtomType"><font size="4">AtomType</font></a><font
+size="4">&gt;用于说明属性的取值类型和范围：
+                Hierar 为层次型；
+                Symbol 为符号型；
+                Number 为数值型；
+                Boolean 为布尔型；
+                Limited 说明取值范围为有限集合；
+                Unlimited 说明取值范围为无限集合，即可取该类型的任意值；
+        &lt;</font><a href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; 为有限的层次类型和符号类型指定取值范围，
+                并可为单个层次型值或符号型值定义若干个别名；
+        &lt;</font><a href="#Number_Set"><font size="4">Number_Set</font></a><font
+size="4">&gt; 为某些数值定义若干个别名；
+        &lt;</font><a href="#Boolean_Set"><font size="4">Boolean_Set</font></a><font
+size="4">&gt; 为布尔值定义若干个别名。
+                有关各种类型的原子的定义，参见后面§2 节。
+        &lt;</font><a href="#DefAtom"><font size="4">DefAtom</font></a><font
+size="4">&gt; 用于说明属性的缺省值(一个原子)，该值应符合前面的说明。
+        &lt;</font><a href="#ValMode"><font size="4">ValMode</font></a><font
+size="4">&gt; 用于属性的模式说明。
+        &lt;</font><a href="#ActMode"><font size="4">ActMode</font></a><font
+size="4">&gt; 用于说明属性的活跃模式。
+                属性的活跃模式可以是静态的(Static)或动态的(Dynamic)。
+        &lt;</font><a href="#RelMode"><font size="4">RelMode</font></a><font
+size="4">&gt; 用于说明属性的相关模式。
+                相关模式有两种：RelMode=0 表示不相关，RelMode=1 表示相关。
+                属性的相关模式反映了一个语言成分的该属性之值与其中心语言成分的该属性之值
+                之间的关系。
+        语义属性的缺省活跃模式为静态，缺省相关模式为相关。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.3"><font size="4">§1.3 语义关联</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="SemAss"><font
+size="4">SemAss</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#SemAssAtt"><font size="4">SemAssAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SemAssVal"><font size="4">SemAssVal</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SemAss"><font size="4">SemAss</font></a><font
+size="4">&gt; &lt;</font><a href="#SemAss"><font size="4">SemAss</font></a><font
+size="4">&gt;
+        &lt;</font><a name="SemAssAtt"><font size="4">SemAssAtt</font></a><font
+size="4">&gt;:
+                 SemAssAtt : { &lt;</font><a href="#Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt; }
+                 SemAssAtt &lt;</font><a href="#Condition"><font
+size="4">Condition</font></a><font size="4">&gt; : { &lt;</font><a
+href="#Att_Set"><font size="4">Att_Set</font></a><font size="4">&gt; }
+        &lt;</font><a name="SemAssVal"><font size="4">SemAssVal</font></a><font
+size="4">&gt;:
+                 SemAssVal ( &lt;</font><a href="#Ident"><font
+size="4">Ident:SemAssAtt</font></a><font size="4">&gt; ) : &lt;</font><a
+href="#FestVal"><font size="4">FestVal</font></a><font size="4">&gt;
+        &lt;</font><a name="FestVal"><font size="4">FestVal</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#DefFest"><font size="4">DefFest</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ValMode"><font size="4">ValMode</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#DefFest"><font size="4">DefFest</font></a><font
+size="4">&gt; &lt;</font><a href="#ValMode"><font size="4">ValMode</font></a><font
+size="4">&gt;
+        &lt;</font><a name="DefFest"><font size="4">DefFest</font></a><font
+size="4">&gt;:
+                 Default = &lt;</font><a href="#Fest"><font
+size="4">Fest</font></a><font size="4">&gt;</font></pre>
+
+<pre><font size="4">        关联属性与其它属性不同的是，它的取值不是原子，而是另外一个特征结构。
+        语义关联用于建立句子中语言成分之间的语义关系，用于表示语言成分的深层格。
+        &lt;</font><a href="#SemAssAtt"><font size="4">SemAssAtt</font></a><font
+size="4">&gt; 是语义关联属性说明，用于列出所有的语义关联属性：
+        &lt;</font><a href="#SemAssVal"><font size="4">SemAssVal</font></a><font
+size="4">&gt; 是语义关联属性值说明，说明语义关联属性的缺省值和模式。
+        &lt;</font><a href="#FestVal"><font size="4">FestVal</font></a><font
+size="4">&gt; 是特征结构属性的取值说明。
+        &lt;</font><a href="#DefFest"><font size="4">DefFest</font></a><font
+size="4">&gt; 用于说明属性的缺省值(一个特征结构)。
+        语义关联属性的缺省活跃模式为静态，缺省相关模式为相关。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.4"><font size="4">§1.4 词语分类</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="LexCat"><font
+size="4">LexCat</font></a><font size="4">&gt;:
+                 LexCat : &lt;</font><a href="#Attribute"><font
+size="4">Attribute</font></a><font size="4">&gt; : { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }</font></pre>
+
+<pre><font size="4">        这一部分用于说明一种语言的词语的分类系统。该分类系统是一个枚举的符号类型。
+        &lt;</font><a href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt; 说明词类属性的属性名，&lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; 说明具体有哪些词类及子类。
+        词语分类属性的类型为符号型，活跃模式为静态，相关模式为相关。
+        在特征结构描述中，被说明为 LexCat 的属性之值应为&lt;</font><a
+href="#Ident"><font size="4">Ident:LexCat</font></a><font
+size="4">&gt;。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.5"><font size="4">§1.5
+    词语的语法特征</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="LexFeat"><font
+size="4">LexFeat</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#LexAtt"><font size="4">LexAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LexVal"><font size="4">LexVal</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LexFeat"><font size="4">LexFeat</font></a><font
+size="4">&gt; &lt;</font><a href="#LexFeat"><font size="4">LexFeat</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="LexAtt"><font
+size="4">LexAtt</font></a><font size="4">&gt;:
+                 LexAtt ( BaseForm ) : &lt;</font><a
+href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt;
+                 LexAtt ( VaryForm ) : &lt;</font><a
+href="#Attribute"><font size="4">Attribute</font></a><font
+size="4">&gt;
+                 LexAtt : { &lt;</font><a href="#Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt; }
+                 LexAtt &lt;</font><a href="#Condition"><font
+size="4">Condition</font></a><font size="4">&gt; : { &lt;</font><a
+href="#Att_Set"><font size="4">Att_Set</font></a><font size="4">&gt; }</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="LexVal"><font
+size="4">LexVal</font></a><font size="4">&gt;:
+                 LexVal ( &lt;</font><a href="#Ident"><font
+size="4">Ident:LexAtt</font></a><font size="4">&gt; ) : &lt;</font><a
+href="#AtomVal"><font size="4">AtomVal</font></a><font size="4">&gt;</font></pre>
+
+<pre><font size="4">        这一部分描述词语的那些仅靠分类所无法描述的语法特征。
+        &lt;</font><a href="#LexAtt"><font size="4">LexAtt</font></a><font
+size="4">&gt;是属性说明，用于列出所有的词类语法属性：
+                LexBase 所指明的是单词原形属性，用于表示单词的原形，其类型为符号型，
+                        活跃模式为静态，相关模式为相关；
+                LexVary 所指明的是单词变形属性，用于表示单词的实际形态（如经过屈折或
+                        重叠后），其类型也是符号型，活跃模式为动态，相关模式为相关；
+                &lt;</font><a href="#Condtion"><font size="4">Condtion</font></a><font
+size="4">&gt;是一个表示条件的特征结构，后面列出只有当该条件成立时才具有
+                        的属性，其类型、取值范围、缺省值和模式在后面&lt;</font><a
+href="#LexVal"><font size="4">LexVal</font></a><font size="4">&gt;中说明；
+                Static类的属性是静态属性；
+                Dynamic类的属性是动态属性。
+        &lt;</font><a href="#LexVal"><font size="4">LexVal</font></a><font
+size="4">&gt;是属性值的说明，说明语法属性的取值类型、范围、缺省值和模式，
+                应对每一属性分别说明。
+        词语属性的缺省活跃模式为静态，缺省相关模式为相关。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.6"><font size="4">§1.6 短语句子分类</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="PhrCat"><font
+size="4">PhrCat</font></a><font size="4">&gt;:
+                 PhrCat : &lt;</font><a href="#Attribute"><font
+size="4">Attribute</font></a><font size="4">&gt; : { &lt;</font><a
+href="#HieSym_Set"><font size="4">HieSym_Set</font></a><font
+size="4">&gt; }</font></pre>
+
+<pre><font size="4">        这一部分用于说明短语和句子的分类系统，它也是一个枚举的符号类型。其说明格式
+        类似于词语分类的说明。
+        词语的分类和短语句子的分类不能同名，它们一起用作语言成分的标记(Label)。
+        词语的分类系统以及短语句子的分类系统组成了一部短语结构语法(PSG)。
+        短语句子分类属性的类型为符号型，活跃模式为静态，相关模式为不相关。
+        在特征结构描述中，被说明为PhrCat的属性之值应符合&lt;</font><a
+href="#PhrCat"><font size="4">PhrCat</font></a><font size="4">&gt;类型。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.7"><font size="4">§1.7
+    短语句子的语法特征</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="PhrFeat"><font
+size="4">PhrFeat</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#PhrAtt"><font size="4">PhrAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#PhrVal"><font size="4">PhrVal</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#PhrFeat"><font size="4">PhrFeat</font></a><font
+size="4">&gt; &lt;</font><a href="#PhrFeat"><font size="4">PhrFeat</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="PhrAtt"><font
+size="4">PhrAtt</font></a><font size="4">&gt;:
+                 PhrAtt : { &lt;</font><a href="#Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt; }
+                 PhrAtt &lt;</font><a href="#Condition"><font
+size="4">Condition</font></a><font size="4">&gt; : { &lt;</font><a
+href="#Att_Set"><font size="4">Att_Set</font></a><font size="4">&gt; }</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="PhrVal"><font
+size="4">PhrVal</font></a><font size="4">&gt;:
+                 PhrVal ( &lt;</font><a href="#Ident"><font
+size="4">Ident:PhrAtt</font></a><font size="4">&gt; ) : &lt;</font><a
+href="#AtomVal"><font size="4">AtomVal</font></a><font size="4">&gt;</font></pre>
+
+<pre><font size="4">        &lt;</font><a href="#PhrAtt"><font
+size="4">PhrAtt</font></a><font size="4">&gt;是属性说明，用于列出所有的短语句子的语法属性：
+                &lt;</font><a href="#Condition"><font size="4">Condition</font></a><font
+size="4">&gt;后列出该条件成立时所具有的属性。
+        &lt;</font><a href="#PhrVal"><font size="4">PhrVal</font></a><font
+size="4">&gt;是属性值说明，说明语法属性的类型、范围、缺省值和模式。
+        短语句子属性的缺省活跃模式为静态，缺省相关模式为不相关。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.8"><font size="4">§1.8 句法关联</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="SynAss"><font
+size="4">SynAss</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#SynAssAtt"><font size="4">SynAssAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SynAssVal"><font size="4">SynAssVal</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SynAss"><font size="4">SynAss</font></a><font
+size="4">&gt; &lt;</font><a href="#SynAss"><font size="4">SynAss</font></a><font
+size="4">&gt;
+        &lt;</font><a name="SynAssAtt"><font size="4">SynAssAtt</font></a><font
+size="4">&gt;:
+                 SynAssAtt : { &lt;</font><a href="#Att_Set"><font
+size="4">Att_Set</font></a><font size="4">&gt; }
+                 SynAssAtt &lt;</font><a href="#Condition"><font
+size="4">Condition</font></a><font size="4">&gt; : { &lt;</font><a
+href="#Att_Set"><font size="4">Att_Set</font></a><font size="4">&gt; }
+        &lt;</font><a name="SynAssVal"><font size="4">SynAssVal</font></a><font
+size="4">&gt;:
+                 SynAssVal ( &lt;</font><a href="#Ident"><font
+size="4">Ident:SynAssAtt</font></a><font size="4">&gt; ) : &lt;</font><a
+href="#FestVal"><font size="4">FestVal</font></a><font size="4">&gt;</font></pre>
+
+<pre><font size="4">        句法关联用于建立句子中语言成分之间的句法关系，用于表示语言成分的句法功能。
+        &lt;</font><a href="#SynAssAtt"><font size="4">SynAssAtt</font></a><font
+size="4">&gt; 是句法关联属性说明，用于列出所有的句法关联属性：
+        &lt;</font><a href="#SynAssVal"><font size="4">SynAssVal</font></a><font
+size="4">&gt; 是句法关联属性值说明，说明句法关联属性的缺省值和模式。
+        句法关联属性的缺省活跃模式为静态，缺省相关模式为不相关。</font></pre>
+
+<blockquote>
+    <h3><a name="sec1.9"><font size="4">§1.9 特殊字段处理</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="SpecialField"><font
+size="4">SpecialField</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#DigitField"><font size="4">DigitField</font></a><font
+size="4">&gt; &lt;</font><a href="#PunctField"><font size="4">PunctField</font></a><font
+size="4">&gt; &lt;</font><a href="#OtherField"><font size="4">OtherField</font></a><font
+size="4">&gt;
+        &lt;</font><a name="DigitField"><font size="4">DigitField</font></a><font
+size="4">&gt;:
+                 Field ( Digit ) : &lt;</font><a href="#Ident"><font
+size="4">Ident:LexCat</font></a><font size="4">&gt;
+                 Field ( Digit ) : &lt;</font><a href="#Ident"><font
+size="4">Ident:LexCat</font></a><font size="4">&gt; &lt;</font><a
+href="#Fest"><font size="4">Fest</font></a><font size="4">&gt;
+        &lt;</font><a name="PunctField"><font size="4">PunctField</font></a><font
+size="4">&gt;:
+                 Field ( Punct ) : &lt;</font><a href="#Ident"><font
+size="4">Ident:LexCat</font></a><font size="4">&gt;
+                 Field ( Punct ) : &lt;</font><a href="#Ident"><font
+size="4">Ident:LexCat</font></a><font size="4">&gt; &lt;</font><a
+href="#Fest"><font size="4">Fest</font></a><font size="4">&gt;
+        &lt;</font><a name="OtherField"><font size="4">OtherField</font></a><font
+size="4">&gt;:
+                 Field ( Other ) : &lt;</font><a href="#Ident"><font
+size="4">Ident:LexCat</font></a><font size="4">&gt;
+                 Field ( Other ) : &lt;</font><a href="#Ident"><font
+size="4">Ident:LexCat</font></a><font size="4">&gt; &lt;</font><a
+href="#Fest"><font size="4">Fest</font></a><font size="4">&gt;</font></pre>
+
+<pre><font size="4">         此处说明正文中的阿拉伯数字(Digit)，标点符号(Punct)以及其它文字或符号(Other)
+         应处理为何种词类以及应具有的特征结构。</font></pre>
+
+<pre><font size="4">         下表列出了各种属性的缺省的活跃模式和相关模式：</font></pre>
+<div align="center"><center>
+
+<table border="1" width="600" height="100">
+    <tr>
+        <td align="center"><font size="4">属 性 类 型</font></td>
+        <td align="center"><font size="4">活跃模式 ActMode</font></td>
+        <td align="center"><font size="4">相关模式 RelMode</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">一般语义属性
+        SemAtt</font></td>
+        <td align="center">Static </td>
+        <td align="center">1</td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">语义关联属性
+        SemAssAtt</font></td>
+        <td align="center">Dynamic</td>
+        <td align="center">1</td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">一般词语属性
+        LexAtt</font></td>
+        <td align="center">Static</td>
+        <td align="center">1</td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">一般短语属性
+        PhrAtt</font></td>
+        <td align="center">Static</td>
+        <td align="center">0</td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">句法关联属性
+        SynAssAtt</font></td>
+        <td align="center">Static</td>
+        <td align="center">0</td>
+    </tr>
+</table>
+</center></div>
+
+<pre><font size="4">         下表列出了在翻译的各个阶段中属性取缺省值的条件：</font></pre>
+<div align="center"><center>
+
+<table border="1" width="95%">
+    <tr>
+        <td align="center" width="28%"><font size="4">属性类别</font></td>
+        <td align="center" width="8%"><font size="4">语言</font></td>
+        <td align="center" width="8%"><font size="4">词语<br>
+        短语</font></td>
+        <td align="center" width="8%"><font size="4">活跃<br>
+        模式</font></td>
+        <td align="center" width="8%"><font size="4">词法<br>
+        分析</font></td>
+        <td align="center" width="8%"><font size="4">句法<br>
+        分析</font></td>
+        <td align="center" width="8%"><font size="4">词法<br>
+        转换</font></td>
+        <td align="center" width="8%"><font size="4">句法<br>
+        转换</font></td>
+        <td align="center" width="8%"><font size="4">句法<br>
+        生成</font></td>
+        <td align="center" width="8%"><font size="4">词法<br>
+        生成</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">语义静态属性</font></td>
+        <td align="center">Sem</td>
+        <td align="center">Sem</td>
+        <td align="center">Sta</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">语义动态属性</font></td>
+        <td align="center">Sem</td>
+        <td align="center">Sem</td>
+        <td align="center">Dyn</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">源语言词语静态属性</font></td>
+        <td align="center">Src</td>
+        <td align="center">Lex</td>
+        <td align="center">Sta</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">源语言词语动态属性</font></td>
+        <td align="center">Src</td>
+        <td align="center">Lex</td>
+        <td align="center">Dyn</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">源语言短语静态属性</font></td>
+        <td align="center">Src</td>
+        <td align="center">Phr</td>
+        <td align="center">Sta</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">源语言短语动态属性</font></td>
+        <td align="center">Src</td>
+        <td align="center">Phr</td>
+        <td align="center">Dyn</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">目标语言词语静态属性</font></td>
+        <td align="center">Tgt</td>
+        <td align="center">Lex</td>
+        <td align="center">Sta</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">目标语言词语动态属性</font></td>
+        <td align="center">Tgt</td>
+        <td align="center">Lex</td>
+        <td align="center">Dyn</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">目标语言短语静态属性</font></td>
+        <td align="center">Tgt</td>
+        <td align="center">Phr</td>
+        <td align="center">Sta</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">目标语言短语动态属性</font></td>
+        <td align="center">Tgt</td>
+        <td align="center">Phr</td>
+        <td align="center">Dyn</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center">No</td>
+        <td align="center"><font size="4">Yes</font></td>
+    </tr>
+</table>
+</center></div>
+
+<pre><font size="4">        下表列出了翻译的各个阶段所使用的知识库及知识形式：</font></pre>
+<div align="center"><center>
+
+<table border="1" width="90%">
+    <tr>
+        <td align="center" width="15%"><font size="4">翻译阶段</font></td>
+        <td align="center" width="35%"><font size="4">所使用之知识库</font></td>
+        <td align="center" width="50%"><font size="4">所使用之知识形式</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">词法分析</font></td>
+        <td align="center"><font size="4">词典 Dictn</font> <br>
+        <font size="4">重叠词规则库 OvlRbase</font> <br>
+        <font size="4">切分规则库 SegRbase</font> <br>
+        <font size="4">标注规则库 TagRbase</font></td>
+        <td align="center"><font size="4">义项 Meaning in Dictn</font>
+        <br>
+        <font size="4">重叠词规则 OvlRule in OvlRbase</font>
+        <br>
+        <font size="4">切分规则 SegRule in SegRbase</font> <br>
+        <font size="4">标注规则 TagRule in TagRbase</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">句法分析</font></td>
+        <td align="center"><font size="4">析句规则库
+        PrsRbase</font></td>
+        <td align="center"><font size="4">全局析句规则
+        PrsRule in PrsRbase</font> <br>
+        <font size="4">局部析句规则 PrsRule in Dictn</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">转换</font></td>
+        <td align="center">　</td>
+        <td align="center"><font size="4">义项 Meaning in Dictn</font>
+        <br>
+        <font size="4">全局析句规则 PrsRule in PrsRbase</font>
+        <br>
+        <font size="4">局部析句规则 PrsRule in Dictn</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">句法生成</font></td>
+        <td align="center"><font size="4">造句规则库
+        MakRbase</font></td>
+        <td align="center"><font size="4">造句规则 MakRule in
+        MakRbase</font></td>
+    </tr>
+    <tr>
+        <td align="center"><font size="4">词法生成</font></td>
+        <td align="center"><font size="4">构词规则库
+        BldRbase</font></td>
+        <td align="center"><font size="4">构词规则 BldRule in
+        BldRbase</font></td>
+    </tr>
+</table>
+</center></div>
+
+<blockquote>
+    <h2><a name="sec2"><font size="4">§2
+    描述语言知识的基本形式</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        本节介绍本系统中所用的几种描述语言知识(包括规则、词典和短语、句子结构等)的
+    基本形式。</font></pre>
+
+<blockquote>
+    <h3><a name="sec2.1"><font size="4">§2.1 原子</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        原子是最基本的描述单位，它不可以再分割，但可以用‘与’，‘或’，‘非’等逻
+    辑符号相联结。原子之间的基本运算是合一。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Atom"><font
+size="4">Atom</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#Hierar"><font size="4">Hierar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Symbol"><font size="4">Symbol</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Number"><font size="4">Number</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Boolean"><font size="4">Boolean</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Hierar"><font size="4">Hierar</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Hierar_Or"><font size="4">Hierar_Or</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Hierar_Or"><font size="4">Hierar_Or</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Hierar_And"><font size="4">Hierar_And</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Hierar_Not"><font size="4">Hierar_Not</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Hierar_Or"><font size="4">Hierar_Or</font></a><font
+size="4">&gt;|&lt;</font><a href="#Hierar_And"><font size="4">Hierar_And</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Hierar_And"><font size="4">Hierar_And</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Hierar_Smp"><font size="4">Hierar_Smp</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Hierar_And"><font size="4">Hierar_And</font></a><font
+size="4">&gt;~&lt;</font><a href="#Hierar_Smp"><font size="4">Hierar_Smp</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Hierar_Not"><font size="4">Hierar_Not</font></a><font
+size="4">&gt;:
+                 ~&lt;</font><a href="#Hierar_Smp"><font size="4">Hierar_Smp</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Hierar_Not"><font size="4">Hierar_Not</font></a><font
+size="4">&gt;~&lt;</font><a href="#Hierar_Smp"><font size="4">Hierar_Smp</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Hierar_Smp"><font size="4">Hierar_Smp</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident:Atom_Name</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:Atom_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Symbol"><font size="4">Symbol</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Symbol_Or"><font size="4">Symbol_Or</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Symbol_Not"><font size="4">Symbol_Not</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Symbol_Or"><font size="4">Symbol_Or</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Symbol_Smp"><font size="4">Symbol_Smp</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Symbol_Or"><font size="4">Symbol_Or</font></a><font
+size="4">&gt;|&lt;</font><a href="#Symbol_Smp"><font size="4">Symbol_Smp</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Symbol_Not"><font size="4">Symbol_Not</font></a><font
+size="4">&gt;:
+                 ~&lt;</font><a href="#Symbol_Smp"><font size="4">Symbol_Smp</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Symbol_Not"><font size="4">Symbol_Not</font></a><font
+size="4">&gt;~&lt;</font><a href="#Symbol_Smp"><font size="4">Symbol_Smp</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Symbol_Smp"><font size="4">Symbol_Smp</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident:Atom_Name</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:Atom_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Number"><font size="4">Number</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Number_Or"><font size="4">Number_Or</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Number_Not"><font size="4">Number_Not</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Number_Or"><font size="4">Number_Or</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Number_Smp"><font size="4">Number_Smp</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Number_Or"><font size="4">Number_Or</font></a><font
+size="4">&gt;|&lt;</font><a href="#Number_Smp"><font size="4">Number_Smp</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Number_Not"><font size="4">Number_Not</font></a><font
+size="4">&gt;:
+                 ~&lt;</font><a href="#Number_Smp"><font size="4">Number_Smp</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Number_Not"><font size="4">Number_Not</font></a><font
+size="4">&gt;~&lt;</font><a href="#Number_Smp"><font size="4">Number_Smp</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Number_Smp"><font size="4">Number_Smp</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Integ"><font size="4">Integ</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:Atom_Alias</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Boolean"><font size="4">Boolean</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#True"><font size="4">True</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#False"><font size="4">False</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:Atom_Alias</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        原子&lt;</font><a href="#Atom"><font
+size="4">Atom</font></a><font size="4">&gt;主要有四种不同的形式：层次型、符号型、数值型和布尔型。进行运算时，
+    所有的别名 &lt;</font><a href="#Atom_Alias"><font
+size="4">Atom_Alias</font></a><font size="4">&gt; 都要转换成其基本形式 &lt;</font><a
+href="#Atom_Name"><font size="4">Atom_Name</font></a><font
+size="4">&gt;,&lt;</font><a href="#Integ"><font size="4">Integ</font></a><font
+size="4">&gt;,&lt;</font><a href="#True"><font size="4">True</font></a><font
+size="4">&gt;,&lt;</font><a href="#False"><font size="4">False</font></a><font
+size="4">&gt;。
+        布尔型&lt;</font><a href="#Boolean"><font size="4">Boolean</font></a><font
+size="4">&gt;最简单，它只有&lt;</font><a href="#True"><font
+size="4">True</font></a><font size="4">&gt;和&lt;</font><a
+href="#False"><font size="4">False</font></a><font size="4">&gt;两个值，它不能组成与、或、非等
+    复合形式，布尔值只能与它本身合一。
+        数值型&lt;</font><a href="#Number"><font size="4">Number</font></a><font
+size="4">&gt;可以取所有自然数或零，单个数值只能与其本身合一。数值可以组成
+    两种复合形式：~m~n...(非m且非n...)和m|n|t...(m或n或t...)。
+        符号型&lt;</font><a href="#Symbol"><font size="4">Symbol</font></a><font
+size="4">&gt;可以取标识符为值，单个符号只能与其本身合一。其组合形式与数值
+    型相同。
+        层次型&lt;</font><a href="#Hierar"><font size="4">Hierar</font></a><font
+size="4">&gt;比较复杂。假定有单个层次型值α和单个层次型值β，当且仅当存在
+    一个串γ，能满足α＝βγ（或β＝αγ）时，α和β才能够合一，合一的结果为α（或
+    β）。这时我们称α为β（或β为α）的下位值，β为α（或α为β）的上位值。它们反
+    映了多级分类系统中上位范畴和下位范畴之间的关系。 层次型有三种复合形式：~A~B...
+    (非A且非B...)、A~A1~A2...(A且非A1且非A2...) 以及这两种形式之或(|)。 对于第二种
+    形式，要求A1, A2等必须是A的下位值。</font></pre>
+
+<blockquote>
+    <h3><a name="sec2.2"><font size="4">§2.2 特征结构</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        特征结构用于语言单位（如词语、短语、句子等）的内部结构，也用于描述规则和词
+    典。它的基本形式是“属性--值”对的集合。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Fest"><font
+size="4">Fest</font></a><font size="4">&gt;:
+                 [ ]
+                 { }
+                 [ ] { }
+                 [ &lt;</font><a href="#IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt; ]
+                 { &lt;</font><a href="#ExtFest"><font size="4">ExtFest</font></a><font
+size="4">&gt; }
+                 [ &lt;</font><a href="#IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt; ] { &lt;</font><a href="#ExtFest"><font size="4">ExtFest</font></a><font
+size="4">&gt; }
+                 &lt;</font><a href="#None"><font size="4">None</font></a><font
+size="4">&gt;
+        &lt;</font><a name="IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#IntFeat"><font size="4">IntFeat</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt; , &lt;</font><a href="#IntFeat"><font size="4">IntFeat</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt; ; &lt;</font><a href="#IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ExtFest"><font size="4">ExtFest</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#ExtFeat"><font size="4">ExtFeat</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtFest"><font size="4">ExtFest</font></a><font
+size="4">&gt; , &lt;</font><a href="#ExtFeat"><font size="4">ExtFeat</font></a><font
+size="4">&gt;
+        &lt;</font><a name="IntFeat"><font size="4">IntFeat</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#IntAtt"><font size="4">IntAtt</font></a><font
+size="4">&gt; : &lt;</font><a href="#IntVal"><font size="4">IntVal</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ExtFeat"><font size="4">ExtFeat</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#ExtAtt"><font size="4">ExtAtt</font></a><font
+size="4">&gt; : &lt;</font><a href="#ExtVal"><font size="4">ExtVal</font></a><font
+size="4">&gt;
+        &lt;</font><a name="IntAtt"><font size="4">IntAtt</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident:LexAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:PhrAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:SemAtt</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ExtAtt"><font size="4">ExtAtt</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident:SemAss</font></a><font
+size="4">&gt;
+        &lt;</font><a name="IntVal"><font size="4">IntVal</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Atom"><font size="4">Atom</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ExtVal"><font size="4">ExtVal</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Fest"><font size="4">Fest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="None"><font size="4">None</font></a><font
+size="4">&gt;:
+                 无
+                 None
+                 NONE</font></pre>
+
+<pre><font size="4">        特征结构&lt;</font><a
+href="#Fest"><font size="4">Fest</font></a><font size="4">&gt;由一些特征组成，每个特征是一个属性--值对。
+        值为原子的特征，称为内部特征&lt;</font><a
+href="#IntFeat"><font size="4">IntFeat</font></a><font size="4">&gt; ，所有内部特征括在方括号中，组成内
+    部特征集合&lt;</font><a href="#IntFest"><font size="4">IntFest</font></a><font
+size="4">&gt;。 在方括号中，逗号表示&quot;与&quot;，分号表示&quot;或&quot;，与的优先级高
+    于或的优先级。内部属性&lt;</font><a href="#IntAtt"><font
+size="4">IntAtt</font></a><font size="4">&gt;是一个表示属性的标识符。内部值&lt;</font><a
+href="#IntVal"><font size="4">IntVal</font></a><font size="4">&gt;是一个原
+    子。
+        值为其它特征结构的特征，称为外部特征&lt;</font><a
+href="#ExtFeat"><font size="4">ExtFeat</font></a><font size="4">&gt;，所有外部特征括在花括号中，
+    组成外部特征集合&lt;</font><a href="#ExtFest"><font
+size="4">ExtFest</font></a><font size="4">&gt;。外部特征集中不允许出现表示&quot;或&quot;的分号。外部属性
+    &lt;</font><a href="#ExtAtt"><font size="4">ExtAtt</font></a><font
+size="4">&gt;是一个表示关联的标识符。外部值&lt;</font><a
+href="#ExtVal"><font size="4">ExtVal</font></a><font size="4">&gt;是另外一个特征结构。
+        &lt;</font><a href="#None"><font size="4">None</font></a><font
+size="4">&gt;是一个特殊的特征结构, 除了它自身以外, 它不能与任何其它特征结构合一。</font></pre>
+
+<blockquote>
+    <h3><a name="sec2.3"><font size="4">§2.3 树和森林</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="LeftForest"><font
+size="4">LeftForest</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#LeftTree"><font size="4">LeftTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#HeadTag"><font size="4">HeadTag</font></a><font
+size="4">&gt; &lt;</font><a href="#LeftTree"><font size="4">LeftTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LeftForest"><font size="4">LeftForest</font></a><font
+size="4">&gt; &lt;</font><a href="#LeftForest"><font size="4">LeftForest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="LeftTree"><font size="4">LeftTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt; &lt;</font><a href="#WordItem_Or"><font
+size="4">WordItem_Or&gt; </font></a><font size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; ( &lt;</font><a href="#LeftSubForest"><font
+size="4">LeftSubForest</font></a><font size="4">&gt; )
+        &lt;</font><a name="LeftSubForest"><font size="4">LeftSubForest</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LeftSubTree"><font size="4">LeftSubTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#HeadTag"><font size="4">HeadTag</font></a><font
+size="4">&gt; &lt;</font><a href="#LeftSubTree"><font size="4">LeftSubTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LeftSubForest"><font
+size="4">LeftSubForest</font></a><font size="4">&gt; &lt;</font><a
+href="#LeftSubForest"><font size="4">LeftSubForest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="LeftSubTree"><font size="4">LeftSubTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LeftLabelItem"><font
+size="4">LeftLabelItem</font></a><font size="4">&gt;
+                 &lt;</font><a href="#LeftLabelItem"><font
+size="4">LeftLabelItem</font></a><font size="4">&gt; &lt; &lt;</font><a
+href="#WordItem_Or"><font size="4">WordItem_Or&gt; </font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LeftLabelItem"><font
+size="4">LeftLabelItem</font></a><font size="4">&gt; ( &lt;</font><a
+href="#LeftSubForest"><font size="4">LeftSubForest</font></a><font
+size="4">&gt; )
+        &lt;</font><a name="LeftLabelItem"><font size="4">LeftLabelItem</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+        &lt;</font><a name="LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident:LexCat</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident:PhrCat</font></a><font
+size="4">&gt;
+        &lt;</font><a name="WordItem_Or"><font size="4">WordItem_Or</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#WordItem"><font size="4">WordItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#WordItem_Or"><font size="4">WordItem_Or</font></a><font
+size="4">&gt; | &lt;</font><a href="#WordItem"><font size="4">WordItem</font></a><font
+size="4">&gt;
+        &lt;</font><a name="WordItem"><font size="4">WordItem</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Word"><font size="4">Word</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Word"><font size="4">Word</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+        &lt;</font><a name="HeadTag"><font size="4">HeadTag</font></a><font
+size="4">&gt;:
+                 !</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="RightForest"><font
+size="4">RightForest</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#HeadTag"><font size="4">HeadTag</font></a><font
+size="4">&gt; &lt;</font><a href="#RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#RightForest"><font size="4">RightForest</font></a><font
+size="4">&gt; &lt;</font><a href="#RightForest"><font size="4">RightForest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt; &lt;</font><a href="#WordItem_Or"><font
+size="4">WordItem_Or&gt; </font></a><font size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; ( &lt;</font><a href="#LeftSubForest"><font
+size="4">LeftSubForest</font></a><font size="4">&gt; )
+        &lt;</font><a name="RightSubForest"><font size="4">RightSubForest</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#RightSubTree"><font
+size="4">RightSubTree</font></a><font size="4">&gt;
+                 &lt;</font><a href="#HeadTag"><font size="4">HeadTag</font></a><font
+size="4">&gt; &lt;</font><a href="#RightSubTree"><font size="4">RightSubTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#MoveTag"><font size="4">MoveTag</font></a><font
+size="4">&gt; &lt;</font><a href="#ShiftLabelItem"><font size="4">ShiftLabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#RemvTag"><font size="4">RemvTag</font></a><font
+size="4">&gt; &lt;</font><a href="#ShiftLabelItem"><font size="4">ShiftLabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#CopyTag"><font size="4">CopyTag</font></a><font
+size="4">&gt; &lt;</font><a href="#ShiftLabelItem"><font size="4">ShiftLabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#SubForest"><font size="4">SubForest</font></a><font
+size="4">&gt; &lt;</font><a href="#RightSubForest"><font size="4">RightSubForest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="RightSubTree"><font size="4">RightSubTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#RightLabelItem"><font
+size="4">RightLabelItem</font></a><font size="4">&gt;
+                 &lt;</font><a href="#RightLabelItem"><font
+size="4">RightLabelItem</font></a><font size="4">&gt; &lt; &lt;</font><a
+href="#WordItem_Or"><font size="4">WordItem_Or&gt; </font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#RightLabelItem"><font
+size="4">RightLabelItem</font></a><font size="4">&gt; ( &lt;</font><a
+href="#RightSubForest"><font size="4">RightSubForest</font></a><font
+size="4">&gt; )
+        &lt;</font><a name="RightLabelItem"><font size="4">RightLabelItem</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt;</font><a href="#TransVar"><font size="4">TransVar</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ShiftLabelItem"><font size="4">ShiftLabelItem</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt;</font><a href="#LabelVar"><font size="4">LabelVar</font></a><font
+size="4">&gt;
+        &lt;</font><a name="MoveTag"><font size="4">MoveTag</font></a><font
+size="4">&gt;:
+                 #
+        &lt;</font><a name="RemvTag"><font size="4">RemvTag</font></a><font
+size="4">&gt;:
+                 &amp;
+        &lt;</font><a name="CopyTag"><font size="4">CopyTag</font></a><font
+size="4">&gt;:
+                 *
+        &lt;</font><a name="LabelVar"><font size="4">LabelVar</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelVarTag"><font size="4">LabelVarTag</font></a><font
+size="4">&gt; &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+        &lt;</font><a name="TransVar"><font size="4">TransVar</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#TransVarTag"><font size="4">TransVarTag</font></a><font
+size="4">&gt; &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+        &lt;</font><a name="LabelVarTag"><font size="4">LabelVarTag</font></a><font
+size="4">&gt;:
+                 %
+                 %%
+                 %%%
+                 %%%%
+        &lt;</font><a name="TransVarTag"><font size="4">TransVarTag</font></a><font
+size="4">&gt;:
+                 /
+                 //
+                 ///
+                 ////</font></pre>
+
+<pre><font size="4">        树与树林是语言知识表示中一种常用的形式，用于表示语言成分的内部结构。树的结
+    点对应于句子中的语言成分。
+        在使用中，树与树林有两种形式，一种是左树&lt;</font><a
+href="#LeftTree"><font size="4">LeftTree</font></a><font size="4">&gt;与左树林&lt;</font><a
+href="#LeftForest"><font size="4">LeftForest</font></a><font
+size="4">&gt;，用
+    于与某一语言成分的内部结构相匹配，一种是右树&lt;</font><a
+href="#RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;与右树林&lt;</font><a href="#RightForest"><font
+size="4">RightForest</font></a><font size="4">&gt;，
+    用于表示某一棵左树经过转换后得到的结果。左树和右树总是成对出现的，其结构基本类
+    似，个别地方有所不同，以下详细描述。
+        树林&lt;</font><a href="#LeftForest"><font size="4">LeftForest</font></a><font
+size="4">&gt;和&lt;</font><a href="#RightForest"><font size="4">RightForest</font></a><font
+size="4">&gt;由若干个带中心标志的树组成。
+        中心标志&lt;</font><a href="#HeadTag"><font size="4">HeadTag</font></a><font
+size="4">&gt;表示该结点是父结点的中心子结点。
+        树&lt;</font><a href="#LeftTree"><font size="4">LeftTree</font></a><font
+size="4">&gt;和&lt;</font><a href="#RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;由一个标记项加上一个可选的单词项，或加上一个可选的
+    子树林组成；标记项是一个表示词类或短语句子类的标识符；单词项由若干个单词之&quot;或&quot;
+    组成，其中~用于词典中，表示词典中当前词记录的入口单词。
+        子树林&lt;</font><a href="#LeftSubForest"><font
+size="4">LeftSubForest</font></a><font size="4">&gt;和&lt;</font><a
+href="#RightSubForest"><font size="4">RightSubForest</font></a><font
+size="4">&gt;由若干棵加中心标志的子树组成，对于
+    右子树林而言，还可以包括一些加复制标志、移动标志或删除标志的位移标记项。
+        子树&lt;</font><a href="#LeftSubTree"><font size="4">LeftSubTree</font></a><font
+size="4">&gt;和&lt;</font><a href="#RightSubTree"><font size="4">RightSubTree</font></a><font
+size="4">&gt;与树类似，只是对于右子树而言，标记项后面可
+    加一个转换变量，表示该子树是由相应左树中对应于转换变量的子树转换而来，如果没有
+    转换变量，则表示该子树是新增加的。
+        位移标记项&lt;</font><a href="#ShiftLabelItem"><font
+size="4">ShiftLabelItem</font></a><font size="4">&gt;由一个标记项加上一个标记变量组成，表示该位移操作
+    的源结点是树中对应于该标记变量的子树的某一个深层子树。
+        标记变量由ｎ个百分号加上一个标记项组成，表示对应树中的第ｎ个该标记项的结点。
+        转换变量由ｎ个斜杠号加上一个标记项组成，表示右树的对应左树中的第ｎ个该标记
+    项的结点。（以上ｎ= 1,2,3,4）</font></pre>
+
+<pre><font size="4">    关于树结构，还要注意以下几点：</font></pre>
+
+<pre><font size="4">    ● 关于树所对应的语言：
+       1．一棵树对应唯一的一种语言；
+       2．除右树中的转换变量以外，该树中所有的标记都是这种语言的标记；
+       3．右树中的转换变量中的标记，是对应左树的语言的标记；
+       4．左树和右树可以对应不同种语言（如在析句规则中），
+          也可以对应同一种语言（如在造句规则中）；
+    ● 关于中心子结点：
+       1．一个父结点可以没有中心子结点，或者有一个中心子结点；
+       2．父结点和中心子结点共享该树所对应语言的相关属性(即 RelMode=1 的属性)，
+          但这种共享关系可以被切断（参见约束&lt;</font><a
+href="#Bind"><font size="4">Bind</font></a><font size="4">&gt;）；
+       3．一个标记项前面如果有中心标志，那么它所对应的结点必须是其父结点的中心子结点；
+       4．一个标记项前面如果没有中心标志，那么它所对应的结点必须不是其父结点的中心
+          子结点；
+    ● 在左树到右树的转换中：
+       1．左树的一个结点最多只能转换到右树的一个结点；
+       2．根结点必须转换到根结点；
+       3．叶结点必须转换到右树的叶结点, 或者在右树中不出现；
+       4．中间结点必须转换到右树的中间结点, 或者在右树中不出现；
+
+    ● 在左树到右树的转换中，如果左树和右树对应同一种语言，那么：
+       1．如果一个结点是另一个结点的中心子结点，那么转换后该结点必须仍然是其中心项
+          子结点；
+       2．如果一个结点不是另一个结点的中心子结点，那么转换后该结点必须仍然不是其中
+          心子结点；
+       3．如果一个结点没有中心子结点，那么转换后可用新产生的结点作为其中心子结点；
+    ● 关于位移结点：
+       1．在右树中，位移标记项对应的结点称为位移结点，一个位移结点对应一次位移操作;
+       2．位移操作包括复制、移动和删除三钟操作，位移操作在整棵树的转换结束后进行；
+       3．位移操作的目的结点就是位移结点，目的结点用于指明位移操作的目的位置和被实
+          施位移操作的结点所应满足的特征结构；
+       4．位移操作的源结点是位移标记项中的标记变量所对应的结点的某一个深层子结点，
+          源结点的特征结构和目的结点的特征结构必须能够合一；
+       5．复制操作保留源结点，并复制一份到目的结点位置；
+       6．移动操作将源结点移动到目的结点位置；
+       7．删除操作只删除源结点，目的结点位置不产生任何变化；
+       8．位移操作的源结点中不能含有另一次位移操作的源结点或目的结点作为其子孙结点,
+          即位移操作不能嵌套（避免出现递归位移）；
+       9．可以对复制操作的源结点和目的结点以及位移操作的目的结点再次执行位移操作。</font></pre>
+
+<blockquote>
+    <h3><a name="sec2.4"><font size="4">§2.4 约束</font></a></h3>
+</blockquote>
+
+<pre><font size="4">        &lt;</font><a name="Bind"><font
+size="4">Bind</font></a><font size="4">&gt;:
+                 &lt;</font><a href="#Equation"><font size="4">Equation</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Test"><font size="4">Test</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; , &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Test"><font size="4">Test</font></a><font
+size="4">&gt;:
+                 IF &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; TRUE
+                 IF &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; FALSE
+                 IF &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; THEN &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; ENDIF
+                 IF &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; ELSE &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; ENDIF
+                 IF &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; THEN &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; ELSE &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt; ENDIF
+        &lt;</font><a name="Equation"><font size="4">Equation</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#IntVar"><font size="4">IntVar</font></a><font
+size="4">&gt; = &lt;</font><a href="#Atom"><font size="4">Atom</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#IntVar"><font size="4">IntVar</font></a><font
+size="4">&gt; = &lt;</font><a href="#IntVar"><font size="4">IntVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; = &lt;</font><a href="#Fest"><font size="4">Fest</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; = &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; = &lt;</font><a href="#True"><font size="4">True</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; = &lt;</font><a href="#False"><font size="4">False</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; == &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; &lt;</font><a href="#At"><font size="4">At</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; != &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt; &lt;</font><a href="#At"><font size="4">At</font></a><font
+size="4">&gt;
+        &lt;</font><a name="ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#RootVar"><font size="4">RootVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelVar"><font size="4">LabelVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt;.&lt;</font><a href="#ExtAtt"><font size="4">ExtAtt</font></a><font
+size="4">&gt;
+        &lt;</font><a name="IntVar"><font size="4">IntVar</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#ExtVar"><font size="4">ExtVar</font></a><font
+size="4">&gt;.&lt;</font><a href="#IntAtt"><font size="4">IntAtt</font></a><font
+size="4">&gt;
+        &lt;</font><a name="RootVar"><font size="4">RootVar</font></a><font
+size="4">&gt;:
+                 $
+        &lt;</font><a name="At"><font size="4">At</font></a><font
+size="4">&gt;:
+                 @ &lt;</font><a href="#Ident"><font size="4">Ident:IntAtt</font></a><font
+size="4">&gt;
+                 @ &lt;</font><a href="#Ident"><font size="4">Ident:ExtAtt</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#At"><font size="4">At</font></a><font
+size="4">&gt; &lt;</font><a href="#At"><font size="4">At</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        约束用于对一棵树中各个结点的特征结构进行限制；
+        约束&lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;由多个条件约束表达式和约束等式组成；
+        条件约束表达式&lt;</font><a href="#Test"><font
+size="4">Test</font></a><font size="4">&gt;用于指明在一定条件下才需要进行的约束；
+        约束等式&lt;</font><a href="#Equation"><font size="4">Equation</font></a><font
+size="4">&gt;是一个表示合一运算的等式，这种等式有四类：
+        1．一个内部变量与一个原子或另一个内部变量合一；
+        2．一个外部变量与一个特征结构或另一个外部变量合一；
+        3．一个外部变量与一个布尔值合一，用于判断该变量是否已指向句中的语言成分；
+        4．强制两个外部变量共享（==）或不共享（!=）某些属性。</font></pre>
+
+<blockquote>
+    <h2><a name="sec3"><font size="4">§3 析句规则</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        缺省的析句规则文件名为 PRSRBASE ( Sentence-Parsing RuleBase )。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="PrsRule"><font
+size="4">PrsRule</font></a><font size="4">&gt;:
+                 &amp;&amp; { &lt;</font><a href="#Title"><font
+size="4">Title</font></a><font size="4">&gt; } &lt;</font><a
+href="#PrsStruct"><font size="4">PrsStruct</font></a><font
+size="4">&gt; || &lt;</font><a href="#TrnSwitch"><font size="4">TrnSwitch</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#TrnStruct"><font
+size="4">TrnStruct</font></a><font size="4">&gt;
+                 &amp;&amp; { &lt;</font><a href="#Title"><font
+size="4">Title</font></a><font size="4">&gt; } &lt;</font><a
+href="#PrsStruct"><font size="4">PrsStruct</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#TrnStruct"><font
+size="4">TrnStruct</font></a><font size="4">&gt;
+                 &lt;</font><a href="#PrsRule"><font size="4">PrsRule</font></a><font
+size="4">&gt; || &lt;</font><a href="#TrnSwitch"><font size="4">TrnSwitch</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#TrnStruct"><font
+size="4">TrnStruct</font></a><font size="4">&gt;
+                 &lt;</font><a href="#PrsRule"><font size="4">PrsRule</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#TrnStruct"><font
+size="4">TrnStruct</font></a><font size="4">&gt;
+        &lt;</font><a name="Title"><font size="4">Title</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt; / &lt;</font><a href="#Note"><font size="4">Note</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Note"><font size="4">Note</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Note"><font size="4">Note</font></a><font
+size="4">&gt; &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Note"><font size="4">Note</font></a><font
+size="4">&gt; , &lt;</font><a href="#Ident"><font size="4">Ident</font></a><font
+size="4">&gt;
+        &lt;</font><a name="PrsStruct"><font size="4">PrsStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#PrsReductn"><font size="4">PrsReductn</font></a><font
+size="4">&gt; -&gt; &lt;</font><a href="#PrsForest"><font
+size="4">PrsForest</font></a><font size="4">&gt;
+                 &lt;</font><a href="#PrsReductn"><font size="4">PrsReductn</font></a><font
+size="4">&gt; -&gt; &lt;</font><a href="#PrsForest"><font
+size="4">PrsForest</font></a><font size="4">&gt; :: &lt;</font><a
+href="#PrsBind"><font size="4">PrsBind</font></a><font size="4">&gt;
+        &lt;</font><a name="PrsReductn"><font size="4">PrsReductn</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+        &lt;</font><a name="PrsForest"><font size="4">PrsForest</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LeftForest"><font size="4">LeftForest</font></a><font
+size="4">&gt;
+                 ^ &lt;</font><a href="#LeftForest"><font
+size="4">LeftForest</font></a><font size="4">&gt;
+        &lt;</font><a name="PrsBind"><font size="4">PrsBind</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="TrnSwitch"><font size="4">TrnSwitch</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="TrnStruct"><font size="4">TrnStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#TrnTree"><font size="4">TrnTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#TrnTree"><font size="4">TrnTree</font></a><font
+size="4">&gt; &lt;</font><a href="#TrnBind"><font size="4">TrnBind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="TrnTree"><font size="4">TrnTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;
+        &lt;</font><a name="TrnBind"><font size="4">TrnBind</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        析句规则&lt;</font><a
+href="#PrsRule"><font size="4">PrsRule</font></a><font size="4">&gt;由一个析句结构与若干个转换开关和转换结构组成。
+        析句规则名&lt;</font><a href="#Title"><font size="4">Title</font></a><font
+size="4">&gt;是一个标识符, 它在整个规则库中应唯一对应一条规则。
+        析句结构&lt;</font><a href="#PrsStruct"><font
+size="4">PrsStruct</font></a><font size="4">&gt; 由一个析句归约、一个析句树林与一个可选的析句约束组成。
+    析句结构实际上也是一棵树，其根结点是析句归约，内部结构是析句树林，析句约束表
+    示的是对析句结构这棵树（而不是对析句树林中的某棵树）的约束。
+        析句归约&lt;</font><a href="#PrsReductn"><font
+size="4">PrsReductn</font></a><font size="4">&gt;是一个标记项。
+        析句树林&lt;</font><a href="#PrsForest"><font
+size="4">PrsForest</font></a><font size="4">&gt;由树林与可选的左右边界(^)组成。
+        转换开关&lt;</font><a href="#TrnSwitch"><font
+size="4">TrnSwitch</font></a><font size="4">&gt;实际上是个对源语言树的约束，每个转换开关后接一个或多个
+    转换结构，如果转换开关中的约束不被满足，则后面的转换结构都不会被使用，直到下一
+    个转换开关。转换开关可以省略，表示没有约束。
+        转换结构&lt;</font><a href="#TrnStruct"><font
+size="4">TrnStruct</font></a><font size="4">&gt;由一棵转换树与一个可选的转换约束组成。
+        析句树&lt;</font><a href="#PrsTree"><font size="4">PrsTree</font></a><font
+size="4">&gt;是左树。
+        转换树&lt;</font><a href="#TrnTree"><font size="4">TrnTree</font></a><font
+size="4">&gt;是右树。
+        析句约束&lt;</font><a href="#PrsBind"><font size="4">PrsBind</font></a><font
+size="4">&gt;和转换约束&lt;</font><a href="#TrnBind"><font
+size="4">TrnBind</font></a><font size="4">&gt;分别是对源文和译文的约束。</font></pre>
+
+<blockquote>
+    <h2><a name="sec4"><font size="4">§4 造句规则</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        缺省的造句规则文件名为 MAKRBASE ( Sentence-Making RuleBase )。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="MakRule"><font
+size="4">MakRule</font></a><font size="4">&gt;:
+                 ## { &lt;</font><a href="#Title"><font size="4">Title</font></a><font
+size="4">&gt; } &lt;</font><a href="#LMakStruct"><font size="4">LMakStruct</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#RMakStruct"><font
+size="4">RMakStruct</font></a><font size="4">&gt;
+                 &lt;</font><a href="#MakRule"><font size="4">MakRule</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#RMakStruct"><font
+size="4">RMakStruct</font></a><font size="4">&gt;
+        &lt;</font><a name="LMakStruct"><font size="4">LMakStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LMakTree"><font size="4">LMakTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LMakTree"><font size="4">LMakTree</font></a><font
+size="4">&gt; &lt;</font><a href="#LMakBind"><font size="4">LMakBind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="LMakTree"><font size="4">LMakTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LeftTree"><font size="4">LeftTree</font></a><font
+size="4">&gt;
+
+        &lt;</font><a name="LMakBind"><font size="4">LMakBind</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="RMakStruct"><font size="4">RMakStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#RMakTree"><font size="4">RMakTree</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#RMakTree"><font size="4">RMakTree</font></a><font
+size="4">&gt; &lt;</font><a href="#RMakBind"><font size="4">RMakBind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="RMakTree"><font size="4">RMakTree</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#RightTree"><font size="4">RightTree</font></a><font
+size="4">&gt;
+        &lt;</font><a name="RMakBind"><font size="4">RMakBind</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        造句规则&lt;</font><a
+href="#MakRule"><font size="4">MakRule</font></a><font size="4">&gt;由一个左造句结构和一到多个右造句结构组成。
+        造句规则名&lt;</font><a href="#Title"><font size="4">Title</font></a><font
+size="4">&gt;是一个标识符, 它在整个规则库中应唯一对应一条规则。
+        左造句结构&lt;</font><a href="#LMakStruct"><font
+size="4">LMakStruct</font></a><font size="4">&gt;由一个左造句树与一个可选的左造句约束&lt;</font><a
+href="#LMakBind"><font size="4">LMakBind</font></a><font size="4">&gt;组成。
+        右造句结构&lt;</font><a href="#RMakStruct"><font
+size="4">RMakStruct</font></a><font size="4">&gt;由一个右造句树与一个可选的右造句约束&lt;</font><a
+href="#RMakBind"><font size="4">RMakBind</font></a><font size="4">&gt;组成。
+        左造句树&lt;</font><a href="#LMakTree"><font size="4">LMakTree</font></a><font
+size="4">&gt;是一棵左树。
+        右造句树&lt;</font><a href="#RMakTree"><font size="4">RMakTree</font></a><font
+size="4">&gt;是一棵右树。
+        左造句约束&lt;</font><a href="#LMakBind"><font
+size="4">LMakBind</font></a><font size="4">&gt;和右造句约束&lt;</font><a
+href="#RMakBind"><font size="4">RMakBind</font></a><font size="4">&gt;都是约束。</font></pre>
+
+<blockquote>
+    <h2><a name="sec5"><font size="4">§5 词典</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        缺省的词典文件名DICT。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="Entry"><font
+size="4">Entry</font></a><font size="4">&gt;:
+                 $$ &lt;</font><a href="#Word"><font size="4">Word</font></a><font
+size="4">&gt; &lt;</font><a href="#Meaning"><font size="4">Meaning</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Entry"><font size="4">Entry</font></a><font
+size="4">&gt; &lt;</font><a href="#Meaning"><font size="4">Meaning</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Entry"><font size="4">Entry</font></a><font
+size="4">&gt; &lt;</font><a href="#PrsRule"><font size="4">PrsRule</font></a><font
+size="4">&gt;
+        &lt;</font><a name="Meaning"><font size="4">Meaning</font></a><font
+size="4">&gt;:
+                 ** { &lt;</font><a href="#Title"><font size="4">Title</font></a><font
+size="4">&gt; } &lt;</font><a href="#SrcMeaning"><font size="4">SrcMeaning</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#Meaning"><font size="4">Meaning</font></a><font
+size="4">&gt; || &lt;</font><a href="#TrnSwitch"><font size="4">TrnSwitch</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#TgtMeaning"><font
+size="4">TgtMeaning</font></a><font size="4">&gt;
+                 &lt;</font><a href="#Meaning"><font size="4">Meaning</font></a><font
+size="4">&gt; =&gt; &lt;</font><a href="#TgtMeaning"><font
+size="4">TgtMeaning</font></a><font size="4">&gt;
+        &lt;</font><a name="SrcMeaning"><font size="4">SrcMeaning</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt;</font><a href="#Bind"><font size="4">Bind</font></a><font
+size="4">&gt;
+        &lt;</font><a name="TgtMeaning"><font size="4">TgtMeaning</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#TrnStruct"><font size="4">TrnStruct</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        词典是机器翻译所需的语言知识的主要承载体。
+        词典中一个词记录&lt;</font><a href="#Entry"><font
+size="4">Entry</font></a><font size="4">&gt;由单词名、若干义项和若干局部析句规则。
+        义项&lt;</font><a href="#Meaning"><font size="4">Meaning</font></a><font
+size="4">&gt;由一个义项名，一个源文义项与若干个转换开关和译文义项组成。
+        义项名&lt;</font><a href="#Title"><font size="4">Title</font></a><font
+size="4">&gt;是一个标识符, 它在一个词记录中对应唯一的一个义项； 同样, 一个
+    词记录中的每一条局部析句规则&lt;</font><a
+href="#PrsRule"><font size="4">PrsRule</font></a><font size="4">&gt;也有一个唯一的规则名&lt;</font><a
+href="#Title"><font size="4">Title</font></a><font size="4">&gt;。
+        源文义项&lt;</font><a href="#SrcMeaning"><font
+size="4">SrcMeaning</font></a><font size="4">&gt;由一个源文标记项（词类标记或短语句子分类标记）和一个可
+    选的特征结构组成，特征结构中包含了该词在源文分析时所需的各类信息，包括各类语法
+    语义特征以及语义关联。
+        译文义项&lt;</font><a href="#TgtMeaning"><font
+size="4">TgtMeaning</font></a><font size="4">&gt;与析句规则中的转换结构相同，包括一棵译文树和一个译文约
+    束。译文树是一棵右树。
+        词典中的局部析句规则提供该词专用的，在析句规则库中所没有的一些规则，包括各
+    种成语及习惯用法。</font></pre>
+
+<blockquote>
+    <h2><a name="sec6"><font size="4">§6 汉语重叠词规则</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        缺省的文件名为 OVLRBASE ( Word-overlapping RuleBase )。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="OvlRule"><font
+size="4">OvlRule</font></a><font size="4">&gt;:
+                 @@ &lt;</font><a href="#OvlLexVaryStruct"><font
+size="4">OvlLexVaryStruct</font></a><font size="4">&gt; &lt;&lt; &lt;</font><a
+href="#OvlLexBaseStruct"><font size="4">OvlLexBaseStruct</font></a><font
+size="4">&gt;
+        &lt;</font><a name="OvlLexVaryStruct"><font size="4">OvlLexVaryStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#OvlLexVary"><font size="4">OvlLexVary</font></a><font
+size="4">&gt; -- &lt;</font><a href="#OvlLexStruct"><font
+size="4">OvlLexStruct</font></a><font size="4">&gt;
+        &lt;</font><a name="OvlLexBaseStruct"><font size="4">OvlLexBaseStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#OvlLexBase"><font size="4">OvlLexBase</font></a><font
+size="4">&gt; -- &lt;</font><a href="#OvlLexStruct"><font
+size="4">OvlLexStruct</font></a><font size="4">&gt;
+        &lt;</font><a name="OvlLexStruct"><font size="4">OvlLexStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt;</font><a href="#Fest"><font size="4">Fest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="OvlLexVary"><font size="4">OvlLexVary</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#ChnChar"><font size="4">ChnChar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#OvlCharVar"><font size="4">OvlCharVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#OvlLexVary"><font size="4">OvlLexVary</font></a><font
+size="4">&gt; &lt;</font><a href="#OvlLexVary"><font size="4">OvlLexVary</font></a><font
+size="4">&gt;
+        &lt;</font><a name="OvlCharVar"><font size="4">OvlCharVar</font></a><font
+size="4">&gt;:
+                 A-Z
+        &lt;</font><a name="OvlLexBase"><font size="4">OvlLexBase</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#ChnChar"><font size="4">ChnChar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#OvlCharVar"><font size="4">OvlCharVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#OvlLexBase"><font size="4">OvlLexBase</font></a><font
+size="4">&gt; &lt;</font><a href="#OvlLexBase"><font size="4">OvlLexBase</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        汉语切词规则由单词的变化形结构和单词的基本形结构组成。
+        单词的变化形结构由单词的变化形，变化形的词法结构组成。
+        单词的基本形结构由单词的基本形，基本形的词法结构组成。
+        单词基本形和变化形的词法结构由一个标记项和一个特征结构组成。
+        单词的基本形和变化形的形式根据源语言的不同而不同。
+        单词的基本形和变化形都由汉字和汉字变量组成。汉字变量由一个大写拉丁字母表示，
+    允许与任意一个汉字匹配。</font></pre>
+
+<blockquote>
+    <h2><a name="sec7"><font size="4" face="宋体">§</font><font
+    size="4">7 汉语切分规则</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        缺省的文件名为 SEGRBASE ( Segmentation RuleBase )。</font></pre>
+
+<pre><font size="4">	&lt;</font><a name="SegRule"><font size="4">SegRule</font></a><font
+size="4">&gt;:
+                 @@ &lt;</font><a href="#Word"><font size="4">Word</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        汉语切分规则用于指明一个汉语词是否可能在句子中造成组合切分歧义。</font></pre>
+
+<blockquote>
+    <h2><a name="sec8"><font size="4">§</font><font size="4"
+    face="宋体">8</font><font size="4"> 英语构词规则</font></a></h2>
+</blockquote>
+
+<pre><font size="4">        缺省的文件名为 BLDRBASE ( Word-Building RuleBase )。</font></pre>
+
+<pre><font size="4">        &lt;</font><a name="BldRule"><font
+size="4">BldRule</font></a><font size="4">&gt;:
+                 @@ &lt;</font><a href="#BldLexBaseStruct"><font
+size="4">BldLexBaseStruct</font></a><font size="4">&gt; &gt;&gt; &lt;</font><a
+href="#BldLexVaryStruct"><font size="4">BldLexVaryStruct</font></a><font
+size="4">&gt;
+        &lt;</font><a name="BldLexBaseStruct"><font size="4">BldLexBaseStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#BldLexBase"><font size="4">BldLexBase</font></a><font
+size="4">&gt; -- &lt;</font><a href="#BldLexStruct"><font
+size="4">BldLexStruct</font></a><font size="4">&gt;
+        &lt;</font><a name="BldLexVaryStruct"><font size="4">BldLexVaryStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#BldLexVary"><font size="4">BldLexVary</font></a><font
+size="4">&gt;
+                 { &lt;</font><a href="#Ident"><font size="4">Ident:LexAtt</font></a><font
+size="4">&gt; }
+
+        &lt;</font><a name="BldLexStruct"><font size="4">BldLexStruct</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#LabelItem"><font size="4">LabelItem</font></a><font
+size="4">&gt; &lt;</font><a href="#Fest"><font size="4">Fest</font></a><font
+size="4">&gt;
+        &lt;</font><a name="BldLexBase"><font size="4">BldLexBase</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LtnChar"><font size="4">LtnChar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#BldWordVar"><font size="4">BldWordVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#BldLexBase"><font size="4">BldLexBase</font></a><font
+size="4">&gt; &lt;</font><a href="#LtnChar"><font size="4">LtnChar</font></a><font
+size="4">&gt;
+        &lt;</font><a name="BldWordVar"><font size="4">BldWordVar</font></a><font
+size="4">&gt;:
+                 *
+        &lt;</font><a name="BldLexVary"><font size="4">BldLexVary</font></a><font
+size="4">&gt;:
+                 &lt;</font><a href="#LtnChar"><font size="4">LtnChar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#BldWordVar"><font size="4">BldWordVar</font></a><font
+size="4">&gt;
+                 &lt;</font><a href="#BldLexVary"><font size="4">BldLexVary</font></a><font
+size="4">&gt; &lt;</font><a href="#LtnChar"><font size="4">LtnChar</font></a><font
+size="4">&gt;</font></pre>
+
+<pre><font size="4">        英语构词规则由单词的基本形结构和单词的变化形结构组成。
+        单词的基本形结构由单词的基本形，基本形的词法结构组成。
+        单词的变化形结构是一个单词的变化形，或一个括在花括号中的目标语言词法属性。
+        单词基本形和变化形的词法结构由一个标记项和一个特征结构组成。
+        单词的基本形和变化形的形式根据目标语言的不同而不同。
+        单词的基本形和变化形都由一个单词变量(可以没有)，和若干个拉丁字母组成。单词
+    变量用一个星号表示，可与任意多个拉丁字母匹配。</font></pre>
+</body>
+</html>

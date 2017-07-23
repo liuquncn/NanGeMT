@@ -1,0 +1,6725 @@
+    aedge.cfg.reduct=itemsrch.group(1)
+    if (itemsrch.group(3)):
+        aedge.cfg.part.append(itemsrch.group(3))
+    else:
+        aedge.cfg.part.append("")
+
+        edge.ruleid=tags[i].catid
+        edge.cfg.part.append(tags[i].word)
+        edge.head=0
+
+        self.prsid=""
+        self.swiid=""
+        self.tranid=""
+        self.cfg=cfgc()
+        self.head=0
+        self.bind=""
+                    fval=procshifou(fval)
+                    if (fval==globvar.shi):
+                        fval=globvar.fou
+                    elif (fval==globvar.fou):
+                        fval=globvar.shi
+                    else:
+def recurprintbldsent(edge):
+    if (len(edge.son)!=0):
+        for i in range(len(edge.son)):
+            recurprintbldsent(globvar.enchart[edge.son[i]])
+    else:
+        quoreg='"(.+)"'
+        quosrch=re.search(quoreg,edge.cfg.part[0])
+        if quosrch:
+            print quosrch.group(1),
+        else:
+            if (edge.cfg.reduct=="A"):
+                geneadj(edge)
+            elif (edge.cfg.reduct=="D"):
+                geneadv(edge)
+            elif (edge.cfg.reduct=="N"):
+                genenoun(edge)
+            elif (edge.cfg.reduct=="V"):
+                geneverb(edge)
+            else:
+                print edge.cfg.part[0],
+    print
+
+def geneadj(edge):
+    degrval,valtype,valset=bldbasfeatval(edge,"DEGR")
+    amorfval,valtype,valset=bldbasfeatval(edge,"AMORF")
+    if (degrval=="SUPE"):
+        if (amorfval=="IREG"):
+            supeval,valtype,valset=basfeatval(degrval,edge,lang)
+            print supeval,
+        else:
+            if (amorfval=="SUFF"):
+                print edge.cfg.part[0]+"est",
+            else:
+                print "most",edge.cfg.part[0],
+    elif (degrval=="COMP"):
+        if (amorfval=="IREG"):
+            compval,valtype,valset=basfeatval(degrval,edge,lang)
+            print compval,
+        else:
+            if (amorfval=="SUFF"):
+                print edge.cfg.part[0]+"er",
+            else:
+                print "more",edge.cfg.part[0],
+    else:
+        print edge.cfg.part[0],
+
+def geneadv(edge):
+    degrval,valtype,valset=bldbasfeatval(edge,"DEGR")
+    dmorfval,valtype,valset=bldbasfeatval(edge,"DMORF")
+    if (degrval=="SUPE"):
+        if (dmorfval=="IREG"):
+            supeval,valtype,valset=basfeatval(degrval,edge,lang)
+            print supeval,
+        else:
+            if (dmorfval=="SUFF"):
+                print edge.cfg.part[0]+"est",
+            else:
+                print "most",edge.cfg.part[0],
+    elif (degrval=="COMP"):
+        if (dmorfval=="IREG"):
+            compval,valtype,valset=basfeatval(degrval,edge,lang)
+            print compval,
+        else:
+            if (dmorfval=="SUFF"):
+                print edge.cfg.part[0]+"er",
+            else:
+                print "more",edge.cfg.part[0],
+    else:
+        print edge.cfg.part[0],
+    
+def genenoun(edge):
+    nnumval,valtype,valset=bldbafeatval("NNUM",edge)
+    nmorfval,valtype,valset=bldbasfeatval("NMORF",edge)
+    if (nnumval=="PLUR"):
+        if (nmorfval=="IREG"):
+            plurval,valtype,valset=basfeatval(nnumval,edge,lang)
+            print plurval,
+        else:
+            printnouns(edge.cfg.part[0])
+    else:
+        print edge.cfg.part[0],
+
+def geneverb(edge):
+    if (not verbbe(edge.cfg.part[0])):
+        formval,valtype,valset=bldbasfeatval("FORM",edge)
+        vmorfval,valtype,valset=bldbasfeatval("VMORF",edge)
+        if (formval=="VG"):
+            printvg(edge.cfg.part[0])
+        elif (formval=="VN"):
+            if (vmorfval=="IREG"):
+                vnval,valtype,valset=basfeatval(formval,edge,lang)
+                print vnval,
+            else:
+                print edge.cfg.part[0]+"ed",
+        elif (formval=="RT"):
+            print edge.cfg.part[0],
+        else:
+            voiceval,valtype,valset=bldbasfeatval("VOICE",edge)
+            if (len(voiceval)==0):
+                voiceval="ACTI"
+
+            futrval,valtype,valset=bldbasfeatval("FUTR",edge)
+            futrval=procshifou(futrval)
+            if (len(futrval)==0):
+                futrval=globvar.fou
+                
+            pastval,valtype,valset=bldbasfeatval("PAST",edge)
+            pastval=procshifou(pastval)
+            if (len(pastval)==0):
+                pastval=fou
+                
+            nperval,valtype,valset=bldbasfeatval("NPER",edge)
+            if (len(nperval)==0):
+                nperval="3"
+
+            nnumval,valtype,valset=bldbasfeatval("NNUM",edge)
+            if (len(nnumval)==0):
+                nnumval="SNGL"
+
+            if (voiceval=="ACTI" and futrval==shi and pastval==shi):
+                print "would",edge.cfg.part[0],
+            elif (voiceval=="PASS" and futrval==shi and pastval==shi):
+                print "would be",
+                if (vmorfval=="IREG"):
+                    vnval,valtype,valset=bldbasfeatval("VN",edge),
+                else:
+                    printvnvd(edge.cfg.part[0])
+            elif (voiceval=="ACTI" and futrval==shi and pastval==fou):
+                print "will",edge.cfg.part[0],
+            elif (voiceval=="PASS" and futrval==shi and pastval==fou):
+                print "will be",
+                if (vmorfval=="IREG"):
+                    vnval,valtype,valset=bldbasfeatval("VN",edge),
+                else:
+                    printvnvd(edge.cfg.part[0])
+            elif (voiceval=="ACTI" and futrval==fou and pastval==shi):
+                if (vmorfval=="IREG"):
+                    vdval,valtype,valset=bldbasfeatval("VD",edge),
+                else:
+                    printvnvd(edge.cfg.part[0])
+            elif (voice=="PASS" and futrval==fou and pastval==shi):
+                if ((nperval=="1" and nnumval=="SNGL") or (nperval=="3" and nnumval=="SNGL")):
+                    print "was",
+                else:
+                    print "were",
+                if (vmorfval=="IREG"):
+                    vnval,valtype,valset=bldbasfeatval("VN",edge)
+                    print vnval,
+                else:
+                    printvnvd(edge.cfg.part[0])
+            elif (voiceval=="ACTI" and futrval==fou and pastval==fou):
+                if (nperval=="3" and nnumval=="SNGL"):
+                    printunvs(edge.cfg.part[0])
+                else:
+                    print edge.cfg.part[0],
+            elif (voiceval=="PASS" and futrval==fou and pastval
+def makfindfeatval(edge,fname):
+    nameset=fname.split(".")
+    curredge=edge
+    for i in range(0,len(nameset)):
+        fval,valtype,valset=makbasfeatval(
+        
+
+
+void assignfatherparse(vector<edgec> & chart, edgec & root)
+{
+  root.father=-1;
+  recurassignparse(chart,root);
+}
+
+void recurassignparse(vector<edgec> & chart, edgec & edge)
+{
+  if (!edge.son.empty()) {
+    for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+      chart[*i].father=edge.id;
+      recurassignparse(chart,chart[*i]);
+    }
+  }
+}
+
+
+
+        if (lval.find("eid")==0):
+            edge=findedge(string.atoi(lval[3:]),lang)
+            lval=edge.bind
+        if (rval.find("eid")==0):
+            edge=findedge(string.atoi(rval[3:]),lang)
+            rval=edge.bind
+        if (lval.find("[")==0 and rval.find("[")==0):
+            nval,res=featagree(lval,rval,lang)
+        elif (lval.find("~[")==0 or rval.find("~[")==0):
+            res=True
+            nval=lval
+                elif (rval.find(~
+
+        else:
+                rval=procshifou(rval)
+                res=(rval==globvar.fou)
+                if (res):
+                    nval=lval
+    
+    print "here1",nota
+    print "here2",edge.id
+    assert(sonid!=-1)
+            print "tranedge",edge.prsid
+            print "tranedge2",rule
+            print "tranedge3",tranentry
+def parsesource(compsent):
+    resetparglobvar()
+    chnsegs=compseg(compsent)
+    iniedges(chnsegs)
+    bestforest=parse()
+    return(bestforest)
+
+    if (lang=="chn"):
+        globvar.chart[edge.id]=edge.bind
+    else:
+        globvar.enchart[edge.id]=edge.bind
+    #catreg='\*\*{'+catid+'} \w (\$=\[\S+?\]({\S+})?)?([^&|^\*]+)'
+    entry=removespace(entry)
+    catreg='\*\*{'+catid+'} \w( \$=\[\S+?\]({\S+})?)?([^&|^\*]+)' 
+    catsrch=re.search(catreg,entry,re.S)
+    assert(catsrch)
+    print "here8",catreg
+    print "here9",entry
+    print "group3|"+catsrch.group(3)+"|"
+    print "group1",catsrch.group(1)
+    print "group2",catsrch.group(2)
+    return(catsrch.group(3))
+
+    rulereg="({"+prsid+"})([^&|^[\$\$]|^\*]+)"
+    if (source=='p'):
+        rulesrch=re.search(rulereg,globvar.prsrbase,re.S)
+    elif (souce=='l'):
+        rulesrch=re.search(rulereg,glovar.dictn,re.S)
+    else:
+        assert(False)
+    rule=rulesrch.group(2)
+        tranreg="({.+})? (.+?)?((=>.+)+)"
+        transrch=re.search(tranreg,catentry,re.S)
+        print "here1",tranreg
+        print "here2",catentry
+        if (transrch):
+            print "here3",transrch.group(2)
+            print "here4",transrch.group(3)
+        else:
+            print "here5"
+        exit(0)
+        assert(transrch)
+
+void separate(string & switran, string & swi, string & tran)
+{
+  size_t tranpos=switran.find("=>");
+  swi=switran.substr(0,tranpos);
+  tran=switran.substr(tranpos+2);
+}
+
+/*
+void setancesilence(edgec & edge, vector<edgec> & edges)
+{
+  int eid=edge.father;
+  while (eid!=-1) {
+    edgec & fedge=genefindedge(eid,edges);
+    fedge.state='s';
+    eid=fedge.father;
+  }
+}
+*/
+void extracttree(int father, edgec & root, vector<edgec> & edges)
+{
+  for (vector<int>::iterator i=root.son.begin();i!=root.son.end();i++) {
+    edgec sone=chart[*i];
+    vector<edgec> sonedges;
+    extracttree(root.id,sone,sonedges);
+    edges.insert(edges.end(),sonedges.begin(),sonedges.end());
+  }
+  edgec edge=root;
+  edge.father=father;
+  edge.state='a';
+  edges.push_back(edge);
+}
+
+def trantree(rootedge):
+    resettrangolbvar()
+    edges=extracttree(-1,rootedge)
+    feattransition(rootedge,edges)
+    recurshowgene(rootedge,edges,0)
+    for i in range(0,len(edges)):
+        if (edges[i].state=='a'):
+            enedges=tranedge(edges[i])
+            globvar.enchart[edges[i].id]=enedges
+            #if (len(enedges)==0):
+                #print "-----transform fail-------"
+                #setancesilence(edges[i],edges)
+            #else:
+                #printtranchart(enedges)
+
+def resettrangolbvar():
+    globvar.enchart={}
+    globvar.enchartidx={}
+    globvar.trnsresult=[]
+    edges=[]
+    globvar.enchart[-1]=edges
+
+def tranedge(edge):
+    if (len(edge.son)==0):
+        if (edge.prsid=="unk"):
+            if (edge.cfg.reduct=="m"):
+                entran="M<"+edge.cfg.part[0]+">"
+            else:
+                entran="N<"+edge.cfg.part[0]+">"
+            enedge=crealeafedge(entran)
+            enedge.sentreg=edge.sentreg
+            enedges.append(enedge)
+            globvar.enchartidx[enedge.id]=edge.id
+        else:
+            entry=getentry(edge.cfg.front[0])
+            catentry=getcatentry(edge.prsid,entry)
+            tranentry=gettranentry(edge,catentry)
+            transet=tranentry.split("=>")
+            enedges=prsrtranedge(edge,transet)
+    else:
+        ruleentry=getruleentry(edge.source,edge.prsid)
+        tranentry=gettranentry(edge,ruleentry)
+        transet=tranentry.split("=>")
+        enedges=prsrtranedge(edge,transet)
+
+def crealeafedge(tranitem):
+    leafreg='!?(\w+)(<.+>)?'
+    leafsrch=re.search(leafreg,tranitem)
+    assert(leafsrch)
+    edge=edgec()
+    edge.cfg.reduct=leafsrch.group(1)
+    if (leafsrch.group(2)):
+        edge.cfg.part.append(leafsrch.group(2)[1:-1])
+    edge.id=eeid
+    eeid+=1 # pause
+
+def recurshowgene(edge,edges,spanum):
+    if (spanum>=4):
+        print " "*4+"+"+"-"*3
+    print edge.cfg.reduct+" "+str(edge.id)+":"+str(edge.father)+" ("+edge.prsid+","+edge.swiid+","+edge.tranid+")"+edge.bind
+    if (len(edge.son)!=0):
+        for i in range(0,len(edge.son)):
+            sone=genefindedge(edge.son[i],genechart)
+            recurshowgene(sone,edges,spanum+4);
+    else:
+        print " "*spanum+"+"+"-"*3+edge.cfg.part[0]
+    
+def extracttree(father,rootedge):
+    edges=[]
+    for i in range(0,len(rootedge.son)):
+        sonedges=recurposttravel(rootedge.id,globvar.chart[rootedge.son[i]])
+        edges+=sonedges
+    rootedge.father=father
+    rootedge.state='a'
+    edges.append(rootedge)
+    return(edges)
+
+def feattransition(rootedge,edges):
+    if (len(rootedge.son)!=0):
+        transition(rootedge,edges)
+        for i in range(0,len(rootedge.son)):
+            sone=genefindedge(rootedge.son[i],edges)
+            recurpretravel(sone,edges)
+
+def genefindedge(eid,edges):
+    for i in range(0,len(edges)):
+        if (edges[i].id==eid):
+            return(edges[i])
+    assert(False)
+
+def transition(edge,edges):
+    feat=""
+    featset=getabindset(edge.bind[1:-1])
+    for i in range(0,len(featset)):
+        sonreg='^(%+\w+)\.(.+?):(.+)$'
+        sonsrch=re.search(sonreg,featset)
+        if (not sonsrch):
+            feat+=featset[i]+","
+        else:
+            nota=sonsrch.group(1)
+            sonid=findsonid(nota,edge)
+            sone=genefindedge(sonid,edges)
+            fname=sonsrch.group(2)
+            fval=sonsrch.group(3)
+            modifeatval(sone,featname,fval,edges)
+    edge.bind="["+feat[:-1]+"]"
+
+def modifeatval(edge,fname,nval,edges):
+    nameset=fname.split(".")
+    curredge=edge
+    fval=nval
+    for i in range(0,len(nameset)):
+        fval,ftype,fvalset=basfeatval(nameset[i],curredge)
+        if (fval.find("eid")==0):
+            curredge=genefindedge(string.atoi(fval[3:]),edges)
+    if (fval!=nval):
+        nvreg="(,|\[)("+fnam+":"+fval+")(,|\])"
+        nvsrch=re.search(nvreg,curredge.bind)
+        curredge.bind=curredge.bind[:nvsrch.span(2)[0]]+fname+":"+nval+curredge.bind[nvsrch.span(2)[1]]
+
+def generate(tranforest):
+    makresult=[]
+    bldresult=[]
+    for i in range(0,len(trnsforest)):
+        tranchart=getranchart(enchart,tranforest[i])
+        makchart,bldchart=generate(tranchart)
+        makresult.append(makchart)
+        bldresult.append(bldchart)
+    ensent=printmakbld(makresult,bldresult)
+void makeagree(string & tree, string & bind, edgec & edge)
+{
+  assert(bind.find("IF")==string::npos);
+  vector<string> bindset;
+  getabindset(bind,bindset);
+  for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++) {
+    makaagree(tree,bind,edge);
+  }
+  return(true);
+}
+
+void makeaagree(string & tree, string & bind, edgec & edge)
+{
+  getopeval(bind,lfeat,opera,rfeat);
+  int eid=prevtravelfind(tree,edge)
+}
+/*
+void findgeneroot(vector<edgec> & genechart, edgec & root)
+{
+  for (vector<edgec>::iterator i=genechart.begin();i!=genechart.end();i++) {
+    if (i->father==-1) {
+      root=*i;
+      return;
+    }
+  }
+  assert(false);
+}
+*/
+ /*
+void printgenetree(vector<edgec> & genechart)
+{
+  edgec root;
+  for (vector<edgec>::iterator i=genechart.begin();i!=genechart.end();i++)
+    if (i->father==-1) {
+      root=*i;
+      break;
+    }
+  recurprintgene(root);
+  cout << endl;
+  recurshowgene(root,0);
+}
+*/
+
+void delematch(set<int> & matchids, vector<edgec> & ntree)
+{
+  vector<edgec> temp;
+  for (vector<edgec>::iterator i=ntree.begin();i!=ntree.end();i++) {
+    if (matchids.find(i->id)==matchids.end())
+      temp.push_back(*i);
+  }
+  ntree=temp;
+}
+
+int findmatchroot(set<int> & matchids)
+{
+  int rootid=-2;
+  assert(!matchids.empty());
+  for (set<int>::iterator i=matchids.begin();i!=matchids.end();i++) {
+    if (*i>rootid)
+      rootid=*i;
+  }
+  return(rootid);
+}
+
+  makresult.clear();
+  bldresult.clear();
+//vector<edgec> makchart;
+vector< vector<edgec> > makresult;
+vector< vector<edgec> > bldresult;
+/*
+void modifather(edgec & edge)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    makchart[*i].father=edge.id;
+  }
+}
+
+edgec & genefindedge(int & eid, vector<edgec> & genechart)
+{
+  for (vector<edgec>::iterator i=genechart.begin();i!=genechart.end();i++) {
+    if (i->id==eid) {
+      return(*i);
+    }
+  }
+  assert(false);
+}
+
+void geneassignfather(vector<edgec> & genechart)
+{
+  edgec & root=genefindroot(genechart);
+  recurgeneassign(root,genechart);
+}
+
+edgec & genefindroot(vector<edgec> & genechart)
+{
+  for (vector<edgec>::iterator i=genechart.begin();i!=genechart.end();i++) {
+    if (i->father==-1)
+      return(*i);
+  }
+  assert(false);
+}
+
+void recurgeneassign(edgec & edge, vector<edgec> & genechart)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    edgec & sone=genefindedge(*i,genechart);
+    sone.father=edge.id;
+    recurgeneassign(sone,genechart);
+  }
+}
+*/
+
+/*
+void trnextracttree(int fid, edgec & edge, vector<edgec> & tranchart)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    edgec sone=enchart[*i];
+    trnextracttree(edge.id,sone,tranchart);
+  }
+  edge.father=fid;
+  tranchart.push_back(edge);
+}
+
+	if (succ) { // && makeagree(rbind,root)) {
+	  root.prsid=prsid;
+	  root.id=edge.id;
+	  root.father=edge.father;
+	  makchart[edge.id]=root;
+	  changed=true;
+	}
+/*
+bool createtree(map<string,edgec> & lnetable, string & rtree, map<string,edgec> & rnetable, string & bind, vector<edgec> & ntree, vector<edgec> & remchart)
+{
+  string red;
+  vector<string> sons;
+  int head;
+  septree(rtree,red,sons,head);
+  edgec nulle;
+  string rootname="$";
+  rnetable.insert(pair<string,edgec>(rootname,nulle));
+  int rootid;
+  bool res=recurmaktree(lnetable,red,rootname,sons,head,rootname,rnetable,bind,ntree,rootid,remchart);
+  return(res);
+}
+
+bool recurcreatetree(map<string,edgec> & lnetable, string & trnroot, string & oriroot, vector<string> & sons, int head, string & name, map<string,edgec> & rnetable, string & bind, vector<edgec> & ntree, int & rootid, vector<edgec> & remchart)
+{
+  edgec redge;
+  if (!sons.empty()) {
+    vector<string> parts;
+    vector<int> sonids;
+    for (vector<string>::iterator i=sons.begin();i!=sons.end();i++) {
+      edgec nulle;
+      string subroot;
+      vector<string> subsons;
+      int subhead;
+      septree(*i,subroot,subsons,subhead);
+      string strnroot;
+      string soriroot;
+      getoriname(subroot,strnroot,soriroot);
+      string subname=addnetable(rnetable,strnroot,nulle);
+      vector<edgec> sonntree;
+      int sonid;
+      bool res=recurcreatetree(lnetable,strnroot,soriroot,subsons,subhead,subname,rnetable,bind,sonntree,sonid,remchart);
+      if (res==false)
+	return(false);
+      parts.push_back(strnroot);
+      sonids.push_back(sonid);
+      ntree.insert(ntree.end(),sonntree.begin(),sonntree.end());
+    }
+    redge.id=makeid++;
+    redge.source='m';
+    redge.father=-2;
+    redge.son=sonids;
+    redge.head=head;
+    redge.cfg.reduct=trnroot;
+    redge.cfg.part=parts;
+    if (oriroot.empty()) {
+      bool res=getcorrbind(bind,name,redge.bind);
+      if (res==false)
+	return(false);
+    }
+    else {
+      map<string,edgec>::iterator i=lnetable.find(oriroot);
+      redge.bind=i->second.bind;
+    }
+    //printnetable(rnetable);
+  }
+  else {
+    if (!oriroot.empty()) {
+      map<string,edgec>::iterator i=lnetable.find(oriroot);
+      assert(i!=lnetable.end());
+      redge=i->second;
+      redge.id=makeid++;
+      redge.source='m';
+      redge.father=-2;
+      bool res=getcorrbind(bind,name,redge.bind);
+      if (res==false)
+	return(false);
+      else {
+	modifather(i->second,redge.id,remchart);
+      }
+      //printnetable(rnetable);
+    }
+    else {
+      redge.id=makeid++;
+      redge.source='m';
+      redge.father=-2;
+      size_t lanpos=trnroot.find("<");
+      size_t ranpos=trnroot.find(">");
+      assert((lanpos!=string::npos) && (ranpos!=string::npos));
+      redge.cfg.reduct=trnroot.substr(0,lanpos);
+      redge.cfg.part.push_back(trnroot.substr(lanpos+1,ranpos-lanpos-1));
+      bool res=getcorrbind(bind,name,redge.bind);
+      if (res==false)
+	return(false);
+      //printnetable(rnetable);
+    }
+  }
+  ntree.push_back(redge);
+  rootid=redge.id;
+  return(true);
+}
+*/
+
+bool makeedge(edgec & edge)
+{
+  for (vector<string>::iterator j=makrset.begin();j!=makrset.end();j++) {
+    string prsid;
+    string ltree;
+    string lbind;
+    string rtree;
+    string rbind;
+    sepmakrule(*j,prsid,ltree,lbind,rtree,rbind);
+    //set<int> matchids;
+    map<string,edgec> lnetable;
+    if (treematch(ltree,edge,lnetable,matchids)) {
+      if (makagree(lnetable,lbind,edge)) {
+	printedge(edge);
+	cout << *j << endl;
+	//delematch(matchids,makchart);
+	map<string,edgec> rnetable;
+	vector<edgec> newchart;
+	bool res=createtree(lnetable,rtree,rnetable,rbind,newchart,makchart);
+	if (res==true) {
+	  assert(!newchart.empty());
+	  edgec & newroot=newchart.back();
+	  newroot.id=i->id;
+	  newroot.father=i->father;
+	  cout << "--- mak new tree ---" << endl;
+	  makchart.insert(makchart.end(),newchart.begin(),newchart.end());
+	  return(true);
+	}
+	else
+	  makchart=tranchart;
+      }
+    }
+  }
+}
+
+
+bool recurtreematch(string & tree, edgec & edge, map<string,edgec> & netable, set<int> & matchids)
+{
+  string red;
+  vector<string> sons;
+  int head;
+  septree(tree,red,sons,head);
+  string cat;
+  if (!nodematch(red,edge,cat) || (sons.size()!=edge.son.size())) 
+    return(false);
+  else {
+    for (size_t i=0;i<sons.size();i++) {
+      if (!recurtreematch(sons[i],enchart[edge.son[i]],netable,matchids))
+	return(false);
+    }
+    addnetable(netable,cat,edge);
+    matchids.insert(edge.id);
+    return(true);
+  }
+}
+
+bool maksent(vector<edgec> & tranchart, vector<edgec> & makchart)
+{
+  makchart=tranchart;
+  for (vector<edgec>::iterator i=tranchart.begin();i!=tranchart.end();i++) {
+    for (vector<string>::iterator j=makrset.begin();j!=makrset.end();j++) {
+      string prsid;
+      string ltree;
+      string lbind;
+      string rtree;
+      string rbind;
+      sepmakrule(*j,prsid,ltree,lbind,rtree,rbind);
+      set<int> matchids;
+      map<string,edgec> lnetable;
+      if (treematch(ltree,*i,lnetable,matchids,makchart)) {
+	if (makagree(lnetable,lbind,*i,makchart)) {
+	  printedge(*i);
+	  cout << *j << endl;
+	  map<string,edgec> rnetable;
+	  delematch(matchids,makchart);
+	  vector<edgec> newchart;
+	  bool res=maktree(lnetable,rtree,rnetable,rbind,newchart,makchart);
+	  if (res==true) {
+	    assert(!newchart.empty());
+	    edgec & newroot=newchart.back();
+	    newroot.id=i->id;
+	    newroot.father=i->father;
+	    cout << "--- mak new tree ---" << endl;
+	    makchart.insert(makchart.end(),newchart.begin(),newchart.end());
+	    return(true);
+	  }
+	  else
+	    makchart=tranchart;
+	}
+      }
+    }
+  }
+  return(false);
+}
+void findrootedge(edgec & edge, edgec & root)
+{
+  edgec medge=edge;
+  while (medge.father!=-1) {
+    findedge(medge.father,medge);
+  }
+}
+
+/*
+void feattransition(edgec & root, vector<edgec> & edges)
+{
+  if (!root.son.empty()) {
+    transition(root,edges);
+    for (vector<int>::iterator i=root.son.begin();i!=root.son.end();i++) {
+      edgec & sone=genefindedge(*i,edges);
+      feattransition(sone,edges);
+    }
+  }
+}
+*/
+
+/*
+bool entransition(edgec & edge, string & feat)
+{
+  feat=edge.bind;
+  vector<string> featset;
+  getabindset(feat,featset);
+  feat="";
+  for (vector<string>::iterator i=featset.begin();i!=featset.end();i++) {
+    string lfeat;
+    string opera;
+    string rfeat;
+    getopeval(*i,lfeat,opera,rfeat);
+    if ((lfeat.find("$.")==0) && !rfeat.empty()) {
+      lfeat=lfeat.substr(2);
+      if ((opera=="=") || (opera=="=="))
+	feat+=lfeat+":"+rfeat+",";
+      else if (opera=="!=")
+	feat+=lfeat+":~"+rfeat+",";
+    }
+    else if (lfeat=="$") {
+      assert(rfeat[0]=='[');
+      rfeat.replace(0,1,"");
+      size_t rbrapos=rfeat.rfind("]");
+      assert(rbrapos!=string::npos);
+      rfeat.replace(rbrapos,1,"");
+      feat=rfeat+",";
+    }
+    else {
+      if ((lfeat.find("%")!=string::npos) && 
+	  (rfeat.find("%")!=string::npos)) {
+	;
+      }
+      else if (lfeat.find("%")!=string::npos) {
+	size_t dotpos=lfeat.find(".");
+	string nota=lfeat.substr(0,dotpos);
+	edgec sone;
+	trnfindsonedge(edge,nota,sone);
+	if (sone.prsid=="")
+	  return(false);
+	string featname=lfeat.substr(dotpos+1);
+	string newval;
+	if ((opera=="=") || (opera=="=="))
+	  newval=rfeat;
+	else if (opera=="!=")
+	  newval="~"+rfeat;
+	enmodifeatval(sone,featname,newval);
+      }
+      else if (rfeat.find("%")!=string::npos) {
+	size_t dotpos=rfeat.find(".");
+	string nota=rfeat.substr(0,dotpos);
+	edgec sone;
+	trnfindsonedge(edge,nota,sone);
+	if (sone.prsid=="")
+	  return(false);
+	string featname=rfeat.substr(dotpos+1);
+	string newval;
+	if ((opera=="=") || (opera=="=="))
+	  newval=lfeat;
+	else if (opera=="!=")
+	  newval="~"+lfeat;
+	enmodifeatval(sone,featname,newval);
+      }
+      else
+	;  // pause here, think again
+    }
+  }
+  feat="["+feat.substr(0,feat.size()-1)+"]";
+  return(true);
+}
+*/
+
+/*
+void enmodifeatval(edgec & ce, string & featname, string & nval)
+{
+  string temp="."+featname;
+  string septor=".";
+  vector<string> nameset;
+  getset(temp,septor,nameset);
+  string nameval;
+  string featval;
+  string valtype;
+  vector< vector<string> > valset;
+  edgec tempedge;
+  for (vector<string>::iterator i=nameset.begin();i!=nameset.end();i++) {
+    featval="";
+    trnbasfeatval(tempedge,(*i),featval,valtype,valset);
+    nameval=(*i)+":"+featval;
+    if (valtype=="Edge") {
+      if (!featval.empty()) {
+	int eid=atoi(featval.substr(3).c_str());
+	trnfindedge(eid,tempedge);
+      }
+      else { 
+	return;
+      }
+    }
+  }
+  if (featval!=nval) {
+    size_t nvpos=tempedge.bind.find(nameval);
+    if (nvpos!=string::npos) {
+      size_t valpos=tempedge.bind.find(featval,nvpos);
+      tempedge.bind.replace(valpos,featval.length(),nval);
+    }
+    else {
+      size_t colpos=nameval.find(":");
+      assert(colpos!=string::npos);
+      if (tempedge.bind.empty())
+	tempedge.bind="["+nameval.substr(0,colpos+1)+nval+"]";
+      else
+	tempedge.bind.replace(1,0,nameval.substr(0,colpos+1)+nval+",");
+    }
+  }
+}
+*/
+void resetenglobvar()
+{
+  enchart.clear();
+  chtoenidx.clear();
+  entochidx.clear();
+  trnsresult.clear();
+  makresult.clear();
+  bldresult.clear();
+  vector<int> eids;
+  chtoenidx.insert(pair< int, vector<int> >(-1,eids));
+}
+
+void printenchart(map< int, vector<edgec> > & enchart)
+{
+  for (map<int,vector<edgec> >::iterator i=enchart.begin();i!=enchart.end();i++) {
+    if (i->first==-1) 
+      cout << i->first << ":" << endl;
+    else {
+      edgec edge;
+      findedge(i->first,edge);
+      printedge(edge);
+    }
+    for (vector<edgec>::iterator j=i->second.begin();j!=i->second.end();j++) {
+      printedge(*j);
+    }
+  }
+}
+
+/*
+void choosetrnsresult(vector<int> & trnsresult)
+{
+  for (map< int,vector<edgec> >::iterator i=enchart.begin();i!=enchart.end();i++) {
+    if ((i->first!=-1) && !(i->second.empty()))
+      addsentreg(i->first,trnsresult);
+  }
+}
+
+void addsentreg(int eid, vector<int> & trnsresult)
+{
+  vector<int> temp;
+  edgec edge;
+  findedge(eid,edge);
+  size_t i=0;
+  for (;i<trnsresult.size();i++) {
+    edgec sedge;
+    findedge(trnsresult[i],sedge);
+    if ((sedge.sentreg.begin<edge.sentreg.begin) && (sedge.sentreg.end<edge.sentreg.end))
+      temp.push_back(trnsresult[i]);
+    else if (sedge.sentreg>edge.sentreg)
+      break;
+  }
+  temp.push_back(eid);
+  for (;i<trnsresult.size();i++) {
+    edgec sedge;
+    findedge(trnsresult[i],sedge);
+    if ((sedge.sentreg.begin>edge.sentreg.begin) && (sedge.sentreg.end>edge.sentreg.end))
+      temp.push_back(trnsresult[i]);
+  }
+  trnsresult=temp;
+}
+*/
+
+void gettranresult(vector<int> & trnsresult)
+{
+  
+}
+
+void gettranchart(edgec & root, vector<edgec> & tranchart)
+{
+  map< int, vector<edgec> >::iterator i=enchart.find(eid);
+  assert(i!=enchart.end());
+  edgec root=i->second.front();
+  trnrecurposttravel(-1,root,tranchart);
+}
+
+  
+  /*
+  for (vector<string>::iterator i=words.begin();i!=words.end();i++)
+    cout << *i << " ";
+  cout << endl;
+  */
+edgec trnfindsonedge(edgec & edge, string & nota, bool found)
+{
+  int sonid=trnfindsonid(edge,nota);
+  return(trnfindedge(sonid,found));
+}
+
+edgec trnfindedge(int eeid)
+{
+  if (eeid>=0 && eeid<(int)enchart.size()) {
+    return(enchart[eeid]);
+  }
+  else {
+    edgec nulledge;
+    return(nulledge);
+  }
+}
+
+
+  map<int,int>::iterator i=enchartidx.find(eeid);
+  assert(i!=enchartidx.end());
+  map< int,vector<edgec> >::iterator j=enchart.find(i->second);
+  for (vector<edgec>::iterator k=j->second.begin();k!=j->second.end();k++) {
+    if (k->id==eeid) {
+      found=true;
+      edge=(*k);
+      return;
+    }
+  }
+  found=false;
+  map<int,int>::iterator i=enchartidx.find(eeid);
+  assert(i!=enchartidx.end());
+  map< int,vector<edgec> >::iterator j=enchart.find(i->second);
+  for (vector<edgec>::iterator k=j->second.begin();k!=j->second.end();k++) {
+    if (k->id==eeid) {
+      found=true;
+      return(*k);
+    }
+  }
+  found=false;
+  return(enchart.begin()->second.front());
+  if (i!=enchart.end()) {
+    for (vector<edgec>::iterator j=i->second.begin();j!=i->second.end();j++) {
+      if (j->cfg.reduct==encat)
+	sonedges.push_back(*j);
+    }
+  }
+/*
+void getcomplocchart(edgec & edge, string & comptran, size_t loc, vector<edgec> & locchart)
+{
+  vector<edgec> sublocchart;
+  string emptybind;
+  vector<edgec> subenegs;
+  getlocchart(edge,comptran,sublocchart);
+  flattranedge(edge,comptran,emptybind,sublocchart,subenegs);
+
+  map<int,vector<edgec> >::iterator nulit=enchart.find(-1);
+  nulit->second.insert(nulit->second.end(),subenegs.begin(),subenegs.end());
+  for (vector<edgec>::iterator k=subenegs.begin();k!=subenegs.end();k++) {
+    k->sentreg.begin=loc;
+    k->sentreg.end=loc+1;
+    enchartidx.insert(pair<int,int>(k->id,-1));
+  }
+
+  locchart.insert(locchart.end(),subenegs.begin(),subenegs.end());
+}
+*/
+
+/*
+void getlocchart(edgec & edge, string & trancfg, vector<edgec> & locchart)
+{
+  string enred;
+  vector<string> itemset;
+  getitemset(trancfg,enred,itemset);
+  for (vector<string>::iterator i=itemset.begin();i!=itemset.end();i++) {
+    getatomlocchart(edge,*i,i-itemset.begin(),locchart);
+  }
+}
+*/
+
+      /*
+      vector<edgec> sublocchart;
+      getlocchart(edge,*i,sublocchart);
+      string emptybind;
+      vector<edgec> subenegs;
+      flattranedge(edge,*i,emptybind,sublocchart,subenegs);
+      nulit->second.insert(nulit->second.end(),subenegs.begin(),subenegs.end());
+      for (vector<edgec>::iterator k=subenegs.begin();k!=subenegs.end();k++) {
+	k->sentreg.begin=i-itemset.begin();
+	k->sentreg.end=i-itemset.begin()+1;
+	enchartidx.insert(pair<int,int>(k->id,-1));
+      }
+      locchart.insert(locchart.end(),subenegs.begin(),subenegs.end());
+      */
+    /*
+    map<int,vector<edgec> >::iterator nulit=enchart.find(-1);
+    assert(nulit!=enchart.end());
+    for (size_t j=0;j<subcfgs.size();j++) {
+      vector<edgec> subenegs;
+      string emptybind;
+      vector<edgec> sublocchart;
+      getlocchart(edge,subcfgs[j],sublocchart);
+      flattranedge(edge,subcfgs[j],emptybind,sublocchart,subenegs);
+      nulit->second.insert(nulit->second.end(),subenegs.begin(),subenegs.end());
+      for (vector<edgec>::iterator k=subenegs.begin();k!=subenegs.end();k++) {
+	k->sentreg.begin=locs[j];
+	k->sentreg.end=locs[j]+1;
+	enchartidx.insert(pair<int,int>(k->id,-1));
+      }
+      locchart.insert(locchart.end(),subenegs.begin(),subenegs.end());
+    }
+    */
+    /*
+    if (i->find("/")!=string::npos) {
+      string encat;
+      edgec sone;
+      getsonecat(edge,(*i),sone,encat);
+      vector<edgec> ensones;
+      findsonedges(sone.sentreg,sone.id,encat,ensones);
+      for (vector<edgec>::iterator j=ensones.begin();j!=ensones.end();j++) {
+	j->sentreg.begin=i-itemset.begin();
+	j->sentreg.end=i-itemset.begin()+1;
+      }
+      locchart.insert(locchart.end(),ensones.begin(),ensones.end());
+    }
+    else {
+      edgec sone;
+      createsone(*i,sone);
+      sone.sentreg.begin=i-itemset.begin();
+      sone.sentreg.end=i-itemset.begin()+1;
+      locchart.push_back(sone);
+      map< int,vector<edgec> >::iterator idxi=enchart.find(-1);
+      assert(idxi!=enchart.end());
+      idxi->second.push_back(sone);
+      enchartidx.insert(pair<int,int>(sone.id,-1));
+    }
+    */
+void dicttranedge(edgec & edge, vector<string> & transet, vector<edgec> & enedges)
+{
+  for (vector<string>::iterator i=transet.begin();i!=transet.end();i++) {
+    string tranid;
+    string trancfg;
+    string tranbind;
+    sepatranentry(*i,tranid,trancfg,tranbind);
+    string flatcfg;
+    vector<string> subcfgs;
+    vector<edgec> locchart;
+    vector<int> locs;
+    removedeep(edge,trancfg,locs,subcfgs,flatcfg,locchart);
+    map<int,vector<edgec> >::iterator nulit=enchart.find(-1);
+    assert(nulit!=enchart.end());
+    for (size_t j=0;j<subcfgs.size();j++) {
+      vector<edgec> subenegs;
+      string emptybind;
+      vector<edgec> sublocchart;
+      getlocchart(edge,subcfgs[j],sublocchart);
+      flattranedge(edge,subcfgs[j],emptybind,sublocchart,subenegs);
+      nulit->second.insert(nulit->second.end(),subenegs.begin(),subenegs.end());
+      for (vector<edgec>::iterator k=subenegs.begin();k!=subenegs.end();k++) {
+	k->sentreg.begin=locs[j];
+	k->sentreg.end=locs[j]+1;
+	enchartidx.insert(pair<int,int>(k->id,-1));
+      }
+      locchart.insert(locchart.end(),subenegs.begin(),subenegs.end());
+    }
+    vector<edgec> enegs;
+    flattranedge(edge,flatcfg,tranbind,locchart,enegs);
+    for (vector<edgec>::iterator k=enegs.begin();k!=enegs.end();k++) {
+      k->sentreg=edge.sentreg;
+      k->tranid=tranid;
+      enchartidx.insert(pair<int,int>(k->id,edge.id));
+    }
+    enedges.insert(enedges.end(),enegs.begin(),enegs.end());
+  }
+}
+
+def resettargetvar():
+    enchart=[]
+    enchartidx=[]
+    trnsresult=[]
+        exit(0)
+
+        if (modelsrch.group(3)):
+            valset=modelsrch.group(3)[1:-2].split(",")
+        if (modelsrch.group(4)):
+            defpos=modelsrch.group(4).find("Default=")
+            defval=modelsrch.group(4)[defpos+8:]
+Symbol Limited|Symbol Unlimited|Boolean|Number Limited|Number Unlimited|        if (lfeat.find("$")==0 and edge.bind==""):
+            nbind.append(lfeat+opera+rval)
+            res=True
+        else:
+            # "if then else endif"
+            print thenelsesrch.group(1),thenelsesrch.group(3),thenelsesrch.group(5)
+            nifbind,ifres=basagree(thenelsesrch.group(1),edge)
+            nthenbind,thenres=basagree(thenelsesrch.group(3),edge)
+            nelsebind,elseres=basagree(thenelsesrch.group(5),edge)
+
+def getatset(bind):
+    atset=bind.split("@")
+    del atset[0]
+            if ((ifres==True and thenres==False) or (ifres==False and elseres==False)):
+                res=False
+                break
+            if (ifres==True and thenres==True):
+                nbind+=nifbind+nthenbind
+
+            nifbind,ifres=basagree(ifbind,edge)
+            nthbind,thres=basagree(thbind,edge)
+            if (ifres==True and thenres==False):
+                res=False
+                break
+            if (ifres==True and thenres==True):
+                nbind+=nifbind+nthenbind
+            # "if else endif"
+            print elsesrch.group(1),elsesrch.group(3)
+            nifbind,ifres=basagree(elsesrch.group(1),edge)
+            nelsebind,elseres=basagree(elsesrch.group(3),edge)
+            if (ifres==False and elseres==False):
+                res=False
+                break
+            if (ifres==True):
+                nbind+=nifbind
+             thenelsereg='(.+)( THEN )(.+)( ELSE )(.+)'
+            thenelsesrch=re.match(thenelsereg,bindset[i][1])
+            if (thenelsesrch):
+            elsereg='(.+)( ELSE )(.+)'
+            elsesrch=re.match(elsereg,bindset[i][1])
+            if (elsesrch):
+              thenreg='(.+)( THEN )(.+)'
+                thensrch=re.match(thenreg,bindset[i][1])
+     /*
+    if ((feat[colonpos+1]!='[') && (feat[colonpos+2]!='[')) {
+      size_t commapos=feat.find(",",colonpos);
+      size_t braktpos=feat.find("]",colonpos);
+      featval=feat.substr(colonpos+1,min(commapos,braktpos)-colonpos-1);
+    }
+    else {
+      size_t braktpos=feat.find("]",colonpos);
+      assert(braktpos!=string::npos);
+      featval=feat.substr(colonpos+1,braktpos-colonpos);
+    }
+    */
+
+  /*
+  if (edge.son.empty())
+    yxval=edge.cfg.part.front();
+  else {
+    for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+      edgec sone;
+      findedge(*i,sone);
+      string sonyx;
+      recurprocyx(sone,sonyx);
+      yxval+=sonyx;
+    }
+  }
+  */
+        
+
+        iftruesrch=re.match(iftruereg,bindset[i],re.S)
+        if (iftruesrch):
+           print "here"
+        else:
+            ifalsesrch=re.match(ifalsereg,bindset[i],re.S)
+            if (ifalsesrch):
+                pass
+            else:
+                ifthensrch=re.match(ifthenreg,bindset[i],re.S)
+                if (ifthensrch):
+                    pass
+                else:
+                    ifelsesrch=re.match(ifelsereg,bindset[i],re.S)
+                    if (ifelsesrch):
+                        pass
+                    else:
+                        iffullsrch=re.match(iffullreg,bindset[i],re.S)
+                        if (iffullsrch):
+                            pass
+                        else:
+                            pass
+        iftruereg='(IF )(.+)( TRUE)'
+        ifalsereg='(IF )(.+)( FALSE)'
+        ifthenreg='(IF )(.+)( THEN )(.+)( ENDIF)'
+        ifelsereg='(IF )(.+)( ELSE )(.+)( ENDIF)'
+        iffullreg='(IF )(.+)( THEN )(.+)( ELSE )(.+)( ENDIF)'
+                
+
+        if (bindset[i].find("IF")==-1):
+            # basic case
+            anbind,res=basagree(bindset[i],edge)
+            if (res==False):
+                break
+            else:
+                nbind+=anbind
+        elif (bindset[i].find("TRUE")!=-1):
+            # IF <bind> TRUE
+            anbind,res=basagree(bindset[i],edge)
+            if (res==False):
+                break
+            else:
+                nbind+=anbind
+        elif (bindset[i].find("FALSE")!=-1):
+            anbind,res=basagree(bindset[i],edge)
+            if (res==True):
+                res=False
+        elif (:
+                
+            
+
+/*
+动词原形变第三人称单数的规则与发音规律同名词单数变复数大致相同，请认真观察。 1、大多数动词在词尾加“S”在清辅音后发音为[s]，在浊辅音及元音后发音为 [z]。如： 
+①stop－stops [s] ; make－makes [s] 
+②read－reads [z] ; play－plays [z] 
+2、以辅音字母加“y”结尾的，要先将“y”变为“i”，然后在加“es”读[iz] 如： 
+fly－flies [z]； carry－carries [z] 
+study－studies [z]; worry－worries 
+3、以“s, x, ch, sh”结尾的，在词尾加“es”，发音为[iz] 如： 
+teach－teaches [iz]; watch－watches [iz] 
+4、以“o”结尾的动词，加“es”，读[z] 如： 
+go－goes [z] do－does [z] 
+*/
+
+/*
+1、大多动词直接在词尾加-ing，比如：go-going, work-working, study-studying, look-looking，do-doing,eat-eating,play-playing,read-reading,wash-washing,plant-planting,borrow-borrowing,pick-picking,paint-painting,cry-crying,took-tooking (v.拿，占领，接受） climb-climbing 
+
+2、有的以不发音的e字母结尾的动词，要去掉e再加-ing，比如：make-making, write-writing, skate-skating,close–closing, come-coming, make–making,take-taking，have-having,dance-dancing, 
+smile-smiling,ride-riding,become-becoming, 
+若结尾的e 发音,就不能去掉,如：see-seeing 
+
+3、以重读闭音节结尾，末尾只有一个辅音字母的动词，要双写这一辅音字母，再加-ing。例如：run-running, swim-swimming，get – getting,sit–sitting,put–putting,begin–beginning,hit-hitting 
+stop-stopping 
+如果结尾是元音字母加辅音字母组合,就直接加-ing。比如：drawing, playing
+*/
+
+/*
+一般情况
+加 -s
+map-maps
+
+浊辅音和元音后读 /z/
+bag-bags /car-cars
+
+以s, sh, ch, x等结尾
+加 -es
+bus-buses/ watch-watches
+
+以ce, se, ze,等结尾
+加 -s
+license-licenses
+
+以辅音字母+y结尾
+变y 为i再加es
+baby---babies 
+*/
+@@ AA -- a [重叠形式:AA] << A -- a // [重叠:Yes]
+@@ DD -- d [重叠形式:DD] << D -- d 
+@@ VV -- v [重叠形式:VV] << V -- v //[重叠:Yes]
+@@ R俩 -- r << R们 -- r
+@@ N儿 -- n [重叠形式:N儿] << N -- n
+
+@@ MN儿 -- n [重叠形式:MN儿] << MN -- n
+@@ V了V -- v [重叠形式:V了V] << V -- v //[重叠:Yes]
+@@ V一V -- v [重叠形式:V一V] << V -- v //[重叠:Yes]
+@@ V了N -- v [重叠形式:V了N] << VN -- v [趋向动词:否,yx:~上门~出生]
+@@ VVN -- v [重叠形式:VVN] << VN -- v
+@@ V过N -- v [重叠形式:V过N] << VN -- v [趋向动词:否]
+
+@@ AABB -- a [重叠形式:AABB] << AB -- a //[重叠:Yes]
+@@ ABAB -- a [重叠形式:ABAB] << AB -- a //[重叠:Yes]
+@@ UVUV -- v [重叠形式:UVUV] << UV -- v //[重叠:Yes]
+@@ V了一N -- v [重叠形式:V了一N] << VN -- v
+@@ V过一N -- v [重叠形式:V过一N] << VN -- v
+@@ V不了N -- v [重叠形式:V不了N] << VN -- v
+                rulepos=catentset[j].find("&&")
+                if (rulepos!=-1):
+                    catent=catentset[j][:rulepos]
+                    rulent=catentset[j][rulepos:]
+                else:
+                    catent=catentset[j]
+                    rulent=""
+    global model
+    global dictn
+    global prsrbase
+    global makrbase
+    global bldrbase
+    global prsrset
+    global makrset
+    global bldrset
+    global prsrtable
+
+        global shi
+    global fou
+    global hanzi
+    global hanyucilei
+    global hanyuduanyu
+    global chongdie
+    global liang
+    global er
+    global le
+    global yi
+    global guo
+    global bu
+    global yuyilei
+    global yinjie
+    global jufachengfen
+    global yuyichengfen
+    global zhongxinyu
+    global yingyucilei
+    global Rliang
+    global Ner
+    global NMer
+    global VleV
+    global VyiV
+    global VleN
+    global VguoN
+    global VleyiN
+    global VguoyiN
+    global VbuleN
+
+    while (mpos<len(bigunit) and bigunit[mpos]==' '):
+        mpos+=1
+    bigunit=bigunit[mpos:]
+    mpos=0
+    while (mpos<len(bigunit) and bigunit[mpos]==' '):
+        mpos+=1
+def parserulentry(entry,prsr):
+    idbpos=entry.find("{")
+    idepos=entry.find("}")
+    prsr.prsid=entry[idbpos+1:idepos]
+    temp=entry[idepos+1:]
+    cfgent=""
+    bindent=""
+    getcfgbind(temp,cfgent,bindent)
+    yxbind=""
+    parsecfg(cfgent,prsr.cfg,prsr.head,yxbind)
+    getprsrbind(temp)
+    temp=entry[bindpos+2:min(swipos,tranpos)]
+    advrmspace(temp,prsr.bind)
+    prsr.bind+=yxbind
+    
+def getcfgbind(entry,cfgent,bindent):
+    bindpos=entry.find("::")
+    if (bindpos!=-1):
+        cfgent=entry[:bindpos]
+    else:
+        bindent=""
+        swipos=entry.find("||")
+        if (swipos!=-1):
+            cfgent=entry[:swipos]
+        else:
+            tranpos=entry.find("=>")
+            cfgent=entry[:tranpos]
+    beginpos=prsrbase.find("&&")
+    prsrbase=prsrbase[beginpos:]
+    beginpos=makrbase.find("##")
+    makrbase=makrbase[beginpos:]
+    beginpos=bldrbase.find("@@")
+    bldrbase=bldrbase[beginpos:]
+
+    while (!remain.empty()):
+        temp=remain
+        cat=""
+        oneu=""
+        getoneunit(temp,oneu,remain)
+        if (oneu[0]=='!'):
+            head=cfg.part.size()
+            oneu=oneu[1:]
+        if (oneu.find("<")!=string::npos) {
+      size_t lanpos=oneu.find("<");
+      size_t ranpos=oneu.find(">");
+      assert(ranpos!=string::npos);
+      cat=oneu.substr(0,lanpos);
+      string yx=oneu.substr(lanpos+1,ranpos-lanpos-1);
+      removequota(yx);
+      int repeat=1;
+      for (vector<string>::iterator i=cfg.part.begin();i!=cfg.part.end();i++) {
+	if ((*i)==cat)
+	  repeat++;
+      }
+      string intro;
+      for (int i=0;i<repeat;i++)
+	intro+="%";
+      intro+=cat;
+      yxbind+=","+intro+".yx="+yx;
+    }
+    else
+      cat=oneu;
+    cfg.part.push_back(cat);
+  }
+}
+	//size_t eepos=dictn.find("$$",ebpos+i-j+3);
+	//string entry=dictn.substr(ebpos,eepos-ebpos);
+	//locdictn+=entry;
+    char c=sent[i];
+    switch (state) {
+    case 0:
+      switch (c) {
+      case '(':
+	state=1;
+	break;
+      case ' ':
+	state=2;
+	break;
+      default:
+      }
+      break;
+    case 1:
+      switch (c) {
+      case ')':
+	state
+      }
+      break;
+    case 2:
+      break;
+  /*
+  {
+    string tempsent="";
+    string::const_iterator it=sent.begin();
+    string::const_iterator end=sent.end();
+    boost::smatch m;
+    vector<string> subsents;
+    while (boost::regex_search(it,end,m,brackreg)) {
+      if (it!=m[0].first) {
+	string subsent=string(it,m[0].first);
+	tempsent+=subsent;
+      }
+      it=m[0].second;
+    }
+    if (it!=end) {
+      string subsent=string(it,end);
+      tempsent+=subsent;
+    }
+    sent=tempsent;
+    cout << sent << endl;
+  }
+  */
+
+
+
+  /*
+  {
+    vector<string> tempwords;
+    size_t i=0;
+    while (i<words.size()) {
+      if ((i>0) && (i<words.size()-1) && (words[i]=="·")) {
+	tempwords[i-1]+=words[i]+words[i+1];
+	i+=2;
+      }
+      else {
+	tempwords.push_back(words[i]);
+	i++;
+      }
+    }
+    words=tempwords;
+  }
+  */
+&& {vpsbu1} vp->!vp v :: $.内部结构=粘合述补,$.述语=%vp,$.补语=%v,%vp.宾语.cpcat=~mcp,%vp.内部结构=单词,%vp.动结=是,
+	IF %vp.补语=是 THEN $!=%vp @补语 ENDIF,
+        IF %vp.内部结构=单词 THEN $!=%vp @配价数 @客体,$.配价数=2,$.客体=[语义类:事物|运动] ENDIF,
+        || {vpsbu1.1} %vp.内部结构=单词,%v.补助动词=是,%v.单作补语=是,%v.趋向动词=否,%v.yx=~完~走~成~死
+        => {vpsbu1.1.1} VP(!V/v)
+        => {vpsub1.1.2} VP(!VP/vp D/v) %D.DVEND=Yes
+        || {vpsbu1.2} %vp.内部结构=单词,%v.yx=死,%vp.yx=~去                    /*他不怕~<去死>*/
+        => VP(!VP/vp PP(P<to> N<death>))                                          /*咬死*/
+        || {vpsbu1.3} %vp.内部结构=单词,%v.yx=完
+        => VP(!V/v VP/vp) %V.PERF=Yes,%VP.FORM=VG                                 /*吃完*/
+        || {vpsbu1.4} %vp.内部结构=单词,%v.yx=成                            /*<转换成>热能、光能或化学能*/
+        => VP(!VP/vp)                                                     /*缩成速写*/
+
+&& {djyou2} dj->v<没有|没> np !vp :: $.内部结构=有字,%vp.主体=%np,$.语气=陈述,%np.语气=陈述,IF %np.yx=人工 FALSE /* ~ 假期里工厂没<人工><作了> */
+        => CS(A<No> NP/np !VP/vp)        /*没有一个老师想参加比赛*/ 
+bool isword(int start, int end)
+{
+  int bloc=0;
+  for (size_t i=0;i<chnwords.size();i++) {
+    if (bloc>start)
+      return(false);
+    int eloc=bloc+chnwords[i].size();
+    if ((bloc==start) && (eloc==end) && (chnwords[i]==chnsent.substr(start,end-start)))
+      return(true);
+    bloc=eloc;
+  }
+  return(false);
+}
+
+  /*
+  cout << sent.c_str() << endl;
+  string::const_iterator it=sent.begin();
+  string::const_iterator end=sent.end();
+  boost::smatch m;
+  vector<string> subsents;
+  while (boost::regex_search(it,end,m,numreg)) {
+    if (it!=m[0].first) {
+      string subsent=string(it,m[0].first);
+      vector<string> subwords;
+      dictsegment(subsent,subwords);
+      words.insert(words.end(),subwords.begin(),subwords.end());
+    }
+    words.push_back(m[0]);
+    it=m[0].second;
+  }
+  if (it!=end) {
+    string subsent=string(it,end);
+    vector<string> subwords;
+    dictsegment(subsent,subwords);
+    words.insert(words.end(),subwords.begin(),subwords.end());
+  }
+  */
+	if (vmorfval=="IREG") {
+	  string unname="UN";
+	  string unval;
+	  bldbasfeatval(edge,unname,unval,valtype,valset,genechart);
+	  cout << unval << " ";
+	}
+	else
+            IF %np.内部结构=单词,%np.yx=研究,%%np.内部结构=单词,%%np.汉字=人 FALSE,                /*研究机器人*/
+/*
+void transmit(string & hfeat, string & feat)
+{
+  string inhfeat,exhfeat;
+  getintextfeat(hfeat,inhfeat,exhfeat);
+  string infeat,exfeat;
+  getintextfeat(feat,infeat,exfeat);
+  string ninfeat,nexfeat;
+  combinefeat(inhfeat,infeat,ninfeat);
+  combinefeat(exhfeat,exfeat,nexfeat);
+  if (!ninfeat.empty())
+    feat="["+ninfeat+"]";
+  if (!nexfeat.empty())
+    feat+="{"+nexfeat+"}";
+}
+
+void getintextfeat(string & feat, string & infeat, string & exfeat)
+{
+  size_t lbpos=feat.find("[");
+  size_t rbpos=feat.find("]");
+  infeat=feat.substr(lbpos+1,rbpos-lbpos-1);
+  size_t lbbpos=feat.find("{");
+  if (lbbpos!=string::npos) {
+    size_t rbbpos=feat.find("}");
+    exfeat=feat.substr(lbbpos+1,rbbpos-lbbpos-1);
+  }
+  else
+    exfeat="";
+}
+
+void combinefeat(string & hfeat, string & feat, string & nfeat)
+{
+  nfeat=feat;
+  string septor=",";
+  string temp=","+hfeat;
+  vector<string> hfeatset;
+  getset(temp,septor,hfeatset);
+  for (vector<string>::iterator i=hfeatset.begin();i!=hfeatset.end();i++) {
+    string hname,hval;
+    getnameval(*i,hname,hval);
+    if ((jufachengfen.find(","+hname+",")==string::npos) && 
+	(!foundhname(hname,feat)))
+      nfeat+=","+(*i);
+  }
+  if (nfeat[0]==',')
+    nfeat.replace(0,1,"");
+}
+
+bool foundhname(string & hname, string & feat)
+{
+  string temp=","+feat;
+  size_t fpos=temp.find(","+hname);
+  return(fpos!=string::npos);
+}
+
+void getnameval(string & onefeat, string & fname, string & val)
+{
+  size_t colonpos=onefeat.find(":");
+  fname=onefeat.substr(0,colonpos);
+  val=onefeat.substr(colonpos+1);
+}
+*/
+  /*
+  if (edge.cfg.reduct!="unknown") {
+    if (edge.son.empty()) {
+      boost::match_results<string::const_iterator> m;
+      if ((edge.cfg.reduct=="m") && (boost::regex_match(edge.cfg.part.front(),m,numreg))) {
+	string entran="M<"+edge.cfg.part.front()+">";
+	edgec enedge;
+	createsone(entran,enedge);
+	enedge.sentreg=edge.sentreg;
+	enedges.push_back(enedge);
+	enchartidx.insert(pair<int,int>(enedge.id,edge.id));
+      }
+      else {
+	string entry;
+	getentry(edge.cfg.part.front(),entry);
+	string catentry;
+	getcatentry(edge.prsid,entry,catentry);
+	string tranentry;
+	gettranentry(edge,catentry,tranentry);
+	vector<string> transet;
+	string septor="=>";
+	getset(tranentry,septor,transet);
+	dicttranedge(edge,transet,enedges);
+      }
+    }
+    else {
+      string rule;
+      getrule(edge.source,edge.prsid,rule);
+      string tranentry;
+      gettranentry(edge,rule,tranentry);
+      vector<string> transet;
+      string septor="=>";
+      getset(tranentry,septor,transet);
+      prsrtranedge(edge,transet,enedges);
+    }
+  }
+  else
+    enedges.push_back(edge);
+  */
+    /*
+    if (sentreg<other.sentreg)
+      return(true);
+    else if (sentreg>other.sentreg)
+      return(false);
+    else if (reduct<other.reduct)
+      return(true);
+    else if (reduct>other.reduct)
+      return(false);
+    else
+      return(bind<other.bind);
+    */
+    /*
+    edgec tempe=ce;
+    bool found=getfeatval(tempe.bind,featname,featval);
+    while (!found) {
+      if ((tempe.head>=0) && (tempe.head<tempe.son.size())) {
+	edgec hsone;
+	findedge(tempe.son[tempe.head],hsone);
+	found=getfeatval(hsone.bind,featname,featval);
+	tempe=hsone;
+      }
+      else
+	break;
+    }
+    */
+    /*
+    edgec tempe=ce;
+    bool found=getfeatval(tempe.bind,featname,featval);
+    while (!found) {
+      if ((tempe.head>=0) && (tempe.head<tempe.son.size())) {
+	edgec hsone;
+	findedge(tempe.son[tempe.head],hsone);
+	found=getfeatval(hsone.bind,featname,featval);
+	tempe=hsone;
+      }
+      else
+	break;
+    }
+    */
+    /*
+    size_t featpos=ce.bind.find(","+featname+":");
+    if (featpos==string::npos)
+      featpos=ce.bind.find("["+featname+":");
+    if (featpos==string::npos)
+    */
+    featpos=ce.bind.find("{"+featname+":");
+    if (featpos!=string::npos) {
+      size_t colonpos=ce.bind.find(":",featpos);
+      assert(colonpos!=string::npos);
+      if (ce.bind[colonpos+1]!='[') {
+	size_t commapos=ce.bind.find(",",colonpos);
+	size_t braktpos=ce.bind.find("]",colonpos);
+	featval=ce.bind.substr(colonpos+1,min(commapos,braktpos)-colonpos-1);
+      }
+      else {
+	size_t rbraktpos=ce.bind.find("]",featpos);
+	assert(rbraktpos!=string::npos);
+	featval=ce.bind.substr(colonpos+1,rbraktpos-colonpos);
+      }
+    }
+    else 
+      featval="";
+        IF %np.yx=想法|看法|意见|建议|观点|计划,%ap.中心语.cpcat=vp,%ap.中心语.内部结构=述宾,%ap.中心语.述语.客体=%np,%ap.中心语.宾语.语义类=人类 FALSE,/*~<知道我>的想法  Wangbin added this item on March 18,1998*/
+enunity.o: enunity.cc
+	$(CC) -c $(CPPFLAGS) -o enunity.o enunity.cc
+
+/*
+bool enfindfeatval(edgec & ce, string & featname, string & featval, string & valtype, vector< vector<string> > & valset)
+{
+  string temp="."+featname;
+  string septor=".";
+  vector<string> nameset;
+  getset(temp,septor,nameset);
+  edgec tempedge=ce;
+  for (vector<string>::iterator i=nameset.begin();i!=nameset.end();i++) {
+    featval="";
+    enbasfeatval(tempedge,(*i),featval,valtype,valset);
+    if (valtype=="Edge") {
+      if (!featval.empty()) {
+	int eid=atoi(featval.substr(3).c_str());
+	bool tempbool=true;
+	trnfindedge(eid,tempedge,tempbool);
+      }
+      else { 
+	edgec empedge;
+	tempedge=empedge;
+      }
+    }
+  }
+  return(true);
+}
+
+bool enbasfeatval(edgec & ce, string & featname, string & featval, string & valtype, vector< vector<string> > & valset)
+{
+  if (featname.find("eid")!=string::npos) {
+    valtype="Edge";
+    featval=featname;
+  }
+  else if (featname=="YX") {
+    valtype="Symbol";
+    enrecurprocyx(ce,featval);
+  }
+  else if (featname=="ECAT") {
+    valtype="Symbol";
+    findecat(ce,featval);
+  }
+  else {
+    string defval;
+    checkmodel(featname,valtype,defval,valset);
+    getfeatval(ce.bind,featname,featval);
+  }
+  return(true);
+}
+*/
+/*
+&& {djqsh41} vp -> !v<禁止> vp  
+	=>VP( !V/v P<to> VP/vp ) %VP.FORM=RT
+&& {djqsh42} vp -> !v<禁止> np vp  
+	=>VP( V/v NP/np P<to> VP/vp ) %VP.FORM=RT
+*//*
+$$ HTC
+	**{n} n
+	=> N<HTC>
+$$ Windows
+	**{n} n
+	=> N<Windows>
+	&& {windowsm} n->!n<Windows> m
+	=> N(!N<Windows> M/m)
+*//*
+	&& {zjjuhao} zj -> w<"。">  
+	=>SS( W/w )
+*/
+    boost::match_results<string::const_iterator> m;
+    if (boost::regex_match((*i),m,numreg)) {
+      tagc tag;
+      tag.loc=i-words.begin();
+      tag.sentreg.begin=bpos;
+      tag.sentreg.end=epos;
+      tag.word=(*i);
+      tag.cat="m";
+      tag.catid="m";
+      if (i->find(".")!=string::npos) 
+	tag.feat="[数词子类:小数]";
+      else if (i->size()==4)
+	tag.feat="[数词子类:符号]";
+      else
+	tag.feat="[数词子类:系数]";
+      tags.push_back(tag);
+    }
+    else {
+&& {djvp9} dj->dj !vp :: $.内部结构=主谓,$.主语=%dj,$.谓语=%vp,
+        %dj.标点成分=No,%dj.内部结构=~扩展,
+        %vp.yx=~问,%vp.状语.yx=~一,%vp.内部结构=~连谓~单词,%dj.谓语.内部结构=~单词,       /*~<你为什么不去><问他>*/
+        IF %vp.内部结构=述宾,%vp.yx=是,%vp.宾语.语义类=人类 FALSE,
+        /*~<我不知道他><是个教师>*/
+        IF %dj.谓语.内部结构=联合,%dj.谓语.yx=是,%dj.谓语.语气=疑问 FALSE,
+        IF %dj.谓语.内部结构=粘合述补,%vp.yx=有 FALSE,                                      /*~<餐具vpsbu架上>有一对花瓶 */
+        IF %dj.谓语.内部结构=述宾,%dj.谓语.宾语.cpcat=sp,%vp.yx=有 FALSE,                                      
+        /* ~<我 vpsb看见盒子里>有几块表 */
+        IF %dj.谓语.yx=是,%vp.yx=是 THEN %dj.谓语.状语.yx=~不,%vp.状语.yx=~就~还 ENDIF,
+        IF %dj.谓语.yx=是,%dj.谓语.宾语.cpcat=mp|mcp FALSE,                               /*~<这是一个><有特殊效果的作品>*/
+        IF %dj.连接成分.yx=不是,%vp.yx=是 THEN %vp.状语.yx=~就 ENDIF,
+        IF %dj.连接成分.yx=不是 THEN %vp.状语.yx=~就是 ENDIF,                              /*~<每天晚上不是写字><就是画画儿>*/
+        IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF,
+        IF %vp.内部结构=述宾,%vp.yx=是,%vp.宾语.ccat=r|v,%dj.内部结构=主谓,%vp.宾语.代词子类=rc FALSE,/*~我问他大会的主席是谁*/
+        /* IF %vp.内部结构=状中,%vp.状语.yx=还,%vp.yx=是 FALSE,*/
+        IF %vp.内部结构=状中,%vp.状语.yx=还是 FALSE
+        || %vp.yx=是|标志着|有,%dj.内部结构=~存在,                                   /*六千名代表汇集北京标志着科学的春天的到来*/
+           IF %dj.语气=疑问 FALSE,
+           IF %dj.谓语.yx=在|要|还 FALSE,
+           IF %vp.yx=有,%dj.yx=有,%dj.谓语.内部结构=%vp.内部结构 FALSE
+        => CS(R<that> CS/dj !VP/vp)                                               /*地球是圆的是确实的*/
+        || %vp.内部结构=状中,%vp.作连接=是,%vp.连接成分=Yes,
+           IF %dj.语气=疑问 FALSE
+        => CS(CS/dj !VP/vp)                                                     /*他学习外语不仅注意规则的东西*/
+        || %dj.语气=疑问,%dj.主题成分=否,IF %dj.谓语.内部结构=~述宾 THEN %dj.谓语.助动词=No ENDIF,                    /*~<你能不能>等五分钟 你该不该去是个问题*/
+           IF %vp.配价数=0 THEN %vp.宾语=是 ENDIF,
+           IF %vp.配价数=2|3,%vp.宾语=否 THEN %vp.体谓准=谓 ENDIF
+        => CS(C<whether> CS/dj !VP/vp)                                                /*你去不去由你决定 */
+        || %dj.语气=疑问,%dj.主题成分=是,
+           IF %vp.配价数=0 THEN %vp.宾语=是 ENDIF,
+           IF %vp.配价数=2|3,%vp.宾语=否 THEN %vp.体谓准=谓 ENDIF
+        => CS(#NP%CS CS/dj !VP/vp) %NP=%CS.主题成分
+        => CS(#AP%CS CS/dj !VP/vp) %AP=%CS.主题成分
+        => CS(#DP%CS CS/dj !VP/vp) %DP=%CS.主题成分                              /*他什么时候干了这件事是个谜*/
+        => CS(#D%CS CS/dj !VP/vp) %D=%CS.主题成分                             
+
+
+	//bool temp=true;
+	//trnfindedge(edge.son[i-sons.begin()],sone,temp);
+    if (vmorfval=="IREG") {
+      string vgname="VG";
+      string vgval;
+      makbasfeatval(edge,vgname,vgval,valtype,valset,genechart);
+      cout << vgval << " ";
+    }
+    else
+&& {npde1} np->np ap u<的> np :: %np.语义类=人
+	=> NP(NP(AP/ap !NP//np) PP(P<for> !NP/np))  /*李素丽 最难忘 的 一年*/
+&& {npde2} np->np ap u<的> np :: %np.语义类!=人
+	=> NP(NP(AP/ap !NP//np) PP(P<of> !NP/np))  /*李素丽 最难忘 的 一年*/
+&& {npde3} np->np ap u<的> mp :: %np.语义类=人
+	=> NP(NP(AP/ap !NP/mp) PP(P<for> !NP/np))  /*李素丽 最难忘 的 一年*/
+&& {npde4} np->np ap u<的> mp :: %np.语义类!=人
+	=> NP(NP(AP/ap !NP/mp) PP(P<of> !NP/np))  /*李素丽 最难忘 的 一年*/
+      /*
+    }
+    else {
+      enchart.clear();
+      vector<edgec> enedges;
+      root.father=-1;
+      enedges.push_back(root);
+      enchart.insert(pair<int,vector<edgec> >(root.id,enedges));
+      makresult.push_back(enedges);
+      bldresult.push_back(enedges);
+    }
+      */
+    /*
+    string featname;
+    string featval;
+    string valtype;
+    vector< vector<string> > valset;
+    if (edge.cfg.reduct=="A" || edge.cfg.reduct=="D") {
+      featname="DEGR";
+      bldbasfeatval(edge,featname,featval,valtype,valset,genechart);
+      if (featval=="SUPE")
+	cout << "most ";
+      else if (featval=="COMP")
+	cout << "more ";
+    }
+    else if (edge.cfg.reduct=="V") {
+      featname="FUTR";
+      bldbasfeatval(edge,featname,featval,valtype,valset,genechart);
+      if (featval==shi)
+	cout << "will ";
+    }
+    string word=edge.cfg.part.front();
+    size_t lqopos=word.find("\"");
+    if (lqopos==string::npos) {
+      if (edge.cfg.reduct=="N") {
+	featname="NNUM";
+	bldbasfeatval(edge,featname,featval,valtype,valset,genechart);
+	if (featval=="PLUR")
+	  cout << word << "s ";
+	else
+	  cout << word << " ";
+      }
+      else if (edge.cfg.reduct=="V") {
+	featname="pass";
+	bldbasfeatval(edge,featname,featval,valtype,valset,genechart);
+	if (featval==shi) {
+	  featname="VD";
+	  //trnbasfeatval(edge,featname,featval,valtype,valset);
+	  makbasfeatval(edge,featname,featval,valtype,valset,genechart);
+	  if (!featval.empty())
+	    cout << featval << " ";
+	  else
+	    cout << word << "ed ";
+	}
+	else {
+	  featname="FORM";
+	  string formval;
+	  bldbasfeatval(edge,featname,formval,valtype,valset,genechart);
+	  if (formval.empty())
+	    formval="RT";
+	  string wordform;
+	  bldbasfeatval(edge,formval,wordform,valtype,valset,genechart);
+	  if (!wordform.empty())
+	    cout << wordform << " ";
+	  else {
+	    cout << word;
+	    if (formval=="VG")
+	      cout << "ing";
+	    else if (formval=="VN")
+	      cout << "ed";
+	    cout << " ";
+	  }
+	}
+      }
+      else
+	  cout << word << " ";
+    }
+    else {
+      size_t rqopos=word.rfind("\"");
+      cout << word.substr(lqopos+1,rqopos-lqopos-1) << " ";
+    }
+    featname="COMPPREP";
+    featval="";
+    //trnbasfeatval(edge,featname,featval,valtype,valset);
+    makbasfeatval(edge,featname,featval,valtype,valset,genechart);
+    if (!featval.empty())
+      cout << featval << " ";
+    */
+    string nsubcname="NSUBC";
+    string nsubcval;
+    bldbasfeatval(edge,nsubcname,nsubcval,valtype,valset,genechart);
+      string vmorfname="VMORF";
+      string vmorfval;
+      bldbasfeatval(edge,vmorfname,vmorfval,valtype,valset,genechart);
+      if (vmorfval=="IREG") {
+	string vsname="VS";
+	string vsval;
+	makbasfeatval(edge,vsname,vsval,valtype,valset,genechart);
+	cout << vsval << " ";
+      }
+      else
+	//uresultc res=opunity((*i),(*j),valtype,opera,valset,nval);
+	//if (res==SUCC)
+	//return(true);
+    //if (!found)
+    //  featval=defval;
+    //checkmodel(featname,valtype,defval,valset);
+    //getfeatval(ce.bind,featname,featval);
+/*
+
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    edgec sone;
+    bool tempbool;
+    trnfindedge(*i,sone,tempbool);
+    if (sone.cfg.reduct==cat) {
+      repeat--;
+      if (repeat==0)
+	return(sone.id);
+    }
+    else {
+      
+    }
+  }
+}
+
+*/
+
+  /*
+  for (vector<string>::iterator i=edge.cfg.part.begin();i!=edge.cfg.part.end();i++) {
+    if ((*i)==cat)
+      repeat--;
+    if (repeat==0) 
+      return(edge.son[i-edge.cfg.part.begin()]);
+  }
+  return(-2);
+  */
+	//bool temp=true;
+	//trnfindedge(edge.son[i-sons.begin()],sone,temp);
+  /*
+  else if (lanpos!=string::npos) {
+    trnname=corrname.substr(0,lanpos);
+    oriname="";
+  }
+  */
+      /*
+	uresultc res=valunity(i->second,j->second,valtype,opera,valset,newval);
+      if (res==SUCC)
+	j->second=newval;
+      else
+	return(FAIL);
+      */
+
+    /*
+    if (!lval.empty() && !isalpha(lval[0])) {
+      size_t lepos=model.find("="+lval+",");
+      assert(lepos!=string::npos);
+      size_t lbpos=lepos;
+      while (!isspace(model[lbpos]))
+	lbpos--;
+      lval=model.substr(lbpos+1,lepos-lbpos-1);
+    }
+    if (!rval.empty() && !isalpha(rval[0])) {
+      size_t repos=model.find("="+rval+",");
+      assert(repos!=string::npos);
+      size_t rbpos=repos;
+      while (!isspace(model[rbpos]))
+	rbpos--;
+      rval=model.substr(rbpos+1,repos-rbpos-1);
+    }
+    if (lval.find(rval)==0) { // rval is lval's prefix
+      nval=lval;
+      return(true);
+    }
+    else
+      return(false);
+    */
+/*
+&& {syrs2} np-> np v<使用> !n<人数> 
+   	=>NP( T<the> !N<number> P<of> N<user> P<of> NP/np) %%N.NNUM=PLUR
+*/	
+
+    if (sentreg<other.sentreg)
+      return(true);
+    else if (sentreg>other.sentreg)
+      return(false);
+    else if (reduct<other.reductprsid)
+      return(true);
+    else if (prsid>other.prsid)
+      return(false);
+    else if (dotreg<other.dotreg)
+      return(true);
+    else if (dotreg>other.dotreg)
+      return(false);
+    else
+      return(bind<other.bind);
+    /*
+    ostringstream key;
+    key << sentreg.begin << ";" << sentreg.end << ";"
+	<< prsid << ";" 
+	<< dotreg.begin << ";" << dotreg.end << ";"
+	<< bind;
+    ostringstream otherkey;
+    otherkey << other.sentreg.begin << ";" << other.sentreg.end << ";"
+	     << other.prsid << ";" 
+	     << other.dotreg.begin << ";" << other.dotreg.end << ";"
+	     << other.bind;
+    return(key.str()<otherkey.str());
+    */
+
+  bool operator==(edgekeyc const & other) const {
+    return((prsid==other.prsid) &&
+	   (dotreg==other.dotreg) &&
+	   (sentreg==other.sentreg) &&
+	   (bind==other.bind));
+  }
+  bool operator!=(edgekeyc const & other) const {
+    return((prsid!=other.prsid) ||
+	   (dotreg!=other.dotreg) ||
+	   (sentreg!=other.sentreg) ||
+	   (bind!=other.bind));
+  }
+    if (betterthan(edge,oldedge)) {
+      edge.id=eid++;
+      edge.father=-2;
+      edge.state='a';
+      chart.push_back(edge);
+      i->second=
+      edgekeymap.insert(pair<edgekeyc,int>(edgekey,edge.id));
+      if (complete(edge) && (edge.source=='l'))
+	setsilence(edge);
+    }
+&& {djvp7} dj->ap !vp :: $.内部结构=主谓,%vp.内部结构=~单词,$.主语=%ap,$.谓语=%vp,
+        IF %ap.内部结构=单词,%ap.ccat=z|b FALSE,
+        IF %ap.内部结构=单词,%ap.带补=Yes,%vp.补助动词=Yes FALSE,                /*饿死了几千人*/
+        IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF
+        || %ap.内部结构=的字,%ap.中心语.cpcat=dj,%vp.yx=是,%vp.宾语=是,IF %vp.宾语.cpcat=~mp,%vp.宾语.语义类=人 FALSE
+        => CS(C<what> CS/ap !VP/vp) %VP.VOICE=ACTI                                  /*他们学的是管理和服务 我们发愁的是这个*/  
+        || %ap.内部结构=的字,%ap.中心语.cpcat=dj,%vp.yx=是,%vp.宾语=是,IF %vp.宾语.cpcat=~mp,%vp.宾语.语义类=人 TRUE
+        => CS(C<whom> CS/ap !VP/vp) %VP.VOICE=ACTI
+/*~我们发愁的是这个*/
+        || %ap.内部结构=的字,%ap.中心语.cpcat=vp,%vp.yx=是,%vp.宾语=是,IF %vp.宾语.语义类=人 FALSE
+        => CS(C<what> VP/ap !VP/vp) %VP.VOICE=ACTI
+        || %ap.内部结构=的字,%ap.中心语.cpcat=vp,%vp.yx=是,%vp.宾语=是,IF %vp.宾语.语义类=人 TRUE
+        => CS(C<who> VP/ap !VP/vp) %VP.VOICE=ACTI                                 /*上午来找我的是我父亲*/  
+        || %ap.内部结构=的字,%ap.中心语.cpcat=ap,%vp.yx=是,%vp.宾语=是,IF %ap.中心语.状语=是,%ap.中心语.状语.yx=最 FALSE
+        => CS(T<the> AP/ap !VP/vp) %VP.VOICE=ACTI                                 /*要紧的是有个好的身体*/  
+        || %ap.内部结构=的字,%ap.中心语.cpcat=ap,%vp.yx=是,%vp.宾语=是,IF %ap.中心语.状语=是,%ap.中心语.状语.yx=最 TRUE
+        => CS(AP/ap !VP/vp) %VP.VOICE=ACTI                                         /*最要紧的是有个好的身体*/  
+        || %ap.内部结构=单词|联合,IF %vp.外内=否 THEN %vp.宾语=是,%vp.谓词性主语=Yes  ENDIF
+        => CS(NP/ap !VP/vp)   %VP.VOICE=ACTI                                     /*干旱带来了严重的后果 快乐在等待我们*/
+    else if (edge.cfg.reduct=="N") {
+      featname="DEGR";
+      bldbasfeatval(edge,featname,featval,valtype,valset,genechart);
+      if (featval=="SUPE")
+	cout << "most ";
+      else if (featval=="COMP")
+	cout << "more ";
+    }
+/*
+uresultc notequnity(string & lval, string & rval, string & valtype, vector< vector<string> > & valset, string & nval)
+{
+  if ((lval[0]!='~') && (rval[0]!='~')) {
+    uresultc res=pureunity(lval,rval,valtype,valset,nval);
+    return(res);
+  }
+  else if ((lval[0]!='~') && (rval[0]=='~')) {
+    string temp=rval.substr(1);
+    uresultc res=pureunity(lval,temp,valtype,valset,nval);
+    nval=lval;
+    return(notunity(res));
+  }
+  else if ((lval[0]=='~') && (rval[0]!='~')) {
+    string temp=lval.substr(1);
+    uresultc res=pureunity(temp,rval,valtype,valset,nval);
+    nval=rval;
+    return(notunity(res));
+  }
+  else 
+    return(SUCC);
+}
+*/
+/*
+uresultc pureunity(string & lval, string & rval, string & valtype, vector< vector<string> > & valset, string & nval)
+{ 
+  if (valtype.find("Boolean")!=string::npos) {
+    if (valset.empty()) {
+      procshifou(lval);
+      procshifou(rval);
+      if (lval==rval) {
+	nval=lval;
+	return(SUCC);
+      }
+      else
+	return(FAIL);
+    }
+    else if (!lval.empty() && !rval.empty()) {
+      size_t lv=findval(lval,valset);
+      size_t rv=findval(rval,valset);
+      if (lv==rv) {
+	nval=lval;
+	return(SUCC);
+      }
+      else
+	return(FAIL);
+    }
+    else if ((lval.empty() && !rval.empty()) ||
+	     (!lval.empty() && rval.empty()))
+      return(FAIL);
+    else
+      return(WAIT);  // SUCC
+  }
+  else if (valtype.find("Number")!=string::npos) {
+    if (lval==rval) {
+      nval=lval;
+      return(SUCC);
+    }
+    else
+      return(FAIL);
+  }
+  else if (valtype.find("Symbol")!=string::npos) {
+    if (valset.empty()) {
+      if (lval==rval) {
+	nval=lval;
+	return(SUCC);
+      }
+      else
+	return(FAIL);
+    }
+    else if (!lval.empty() && !rval.empty()) {
+	size_t lv=findval(lval,valset);
+	size_t rv=findval(rval,valset);
+	if (lv==rv) {
+	  nval=lval;
+	  return(SUCC);
+	}
+	else
+	  return(FAIL);
+    }
+    else if ((lval.empty() && !rval.empty()) ||
+	     (!lval.empty() && rval.empty()))
+      return(FAIL);
+    else
+      return(WAIT);  // SUCC
+  }
+  else if (valtype.find("Hierar")!=string::npos) {
+    if (!lval.empty() && !isalpha(lval[0])) {
+      size_t lepos=model.find("="+lval+",");
+      assert(lepos!=string::npos);
+      size_t lbpos=lepos;
+      while (!isspace(model[lbpos]))
+	lbpos--;
+      lval=model.substr(lbpos+1,lepos-lbpos-1);
+    }
+    if (!rval.empty() && !isalpha(rval[0])) {
+      size_t repos=model.find("="+rval+",");
+      assert(repos!=string::npos);
+      size_t rbpos=repos;
+      while (!isspace(model[rbpos]))
+	rbpos--;
+      rval=model.substr(rbpos+1,repos-rbpos-1);
+    }
+    if (lval.find(rval)==0) { // rval is lval's prefix
+      nval=lval;
+      return(SUCC);
+    }
+    else
+      return(FAIL);
+  }
+  else if (valtype.find("Edge")!=string::npos) {
+    procshifou(rval);
+    if (lval==rval) {
+      nval=lval;
+      return(SUCC);
+    }
+    else if (!lval.empty() && (rval==shi))
+      return(SUCC);
+    else if (lval.empty() && (rval==fou))
+      return(SUCC);
+    else
+      return(FAIL);
+  }
+  assert(false);
+}
+*/
+/*
+uresultc notunity(uresultc ures)
+{
+  if (ures==SUCC)
+    return(FAIL);
+  else if (ures==FAIL)
+    return(SUCC);
+  else
+    return(WAIT);
+}
+*/
+/*
+uresultc valunity(string & lval, string & rval, string & valtype, string & opera, vector< vector<string> > & valset, string & nval)
+{
+  if ((lval.find("$")!=string::npos) ||
+      (rval.find("$")!=string::npos)) {
+    if (rval.find("$")==string::npos)
+      nval=rval;
+    else 
+      nval=lval;
+    return(WAIT);
+  }
+  else if (lval.find("%")!=string::npos) {
+    nval=rval;
+    if (rval.empty())
+      return(SUCC);
+    else
+      return(WAIT);
+  }
+  else if (rval.find("%")!=string::npos) {
+    nval=lval;
+    if (lval.empty())
+      return(SUCC);
+    else
+      return(WAIT);
+  }
+  else{
+    string lv, rv;
+    removespace(lval,lv);
+    removespace(rval,rv);
+    vector<string> lvalset;
+    vector<string> rvalset;
+    valsepa(lv,lvalset);
+    valsepa(rv,rvalset);
+    for (vector<string>::iterator i=lvalset.begin();i!=lvalset.end();i++) {
+      for (vector<string>::iterator j=rvalset.begin();j!=rvalset.end();j++) {
+	string subnval;
+	uresultc res=opunity((*i),(*j),valtype,opera,valset,subnval);
+	if (res==SUCC)
+	  nval=(subnval)+"|";
+      }
+    }
+  }
+  if (nval.empty())
+    return(FAIL);
+  else {
+    nval=nval.substr(0,nval.size()-1);
+    return(SUCC);
+  }
+}
+*/
+    /*
+    size_t featpos=ce.bind.find(featname);
+    if (featpos!=string::npos) {
+      size_t colonpos=ce.bind.find(":",featpos);
+      assert(colonpos!=string::npos);
+      size_t commapos=ce.bind.find(",",featpos);
+      size_t braktpos=ce.bind.find("]",featpos);
+      featval=ce.bind.substr(colonpos+1,min(commapos,braktpos)-colonpos-1);
+    }
+    else
+      featval="";
+    */
+/*
+uresultc opunity(string & lval, string & rval, string & valtype, string & opera, vector< vector<string> > & valset, string & nval)
+{
+  uresultc res=equnity(lval,rval,valtype,valset,nval);
+  if (opera=="!=") {
+    res=notunity(res);
+    nval=lval;
+  }
+  return(res);
+}
+
+uresultc equnity(string & lval, string & rval, string & valtype, vector< vector<string> > & valset, string & nval)
+{
+  vector<string> landset;
+  vector<string> randset;
+  getandset(lval,landset);
+  getandset(rval,randset);
+  for (vector<string>::iterator i=landset.begin();i!=landset.end();i++)
+    for (vector<string>::iterator j=randset.begin();j!=randset.end();j++) {
+      uresultc res=notequnity(*i,*j,valtype,valset,nval);
+      if (res==FAIL)
+	return(FAIL);
+    }
+  return(SUCC);
+}
+*/
+    //if (!found)
+    //  featval=defval;
+    //checkmodel(featname,valtype,defval,valset);
+    //getfeatval(ce.bind,featname,featval);
+	&& {mpnian} mp -> m !q<年>   ::$.内部结构=定中,%m.数词子类=符号,$.定语=%m,$.中心语=%q
+	|| IF %m.yx="1" FALSE
+	=>NP( !M/m N/q ) $=[MSUBC:MNUM],%N.NNUM=PLUR
+	|| IF %m.yx="1" TRUE
+	=>NP( !M/m N/q ) $=[MSUBC:MNUM],%N.NNUM=SNGL
+
+	&& {tpnian1} tp -> mcp !q<年> ::$.内部结构=定中,%mcp.数词结构=多系,$!=%q @后时,$.后时=YES,$.定语=%mcp,$.中心语=%q
+	=>NP( !M/mcp N/q )
+
+&& {vpsbu3} vp->!vp ap :: $.内部结构=粘合述补,%vp.动结=是,%ap.形补语=粘,$.宾语=否,$.述语=%vp,$.补语=%ap,
+        %vp.内部结构=单词|附加,%ap.内部结构=单词|状中,
+        IF %vp.内部结构=附加,%ap.内部结构=单词 FALSE,
+        IF %ap.内部结构=状中, %ap.状语.yx=多 THEN $!=%vp @语气,$==%ap @语气 ,$.语气=疑问,$.主题成分=%ap ENDIF, /* 保留多久 */
+        IF %ap.内部结构=状中, %ap.状语.yx=这么|这样|那么|那样
+            THEN $!=%vp @语气,$==%ap @语气, $.语气=感叹,$.主题成分=%ap ENDIF            /*读这么快*/
+        || %ap.yx=~好~死
+        => VP(!VP/vp DP/ap) %DP.DVEND=Yes
+        => VP(!VP/vp AP/ap) %VP.COMPTYPE=AP                                /*用旧了*/
+        || %ap.yx=好
+        => VP(!VP/vp) %VP.PERF=Yes                                      /*程序已经编制好了*/
+        || %ap.yx=死
+        => VP(!VP/vp P<to> N<death>)
+&& {apsbu1} ap->!a v :: $.内部结构=粘合述补,$.述语=%a,$.补语=%v,%a.带补=粘,%v.兼类=~y~u
+        || %v.趋向动词=是,%a.形趋=是
+        => DP(!D/a)
+        => AP(!A/a)        /*慢下来*/
+        || %v.趋向动词=否,%v.补助动词=是,%a.yx=~早~走            /*我尽量<ap快走>*/
+        => AP(D<very> !A/a)        /*热死 累垮*/
+&& {pp7} pp->!p vp :: $.内部结构=介宾,%p.体谓=谓,%vp.内部结构=~状中,$.宾语=%vp,$!=%p @语气,$==%vp @语气,$.主题成分=%vp,
+        IF %vp.内部结构=单词 THEN %vp.单作宾语=Yes ENDIF,    /*开车比安小心*/
+        IF %p.yx=除了 THEN $.连接成分=%p,$.作连接=是 ENDIF
+        => PP(!P/p VP/vp) %VP.FORM=VG                       /*关于生产 ~<连>一天也不想呆*/
+    /*
+    string defval;
+    checkmodel(fname,valtype,defval,valset);
+    edgec curedge=edge;
+    bool found=getfeatval(curedge.bind,fname,featval);
+    edgec fedge;
+    while (!found && (curedge.father!=-1)) {
+      genefindedge(curedge.father,fedge,makchart);
+      found=getfeatval(fedge.bind,fname,featval);
+      curedge=fedge;
+    }
+    if (!found)
+      featval=defval;
+    */
+/*
+void printtrans(edgec & root)
+{
+  cout << endl;
+  enprinttree(root);
+  cout << endl;
+  enshowtree(root,0);
+  cout << endl;
+  enprintsent(root);
+  cout << endl;
+}
+*/
+
+/*
+void enfindedge(int eeid, edgec & edge)
+{
+  map<int,int>::iterator i=enchartidx.find(eeid);
+  assert(i!=enchartidx.end());
+  map< int,vector<edgec> >::iterator j=enchart.find(i->second);
+  for (vector<edgec>::iterator k=j->second.begin();k!=j->second.end();k++) {
+    if (k->id==eeid) {
+      edge=(*k);
+      return;
+    }
+  }
+  assert(false);
+}
+*/
+
+/*
+edgec & enfindedge(int eeid)
+{
+  map<int,int>::iterator i=enchartidx.find(eeid);
+  assert(i!=enchartidx.end());
+  map< int,vector<edgec> >::iterator j=enchart.find(i->second);
+  for (vector<edgec>::iterator k=j->second.begin();k!=j->second.end();k++) {
+    if (k->id==eeid) {
+      return(*k);
+    }
+  }
+  assert(false);
+}
+*/
+
+  /*
+  size_t sentlength=chnsent.length();
+  for (size_t i=0;i<sentlength;i++) {
+    for (size_t j=i+1;j<=sentlength;j++) {
+      if ((j<=edge.sentreg.begin) || (i>=edge.sentreg.end))
+	;
+      else {
+	regionc reg(i,j);
+	setregsilence(compsentregmap,reg);
+	setregsilence(incompsentregmap,reg);
+      }
+    }
+  }
+  */
+&& {djdj6} dj->np np !vp :: $.内部结构=主谓,$.主语=%np,
+        %np.语义类=~空间,%np.连接成分=No,%np.名主语=是,
+        %%np.定语.ccat=~v,%%np.连接成分=No,%%np.名主语=是,
+        %vp.ccat=~q,%vp.被动=NO,
+	IF %np.内部结构=单词,%np.yx=王,%%np.语义类=身份 FALSE, /*~王小姐不会烧饭*/        
+	IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气 ENDIF,
+        IF %%np.语气=疑问 THEN $!=%vp @语气,$==%%np @语气 ENDIF,
+        IF %%np.内部结构=单词,%%np.兼类=v FALSE                                     /*~用户希望得到良好的服务*/
+        || {djdj6.1} %vp.配价数=0,%vp.助动词=Yes,%vp.宾语=Yes,%vp.宾语.ccat=~v,%vp.中心语.宾语.ccat=~v
+        => CS(NP//np !VP/vp NP/np) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER     
+        || {djdj6.2} %vp.配价数=0,%vp.助动词=Yes,%vp.宾语=Yes,%vp.宾语.ccat=v,%vp.宾语.主体=%%np
+        => CS(NP//np !VP/vp NP/np) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER            /*你要的东西我可以给你带来*/
+        || {djdj6.3} %vp.配价数=0,%vp.助动词=Yes,%vp.宾语=Yes,%vp.宾语.ccat=v,%vp.宾语.主体=%np,%vp.宾语.客体=%%np 
+        => CS(NP/np !VP/vp NP//np) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER            /*他什么事也不能干*/
+        || {djdj6.4} %vp.配价数=1,%vp.内部结构=粘合述补|附加,IF %vp.内部结构=附加 THEN %vp.中心语.内部结构=粘合述补 ENDIF
+        => CS(NP//np !VP/vp NP/np) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER 
+        || {djdj6.5} %vp.配价数=2|3,%vp.主体=%%np,%vp.客体=%np
+        => CS(NP//np !VP/vp NP/np) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER     /*这篇文章他念得很熟 文件各单位派人去领*/ 
+        || {djdj6.6} %vp.配价数=2|3,%vp.主体=%np,%vp.内部结构=述补,%vp.客体=%%np
+        => CS(NP/np !VP/vp NP//np)  %NP.RCASE=SUB,%NP==%VP @NNUM @NPER  /*他英语说得很清楚*/
+        || {djdj6.7} %vp.yx=没有,%vp.内部结构=单词|状中,%vp.客体=%%np
+        =>CS( NP/np !VP/vp NP//np)  %NP.RCASE=SUB,%NP==%VP @NNUM @NPER
+	/*
+	if (chart[*j].id==26)
+	  cout << "here" << endl;
+	*/
++---mcp 21:-2 (mcp00:::)
+    +---m 0:-2 (m:::)
+        +---很多
++---np 542:-2 (npdz14:::)
+    +---ap 361:-2 (apdez1:::)
+        +---sp 175:-2 (ppzhijian:::)
+            +---np 63:-2 (npzhong:::)
+                +---g 3:-2 (g:::)
+                    +---中
+                +---g 8:-2 (g:::)
+                    +---俄
+            +---f 9:-2 (f:::)
+                +---之间
+        +---u 11:-2 (u:::)
+            +---的
+    +---np 320:-2 (npdz13:::)
+        +---ap 72:-2 (ap00:::)
+            +---a 17:-2 (a:::)
+                +---大
+        +---np 87:-2 (np00:::)
+            +---n 20:-2 (n:::)
+                +---问题
+np 625:-2 (npdz15:::)[内部结构:组合定中,定语:eid21,中心语:eid542]
++---mcp 21:-2 (mcp00:::)[内部结构:单词,数词结构:单词]
+    +---m 0:-2 (m:::)[数词子类:助数,前副:不,数主语:主,数宾语:宾,数定语:定,数谓语:谓,兼类:a]
+        +---很多
++---np 542:-2 (npdz14:::)[内部结构:组合定中,定语:eid361,中心语:eid320]
+    +---ap 361:-2 (apdez1:::)[内部结构:的字,中心语:eid175]
+        +---sp 175:-2 (ppzhijian:::)[内部结构:定中,定语:eid63,中心语:eid9]
+            +---np 63:-2 (npzhong:::)[内部结构:联合]
+                +---g 3:-2 (g:::)[简称:是,全称:中国]
+                    +---中
+                +---g 8:-2 (g:::)[简称:是,全称:俄国|俄罗斯]
+                    +---俄
+            +---f 9:-2 (f:::)[前时:YES,前处:YES,前名:可,前名的:NO,后名:NO,前方:YES,后方:NO,前动:NO,前介:在,语义类:性状|性能|空间]
+                +---之间
+        +---u 11:-2 (u:::)
+            +---的
+    +---np 320:-2 (npdz13:::)[内部结构:粘合定中,定语:eid72,中心语:eid87]
+        +---ap 72:-2 (ap00:::)[内部结构:单词]
+            +---a 17:-2 (a:::)[形容词子类:aa,谓词性主语:NO,准宾语:可,形谓语:YES,形补语:粘|组,带补:粘,形趋:可,形状语:可,准谓宾:NO,有的宾语:NO,不:YES,很:很,前名:NO,语义类:性能|外形,配价数:1]{主体:[语义类:事物]}
+                +---大
+        +---np 87:-2 (np00:::)[内部结构:单词]
+            +---n 20:-2 (n:::)[名词子类:na,数名:c,数量名:YES,个体量词:个,前名:可,前动:可,后名:NO,名状语:NO,临时量词:NO,语义类:意识|作品|事理]
+                +---问题
+/*
+void modifeatval(edgec & ce, string & featname, string & nval)
+{
+  string temp="."+featname;
+  string septor=".";
+  vector<string> nameset;
+  getset(temp,septor,nameset);
+  string nameval;
+  string featval;
+  string valtype;
+  vector< vector<string> > valset;
+  edgec & tempedge=ce;
+  for (vector<string>::iterator i=nameset.begin();i!=nameset.end();i++) {
+    featval="";
+    basfeatval(tempedge,(*i),featval,valtype,valset);
+    nameval=(*i)+":"+featval;
+    if (valtype=="Edge") {
+      if (!featval.empty()) {
+	int eid=atoi(featval.substr(3).c_str());
+	tempedge=enfindedge(eid);
+      }
+      else { 
+	edgec empedge;
+	tempedge=empedge;
+      }
+    }
+  }
+  if (featval!=nval) {
+    size_t nvpos=tempedge.bind.find(nameval);
+    if (nvpos!=string::npos) {
+      size_t valpos=tempedge.bind.find(featval,nvpos);
+      tempedge.bind.replace(valpos,featval.length(),nval);
+    }
+    else {
+      size_t colpos=nameval.find(":");
+      assert(colpos!=string::npos);
+      if (tempedge.bind.empty())
+	tempedge.bind="["+nameval.substr(0,colpos+1)+nval+"]";
+      else
+	tempedge.bind.replace(1,0,nameval.substr(0,colpos+1)+nval+",");
+    }
+  }
+}
+*/
+  /*
+  string bind=edge.bind;
+  size_t intropos=bind.find("$.");
+  while (intropos!=string::npos) {
+    bind.replace(intropos,2,"");
+    intropos=bind.find("$.");
+  }
+  size_t eqpos=bind.find("=");
+  while (eqpos!=string::npos) {
+    if (bind[eqpos-1]=='!')
+      bind.replace(eqpos-1,2,":~");
+    else if (bind[eqpos+1]=='=')
+      bind.replace(eqpos,2,":");
+    else
+      bind.replace(eqpos,1,":");
+    eqpos=bind.find("=");
+  }
+  if (!bind.empty() && (bind[bind.size()-1]==','))
+    bind.replace(bind.size()-1,1,"");
+  edgec & headedge=chart[edge.son[edge.head]];
+  transmit(headedge.bind,bind);
+  feat=bind;
+  */
+    /*
+    else {
+      if ((lfeat.find("%")!=string::npos) && 
+	  (rfeat.find("%")!=string::npos)) {
+	;
+      }
+      else if (lfeat.find("%")!=string::npos) {
+	size_t dotpos=lfeat.find(".");
+	string nota=lfeat.substr(0,dotpos);
+	edgec & sone=findsonedge(edge,nota);
+	string featname=lfeat.substr(dotpos+1);
+	string newval;
+	if ((opera=="=") || (opera=="=="))
+	  newval=rfeat;
+	else if (opera=="!=")
+	  newval="~"+rfeat;
+	modifeatval(sone,featname,newval);
+      }
+      else if (rfeat.find("%")!=string::npos) {
+	size_t dotpos=rfeat.find(".");
+	string nota=rfeat.substr(0,dotpos);
+	edgec & sone=findsonedge(edge,nota);
+	string featname=rfeat.substr(dotpos+1);
+	string newval;
+	if ((opera=="=") || (opera=="=="))
+	  newval=lfeat;
+	else if (opera=="!=")
+	  newval="~"+lfeat;
+	modifeatval(sone,featname,newval);
+      }
+      else
+	;  // pause here, think again
+    }
+    */
+void findcompprep(string & feat, string & compp)
+{
+  size_t comppos=feat.find("COMPPREP:");
+  if (comppos!=string::npos) {
+    size_t bpos=comppos+9;
+    size_t mpos=bpos;
+    while ((feat[mpos]!=',') && (feat[mpos]!=']'))
+      mpos++;
+    compp=feat.substr(bpos,mpos-bpos);
+  }
+}
+
+
+
+
+void generecurposttravel(int fid, edgec & edge, vector<edgec> & tranchart)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    edgec & sone=genefindedge(*i,tranchart);
+    generecurposttravel(edge.id,sone,tranchart);
+  }
+  edge.father=fid;
+}
+/*
+uresultc enunity(edgec & ice, size_t loc, edgec & ce, string & nbind)
+{
+  vector<string> bindset;
+  getbindset(ice.bind,bindset);
+  return(enprocbindset(bindset,ice.cfg,loc,ce,nbind));
+}
+
+uresultc enprocbindset(vector<string> & bindset, cfgc & cfg, size_t loc, edgec & ce, string & nbind)
+{
+  for (vector<string>::iterator i=bindset.begin(); i!=bindset.end(); i++) {
+    size_t ifpos=i->find("IF");
+    size_t truepos=i->find("TRUE");
+    size_t falsepos=i->find("FALSE");
+    size_t thenpos=i->find("THEN");
+    size_t elsepos=i->find("ELSE");
+    size_t endifpos=i->find("ENDIF");
+    if (ifpos==string::npos) {
+      // basic case
+      string nbasbind;
+      string temp=*i;
+      uresultc res=enbasunity(cfg,temp,loc,ce,nbasbind);
+      if (res==FAIL)
+	return(FAIL);
+      else if (res==WAIT)
+	nbind += nbasbind;
+    }
+    else if (truepos!=string::npos) {
+      // if <bind> TRUE
+      string nbasbind;
+      string temp=i->substr(ifpos+3,truepos-ifpos-3);
+      uresultc res=enbasunity(cfg,temp,loc,ce,nbasbind);
+      if (res==FAIL)
+	return(FAIL);
+      else if (res==WAIT)
+	nbind += nbasbind;
+    }
+    else if (falsepos!=string::npos) {
+      // if <bind> FALSE
+      string nbasbind;
+      string temp=i->substr(ifpos+3,falsepos-ifpos-3);
+      uresultc res=enbasunity(cfg,temp,loc,ce,nbasbind);
+      if (res==SUCC)
+	return(FAIL);
+      else if (res==WAIT)
+	nbind += "IF "+nbasbind+" FALSE,";
+    }
+    else if ((thenpos!=string::npos) && (elsepos==string::npos)) {
+      // if <bind> then <bind> endif
+      string nifbind;
+      string nthenbind;
+      string temp=i->substr(ifpos+3,thenpos-ifpos-3);
+      uresultc ifres=enbasunity(cfg,temp,loc,ce,nifbind);
+      if (ifres!=FAIL) {
+	string temp=i->substr(thenpos+5,endifpos-thenpos-5);
+	uresultc thenres=enbasunity(cfg,temp,loc,ce,nthenbind);
+	if ((ifres==SUCC) && (thenres==FAIL))
+	  return(FAIL);
+	else if ((ifres==SUCC) && (thenres==WAIT))
+	  nbind += nthenbind;
+	else if ((ifres==WAIT) && (thenres==FAIL))
+	  nbind += "IF "+nifbind+" FALSE,";
+	else if ((ifres==WAIT) && (thenres==WAIT))
+	  nbind += "IF "+nifbind+" THEN "+nthenbind+" ENDIF,";
+      }
+    }
+    else if ((thenpos==string::npos) && (elsepos!=string::npos)) {
+      // if <bind> else <bind> endif
+      string nifbind;
+      string nelsebind;
+      string temp=i->substr(ifpos+3,elsepos-ifpos-3);
+      uresultc ifres=enbasunity(cfg,temp,loc,ce,nifbind);
+      if (ifres!=SUCC) {
+	string temp=i->substr(elsepos+5,endifpos-elsepos-5);
+	uresultc elseres=enbasunity(cfg,temp,loc,ce,nelsebind);
+	if ((ifres==FAIL) && (elseres==FAIL))
+	  return(FAIL);
+	else if ((ifres==FAIL) && (elseres==WAIT))
+	  nbind += nelsebind;
+	else if ((ifres==WAIT) && (elseres==FAIL))
+	  nbind += nifbind;
+	else if ((ifres==WAIT) && (elseres==WAIT))
+	  nbind += "IF "+nifbind+" ELSE "+nelsebind+" ENDIF,";
+      }
+    }
+    else if ((thenpos!=string::npos) && (elsepos!=string::npos)) {
+      // if <bind> then <bind> else <bind> endif
+      string nifbind;
+      string nthenbind;
+      string nelsebind;
+      string iftemp=i->substr(ifpos+3,thenpos-ifpos-3);
+      string thentemp=i->substr(thenpos+5,elsepos-thenpos-5);
+      string elsetemp=i->substr(elsepos+5,endifpos-elsepos-5);
+      uresultc ifres=enbasunity(cfg,iftemp,loc,ce,nifbind);
+      uresultc thenres=enbasunity(cfg,thentemp,loc,ce,nthenbind);
+      uresultc elseres=enbasunity(cfg,elsetemp,loc,ce,nelsebind);
+      if (((ifres==SUCC) && (thenres==FAIL)) || ((ifres==FAIL) && (elseres==FAIL)))
+	return(FAIL);
+      else if ((ifres==SUCC) && (thenres==WAIT))
+	nbind += nthenbind;
+      else if ((ifres==FAIL) && (elseres==WAIT))
+	nbind += nelsebind;
+      else if ((ifres==WAIT) && (thenres==FAIL) && (elseres==FAIL))
+	return(FAIL);
+      else if ((ifres==WAIT) && (thenres==FAIL) && (elseres==SUCC))
+	nbind += "IF "+nifbind+" FALSE,";
+      else if ((ifres==WAIT) && (thenres==FAIL) && (elseres==WAIT))
+	nbind += nelsebind+"IF "+nifbind+" FALSE,";
+      else if ((ifres==WAIT) && (thenres==SUCC) && (elseres==FAIL))
+	nbind += nifbind;
+      else if ((ifres==WAIT) && (thenres==SUCC) && (elseres==SUCC))
+	;
+      else if ((ifres==WAIT) && (thenres==SUCC) && (elseres==WAIT))
+	nbind += "IF "+nifbind+" ELSE "+nelsebind+" ENDIF,";
+      else if ((ifres==WAIT) && (thenres==WAIT) && (elseres==FAIL))
+	nbind += nifbind+nthenbind;
+      else if ((ifres==WAIT) && (thenres==WAIT) && (elseres==SUCC)) 
+	nbind += "IF "+nifbind+" THEN "+nthenbind+" ENDIF,";
+      else if ((ifres==WAIT) && (thenres==WAIT) && (elseres==WAIT))
+	nbind += "IF "+nifbind+" THEN "+nthenbind+" ELSE "+nelsebind+" ENDIF,";
+    }
+  }
+  if (nbind.empty())
+    return(SUCC);
+  else
+    return(WAIT);
+}
+
+uresultc enbasunity(cfgc & cfg, string & bind, size_t loc, edgec & ce, string & nbind)
+{
+  vector<string> bindset;
+  getabindset(bind,bindset);
+  for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++) {
+    string anbind;
+    uresultc res=enaunity(cfg,(*i),loc,ce,anbind);
+    if (res==FAIL)
+      return(FAIL);
+    else if (res==WAIT)
+      nbind += anbind;
+  }
+  if (nbind.empty())
+    return(SUCC);
+  else
+    return(WAIT);
+}
+
+uresultc enaunity(cfgc & cfg, string & bind, size_t loc, edgec & ce, string & nbind)
+{
+  size_t atpos=bind.find("@");
+  if (atpos!=string::npos) {
+    vector<string> atset;
+    getatset(bind,atset);
+    string opera;
+    string lval;
+    string rval;
+    string temp=bind.substr(0,atpos);
+    getopeval(temp,lval,opera,rval);
+    for (vector<string>::iterator i=atset.begin();i!=atset.end();i++) {
+      string atbind=lval+"."+*i+opera+rval+"."+*i;
+      string natbind;
+      uresultc res=enaunity(cfg,atbind,loc,ce,natbind);
+      if (res==FAIL)
+	return(FAIL);
+      if (res==WAIT)
+	nbind += natbind;
+    }
+    if (nbind.empty())
+      return(SUCC);
+    else
+      return(WAIT);
+  }
+  else {
+    string lval,opera,rval;
+    getopeval(bind,lval,opera,rval);
+    string percat;
+    getpercat(cfg,loc,percat);
+    string lfval,lvaltype;
+    vector< vector<string> > lvalset;
+    if (lval==percat) {
+      lvaltype="Edge";
+      ostringstream oss;
+      oss << ce.id;
+      lfval="eid"+oss.str();
+    }
+    else if (lval.find(percat+".")==0) {
+      string featname=lval.substr(percat.size()+1);
+      enfindfeatval(ce,featname,lfval,lvaltype,lvalset);
+    }
+    else
+      lfval=lval;
+    string rfval,rvaltype;
+    vector< vector<string> > rvalset;
+    if (rval==percat) {
+      rvaltype="Edge";
+      ostringstream oss;
+      oss << ce.id;
+      rfval="eid"+oss.str();
+    }
+    else if (rval.find(percat+".")==0) {
+      string featname=rval.substr(percat.size()+1);
+      enfindfeatval(ce,featname,rfval,rvaltype,rvalset);
+    }
+    else
+      rfval=rval;
+    string newval;
+    uresultc res;
+    if (lfval.empty() || rfval.empty()) {
+      res=WAIT;
+    }
+    else if (!lvaltype.empty())
+      res=valunity(lfval,rfval,lvaltype,opera,lvalset,newval);
+    else
+      res=valunity(lfval,rfval,rvaltype,opera,rvalset,newval);
+    if (res==WAIT) {
+      if (!lfval.empty() && !rfval.empty())
+	nbind=lfval+opera+rfval+",";
+      else if (lfval.empty())
+	nbind=lval+opera+rfval+",";
+      else // rfval.empty()
+	nbind=lfval+opera+rval+",";
+    }
+    else if (res==SUCC) {
+      if (lval.find(percat+".")==0) {
+	string featname=lval.substr(percat.size()+1);
+	enmodifeatval(ce,featname,newval);
+      }
+      if (rval.find(percat+".")==0) {
+	string featname=rval.substr(percat.size()+1);
+	enmodifeatval(ce,featname,newval);
+      }
+    }
+    return(res);
+  }
+}
+*/
+/*
+uresultc unity(edgec & ice, size_t loc, edgec & ce, string & nbind)
+{
+  vector<string> bindset;
+  getbindset(ice.bind,bindset);
+  return(procbindset(bindset,ice.cfg,loc,ce,nbind));
+}
+
+uresultc procbindset(vector<string> & bindset, cfgc & cfg, size_t loc, edgec & ce, string & nbind)
+{
+  for (vector<string>::iterator i=bindset.begin(); i!=bindset.end(); i++) {
+    size_t ifpos=i->find("IF");
+    size_t truepos=i->find("TRUE");
+    size_t falsepos=i->find("FALSE");
+    size_t thenpos=i->find("THEN");
+    size_t elsepos=i->find("ELSE");
+    size_t endifpos=i->find("ENDIF");
+    if (ifpos==string::npos) {
+      // basic case
+      string nbasbind;
+      string temp=*i;
+      uresultc res=basunity(cfg,temp,loc,ce,nbasbind);
+      if (res==FAIL)
+	return(FAIL);
+      else if (res==WAIT)
+	nbind += nbasbind;
+    }
+    else if (truepos!=string::npos) {
+      // if <bind> TRUE
+      string nbasbind;
+      string temp=i->substr(ifpos+3,truepos-ifpos-3);
+      uresultc res=basunity(cfg,temp,loc,ce,nbasbind);
+      if (res==FAIL)
+	return(FAIL);
+      else if (res==WAIT)
+	nbind += nbasbind;
+    }
+    else if (falsepos!=string::npos) {
+      // if <bind> FALSE
+      string nbasbind;
+      string temp=i->substr(ifpos+3,falsepos-ifpos-3);
+      uresultc res=basunity(cfg,temp,loc,ce,nbasbind);
+      if (res==SUCC)
+	return(FAIL);
+      else if (res==WAIT)
+	nbind += "IF "+nbasbind+" FALSE,";
+    }
+    else if ((thenpos!=string::npos) && (elsepos==string::npos)) {
+      // if <bind> then <bind> endif
+      string nifbind;
+      string nthenbind;
+      string temp=i->substr(ifpos+3,thenpos-ifpos-3);
+      uresultc ifres=basunity(cfg,temp,loc,ce,nifbind);
+      if (ifres!=FAIL) {
+	string temp=i->substr(thenpos+5,endifpos-thenpos-5);
+	uresultc thenres=basunity(cfg,temp,loc,ce,nthenbind);
+	if ((ifres==SUCC) && (thenres==FAIL))
+	  return(FAIL);
+	else if ((ifres==SUCC) && (thenres==WAIT))
+	  nbind += nthenbind;
+	else if ((ifres==WAIT) && (thenres==FAIL))
+	  nbind += "IF "+nifbind+" FALSE,";
+	else if ((ifres==WAIT) && (thenres==WAIT))
+	  nbind += "IF "+nifbind+" THEN "+nthenbind+" ENDIF,";
+      }
+    }
+    else if ((thenpos==string::npos) && (elsepos!=string::npos)) {
+      // if <bind> else <bind> endif
+      string nifbind;
+      string nelsebind;
+      string temp=i->substr(ifpos+3,elsepos-ifpos-3);
+      uresultc ifres=basunity(cfg,temp,loc,ce,nifbind);
+      if (ifres!=SUCC) {
+	string temp=i->substr(elsepos+5,endifpos-elsepos-5);
+	uresultc elseres=basunity(cfg,temp,loc,ce,nelsebind);
+	if ((ifres==FAIL) && (elseres==FAIL))
+	  return(FAIL);
+	else if ((ifres==FAIL) && (elseres==WAIT))
+	  nbind += nelsebind;
+	else if ((ifres==WAIT) && (elseres==FAIL))
+	  nbind += nifbind;
+	else if ((ifres==WAIT) && (elseres==WAIT))
+	  nbind += "IF "+nifbind+" ELSE "+nelsebind+" ENDIF,";
+      }
+    }
+    else if ((thenpos!=string::npos) && (elsepos!=string::npos)) {
+      // if <bind> then <bind> else <bind> endif
+      string nifbind;
+      string nthenbind;
+      string nelsebind;
+      string iftemp=i->substr(ifpos+3,thenpos-ifpos-3);
+      string thentemp=i->substr(thenpos+5,elsepos-thenpos-5);
+      string elsetemp=i->substr(elsepos+5,endifpos-elsepos-5);
+      uresultc ifres=basunity(cfg,iftemp,loc,ce,nifbind);
+      uresultc thenres=basunity(cfg,thentemp,loc,ce,nthenbind);
+      uresultc elseres=basunity(cfg,elsetemp,loc,ce,nelsebind);
+      if (((ifres==SUCC) && (thenres==FAIL)) || ((ifres==FAIL) && (elseres==FAIL)))
+	return(FAIL);
+      else if ((ifres==SUCC) && (thenres==WAIT))
+	nbind += nthenbind;
+      else if ((ifres==FAIL) && (elseres==WAIT))
+	nbind += nelsebind;
+      else if ((ifres==WAIT) && (thenres==FAIL) && (elseres==FAIL))
+	return(FAIL);
+      else if ((ifres==WAIT) && (thenres==FAIL) && (elseres==SUCC))
+	nbind += "IF "+nifbind+" FALSE,";
+      else if ((ifres==WAIT) && (thenres==FAIL) && (elseres==WAIT))
+	nbind += nelsebind+"IF "+nifbind+" FALSE,";
+      else if ((ifres==WAIT) && (thenres==SUCC) && (elseres==FAIL))
+	nbind += nifbind;
+      else if ((ifres==WAIT) && (thenres==SUCC) && (elseres==SUCC))
+	;
+      else if ((ifres==WAIT) && (thenres==SUCC) && (elseres==WAIT))
+	nbind += "IF "+nifbind+" ELSE "+nelsebind+" ENDIF,";
+      else if ((ifres==WAIT) && (thenres==WAIT) && (elseres==FAIL))
+	nbind += nifbind+nthenbind;
+      else if ((ifres==WAIT) && (thenres==WAIT) && (elseres==SUCC)) 
+	nbind += "IF "+nifbind+" THEN "+nthenbind+" ENDIF,";
+      else if ((ifres==WAIT) && (thenres==WAIT) && (elseres==WAIT))
+	nbind += "IF "+nifbind+" THEN "+nthenbind+" ELSE "+nelsebind+" ENDIF,";
+    }
+  }
+  if (nbind.empty())
+    return(SUCC);
+  else
+    return(WAIT);
+}
+
+uresultc basunity(cfgc & cfg, string & bind, size_t loc, edgec & ce, string & nbind)
+{
+  vector<string> bindset;
+  getabindset(bind,bindset);
+  for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++) {
+    string anbind;
+    uresultc res=aunity(cfg,(*i),loc,ce,anbind);
+    if (res==FAIL)
+      return(FAIL);
+    else if (res==WAIT)
+      nbind += anbind;
+  }
+  if (nbind.empty())
+    return(SUCC);
+  else
+    return(WAIT);
+}
+
+uresultc aunity(cfgc & cfg, string & bind, size_t loc, edgec & ce, string & nbind)
+{
+  size_t atpos=bind.find("@");
+  if (atpos!=string::npos) {
+    vector<string> atset;
+    getatset(bind,atset);
+    string opera;
+    string lval;
+    string rval;
+    string temp=bind.substr(0,atpos);
+    getopeval(temp,lval,opera,rval);
+    for (vector<string>::iterator i=atset.begin();i!=atset.end();i++) {
+      string atbind=lval+"."+*i+opera+rval+"."+*i;
+      string natbind;
+      uresultc res=aunity(cfg,atbind,loc,ce,natbind);
+      if (res==FAIL)
+	return(FAIL);
+      if (res==WAIT)
+	nbind += natbind;
+    }
+    if (nbind.empty())
+      return(SUCC);
+    else
+      return(WAIT);
+  }
+  else {
+    string lval,opera,rval;
+    getopeval(bind,lval,opera,rval);
+    string percat;
+    getpercat(cfg,loc,percat);
+    if ((lval!=percat) &&
+	(lval.find(percat+".")!=0) && 
+	(rval!=percat) &&
+	(rval.find(percat+".")!=0)) {
+      nbind=bind+",";
+      return(WAIT);
+    }
+    else {
+      string lfname,lfval;
+      string lvaltype;
+      vector< vector<string> > lvalset;
+      if (lval==percat) {
+	lvaltype="Edge";
+	ostringstream oss;
+	oss << ce.id;
+	lfval="eid"+oss.str();
+      }
+      else if (lval.find(percat+".")==0) {
+	string temp=lval.substr(percat.size()+1);
+	removespace(temp,lfname);
+	findfeatval(ce,lfname,lfval,lvaltype,lvalset);
+      }
+      else
+	lfval=lval;
+      string rfname,rfval;
+      string rvaltype;
+      vector< vector<string> > rvalset;
+      if (rval==percat) {
+	rvaltype="Edge";
+	ostringstream oss;
+	oss << ce.id;
+	rfval="eid"+oss.str();
+      }
+      else if (rval.find(percat+".")==0) {
+	string temp=rval.substr(percat.size()+1);
+	removespace(temp,rfname);
+	findfeatval(ce,rfname,rfval,rvaltype,rvalset);
+      }
+      else
+	rfval=rval;
+      string newval;
+      uresultc res;
+      if (!lvaltype.empty())
+	res=valunity(lfval,rfval,lvaltype,opera,lvalset,newval);
+      else if (!rvaltype.empty())
+	res=valunity(lfval,rfval,rvaltype,opera,rvalset,newval);
+      else
+	res=SUCC;
+      if (res==WAIT)
+	nbind=lfval+opera+rfval+",";
+      return(res);
+    }
+  }
+}
+*/
+    /*
+    for (vector<string>::iterator j=subcfgs.begin();j!=subcfgs.end();j++) {
+      vector<edgec> subenegs;
+      string emptybind;
+      vector<edgec> sublocchart;
+      getlocchart(edge,(*j),sublocchart);
+      flattranedge(edge,(*j),emptybind,sublocchart,subenegs);
+      if (subenegs.empty()) {
+	subres=false;
+	break;
+      }
+      else {
+	nulit->second.insert(nulit->second.end(),subenegs.begin(),subenegs.end());
+	for (vector<edgec>::iterator k=subenegs.begin();k!=subenegs.end();k++)
+	  enchartidx.insert(pair<int,int>(k->id,-1));
+	locchart.insert(locchart.end(),subenegs.begin(),subenegs.end());
+      }
+    }
+    */
+    /*
+    for (vector<string>::iterator j=subcfgs.begin();j!=subcfgs.end();j++) {
+      vector<edgec> subenegs;
+      string tranbind;
+      vector<edgec> sublocchart;
+      getlocchart(edge,*j,sublocchart);
+      flattranedge(edge,(*j),tranbind,sublocchart,subenegs);
+      nulit->second.insert(nulit->second.end(),subenegs.begin(),subenegs.end());
+      for (vector<edgec>::iterator k=subenegs.begin();k!=subenegs.end();k++)
+	enchartidx.insert(pair<int,int>(k->id,-1));
+      locchart.insert(locchart.end(),subenegs.begin(),subenegs.end());
+    }
+    */
+
+#include <assert.h>
+#include "enagree.hh"
+#include "unity.hh"
+#include "transform.hh"
+#include "enunity.hh"
+#include "generate.hh"
+#include "agree.hh"
+
+using namespace std;
+
+extern string fou;
+
+bool enagree(string & bind, edgec & edge, vector<edgec> & makchart, string & nbind)
+{
+  vector<string> bindset;
+  getabindset(bind,bindset);
+  for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++) {
+    string anbind;
+    bool res=enaagree((*i),edge,makchart,anbind);
+    if (res==false)
+      return(false);
+    else
+      nbind+=anbind;
+  }
+  return(true);
+}
+
+bool enaagree(string & bind, edgec & edge, vector<edgec> & makchart, string & nbind)
+{
+  if (bind.find("@")!=string::npos) {
+    return(true);
+  }
+  else {
+    string opera;
+    string lfeat;
+    string rfeat;
+    getopeval(bind,lfeat,opera,rfeat);
+    string lval;
+    string lvaltype;
+    vector< vector<string> > lvalset;
+    enprocfeatval(edge,lfeat,lval,lvaltype,lvalset,makchart);
+    string rval;
+    string rvaltype;
+    vector< vector<string> > rvalset;
+    enprocfeatval(edge,rfeat,rval,rvaltype,rvalset,makchart);
+    if (!lvaltype.empty()) {
+      //return(envalagree(lval,rval,lvaltype,opera,lvalset));
+      string nval;
+      bool res=valagree(lval,rval,lvaltype,opera,lvalset,nval);
+      if (res==false)
+	return(false);
+      else {
+	nbind=lfeat+opera+nval+",";
+	return(true);
+      }
+    }
+    else if (!rvaltype.empty()) {
+      //return(envalagree(lval,rval,rvaltype,opera,rvalset));
+      string nval;
+      bool res=valagree(lval,rval,rvaltype,opera,rvalset,nval);
+      if (res==false)
+	return(false);
+      else {
+	nbind=rfeat+opera+nval+",";
+	return(true);
+      }
+    }
+    else
+      return(lval==rval);
+  }
+}
+
+void enprocfeatval(edgec & edge, string & featname, string & featval, string & valtype, vector< vector<string> > & valset, vector<edgec> & makchart)
+{
+  if (featname[0]=='%') {
+    size_t dotpos=featname.find(".");
+    if (dotpos!=string::npos) {
+      string nota=featname.substr(0,dotpos);
+      edgec sone;
+      bool found;
+      enfindsonedge(edge,nota,found,sone);
+      string fname=featname.substr(dotpos+1);
+      enfindfeatval(sone,fname,featval,valtype,valset);
+    }
+    else {
+      string nota=featname;
+      int sonid=findsonid(edge,nota);
+      ostringstream oss;
+      oss << sonid;
+      featval="eid"+oss.str();
+    }
+  }
+  else if (featname[0]=='$') {
+    assert(featname[1]=='.');
+    string fname=featname.substr(2);
+    string defval;
+    checkmodel(fname,valtype,defval,valset);
+    edgec curedge=edge;
+    bool found=getfeatval(curedge.bind,fname,featval);
+    edgec fedge;
+    while (!found && (curedge.father!=-1) && (curedge.father!=-2)) {
+      genefindedge(curedge.father,fedge,makchart);
+      found=getfeatval(fedge.bind,fname,featval);
+      curedge=fedge;
+    }
+    if (!found)
+      featval=defval;
+  }
+  else
+    featval=featname;
+}
+
+bool envalagree(string & lval, string & rval, string & valtype, string & opera, vector< vector<string> > & valset)
+{
+  string lv, rv;
+  removespace(lval,lv);
+  removespace(rval,rv);
+  if ((lv.find("%")!=string::npos) &&
+      (rv.find("%")!=string::npos))
+    return(lv==rv);
+  else if (lv.find("%")!=string::npos) {
+    if (rv.empty())
+      return(true);
+    else
+      return(false);
+  }
+  else if (rv.find("%")!=string::npos) {
+    if (lv.empty())
+      return(true);
+    else
+      return(false);
+  }  
+  else if (lval[0]=='[') {
+    //assert((lval[0]=='[') && (rval[0]=='['));
+    if (rval[0]=='[') {
+      rval.replace(0,1,"");
+      size_t rbrapos=rval.rfind("]");
+      assert(rbrapos!=string::npos);
+      rval.replace(rbrapos,1,"");
+      size_t colonpos=rval.find(":");
+      while (colonpos!=string::npos) {
+	rval.replace(colonpos,1,"=");
+	colonpos=rval.find(":");
+      }
+      vector<string> bindset;
+      getabindset(rval,bindset);
+      rval="";
+      for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++)
+	rval+="$."+(*i)+",";
+      edgec edge;
+      edge.bind=lval;
+      string nval;
+      bool res=basagree(rval,edge,nval);
+      return(res);
+    }
+    else {
+      procshifou(rval);
+      if (rval==fou)
+	return(false);
+      else // rval==shi
+	return(true);
+    }
+  }
+  else {
+    vector<string> lvalset;
+    vector<string> rvalset;
+    valsepa(lv,lvalset);
+    valsepa(rv,rvalset);
+    for (vector<string>::iterator i=lvalset.begin();i!=lvalset.end();i++) {
+      for (vector<string>::iterator j=rvalset.begin();j!=rvalset.end();j++) {
+	string nval;
+	uresultc res=opunity((*i),(*j),valtype,opera,valset,nval);
+	if (res==SUCC)
+	  return(true);
+      }
+    }
+    return(false);
+  }
+}
+/*
+void findsonedge(edgec & edge, int repeat, string & cat, edgec & sone)
+{
+  size_t no;
+  for (vector<string>::iterator i=edge.cfg.part.begin();i!=edge.cfg.part.end();i++) {
+    if ((*i)==cat)
+      repeat--;
+    if (repeat==0) {
+      no=i-edge.cfg.part.begin();
+      break;
+    }
+  }
+  assert(no<edge.son.size());
+  findedge(edge.son[no],sone);
+}
+*/
+
+	else {
+	  if (valtype.find("Hierar")!=string::npos) {
+	    string lcode;
+	    string rcode;
+	    cout << "here" << endl;
+	    gethierarcode(lval,lcode);
+	    gethierarcode(rval,rcode);
+	    
+	  }
+	}
+   if (!rval.empty() && !isalpha(rval[0])) {
+	      size_t repos=model.find("="+rval+",");
+	      assert(repos!=string::npos);
+	      size_t rbpos=repos;
+	      while (!isspace(model[rbpos]))
+		rbpos--;
+	      rval=model.substr(rbpos+1,repos-rbpos-1);
+	    }
+    else if (featname[0]=='$') {
+      featval="";
+      /*
+      assert(featname[1]=='.');
+      string fname=featname.substr(2);
+      findfeatval(edge,fname,featval,valtype,valset);
+      */
+    }
+/*
+bool valagree(string & lval, string & rval, string & valtype, string & opera, vector< vector<string> > & valset)
+{
+  string lv, rv;
+  removespace(lval,lv);
+  removespace(rval,rv);
+  if ((lv.find("%")!=string::npos) &&
+      (rv.find("%")!=string::npos))
+    return(lv==rv);
+  else if (lv.find("%")!=string::npos) {
+    if (rv.empty())
+      return(true);
+    else
+      return(false);
+  }
+  else if (rv.find("%")!=string::npos) {
+    if (lv.empty())
+      return(true);
+    else
+      return(false);
+  }  
+  else if (lval[0]=='[') {
+    //assert((lval[0]=='[') && (rval[0]=='['));
+    if (rval[0]=='[') {
+      rval.replace(0,1,"");
+      size_t rbrapos=rval.rfind("]");
+      assert(rbrapos!=string::npos);
+      rval.replace(rbrapos,1,"");
+      size_t colonpos=rval.find(":");
+      while (colonpos!=string::npos) {
+	rval.replace(colonpos,1,"=");
+	colonpos=rval.find(":");
+      }
+      vector<string> bindset;
+      getabindset(rval,bindset);
+      rval="";
+      for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++)
+	rval+="$."+(*i)+",";
+      edgec edge;
+      edge.bind=lval;
+      bool res=basagree(rval,edge);
+      return(res);
+    }
+    else {
+      return(true);
+    }
+  }
+  else {
+    vector<string> lvalset;
+    vector<string> rvalset;
+    valsepa(lv,lvalset);
+    valsepa(rv,rvalset);
+    for (vector<string>::iterator i=lvalset.begin();i!=lvalset.end();i++) {
+      for (vector<string>::iterator j=rvalset.begin();j!=rvalset.end();j++) {
+	string nval;
+	uresultc res=opunity((*i),(*j),valtype,opera,valset,nval);
+	if (res==SUCC)
+	  return(true);
+      }
+    }
+    return(false);
+  }
+
+}
+*/
+
+/*
+bool sentregin(regionc & sreg, regionc & reg)
+{
+  if ((sreg.begin>=reg.begin) && (sreg.end<=reg.end))
+    return(true);
+  else 
+    return(false);
+}
+*/
+
+/*
+void addenchartidx(map<int,enchartidxc> & enchartidx, int eeid, int eid, size_t begin, size_t end)
+{
+  enchartidxc idx;
+  idx.eid=eid;
+  idx.sentbegin=begin;
+  idx.sentend=end;
+  enchartidx.insert(pair<int,enchartidxc>(eeid,idx));
+}
+*/
+
+	&& {npnian} np -> !mp   ::$.内部结构=定中,$==%mp @定语 @中心语
+	=>NP( !NP/mp )
+
+/*
+bool hastranedge(int start, int end)
+{
+  regionc reg(start,end);
+  map<regionc,vector<int> >::iterator i=compsentregmap(reg);
+  assert(i!=compsentregmap.end());
+  for (vector<int>::iterator j=i->second.begin();j!=i->second.end();j++)
+    if (enchart.find(*j)!=enchart.end()) 
+      return(true);
+  return(false);
+}
+
+bool gettranedge(int start, int end, edgec & enedge)
+{
+  for (vector<edgec>::iterator i=compchart[start][end].begin();i!=compchart[start][end].end();i++) {
+    map<int,vector<edgec> >::iterator j=enchart.find(i->id);
+    if (j!=enchart.end()) {
+      enedge=j->second.front();
+      return(true);
+    }
+  }
+  if (!compchart[start][end].empty())
+    enedge=*compchart[start][end].begin();
+  return(false);
+}
+*/
+
+through: through.o segment.o postag.o parse.o unity.o prsrbase.o chongdie.o 
+	$(CC) -o through through.o segment.o postag.o parse.o unity.o prsrbase.o chongdie.o $(LFLAGS)
+
+  if (eid==54) {
+    cout << "here" << endl;
+  }
+  if (eid==237) {
+    assert(edge.prsid==chart[54].prsid);
+    assert(edge.dotreg==chart[54].dotreg);
+    assert(edge.sentreg==chart[54].sentreg);
+    assert(edge.bind==chart[54].bind);
+    edgekeyc ek(edge.prsid,edge.dotreg,edge.sentreg,edge.bind);
+    edgekeyc ek2(chart[54].prsid,chart[54].dotreg,chart[54].sentreg,chart[54].bind);
+    assert(ek==ek2);
+    assert(edgekeymap.find(ek2)!=edgekeymap.end());
+    assert(edgekeymap.find(ek)!=edgekeymap.end());
+  }
+    //cout << edge.id << " " << edge.prsid << " sentreg(" << edge.sentreg.begin << "," << edge.sentreg.end 
+    //	 << ") dotreg(" << edge.sentreg.begin << "," << edge.sentreg.end << ") bind-" << edge.bind << endl;
+void tdpredict(edgec & ice)
+{
+  if (ice.dotreg.end<ice.cfg.part.size()) {
+    map<string,vector<int> >::iterator i=prsredmap.find(ice.cfg.part[ice.dotreg.end]);
+    if (i!=prsredmap.end()) {
+      for (vector<int>::iterator j=i->second.begin();j!=i->second.end();j++) {
+	edgec newedge;
+	newedge.source='p';
+	newedge.prsid=prsrtable[*j].prsid;
+	newedge.cfg=prsrtable[*j].cfg;
+	newedge.head=prsrtable[*j].head;
+	newedge.dotreg.begin=0;
+	newedge.dotreg.end=0;
+	newedge.sentreg.begin=ice.sentreg.end;
+	newedge.sentreg.end=ice.sentreg.end;
+	newedge.bind=prsrtable[*j].bind;
+	addtoagenda(chart,newedge);
+      }
+    }
+  }
+  if (ice.dotreg.begin>0) {
+    map<string,vector<int> >::iterator i=prsredmap.find(ice.cfg.part[ice.dotreg.begin-1]);
+    if (i!=prsredmap.end()) {
+      for (vector<int>::iterator j=i->second.begin();j!=i->second.end();j++) {
+	edgec newedge;
+	newedge.source='p';
+	newedge.prsid=prsrtable[*j].prsid;
+	newedge.cfg=prsrtable[*j].cfg;
+	newedge.head=prsrtable[*j].head;
+	newedge.dotreg.begin=prsrtable[*j].cfg.part.size();
+	newedge.dotreg.end=prsrtable[*j].cfg.part.size();
+	newedge.sentreg.begin=ice.sentreg.begin;
+	newedge.sentreg.end=ice.sentreg.begin;
+	newedge.bind=prsrtable[*j].bind;
+	addtoagenda(chart,newedge);
+      }
+    }
+  }
+}
+
+  {
+    map<string,vector<int> >::iterator i=prslastmap.find(ce.cfg.reduct);
+    if (i!=prslastmap.end()) {
+      for (vector<int>::iterator j=i->second.begin();j!=i->second.end();j++) {
+	if (prsrtable[*j].cfg.part.size()>1) {
+	  edgec newedge;
+	  newedge.source='p';
+	  newedge.prsid=prsrtable[*j].prsid;
+	  newedge.cfg=prsrtable[*j].cfg;
+	  newedge.head=prsrtable[*j].head;
+	  newedge.dotreg.begin=prsrtable[*j].cfg.part.size();
+	  newedge.dotreg.end=prsrtable[*j].cfg.part.size();
+	  newedge.sentreg.begin=ce.sentreg.end;
+	  newedge.sentreg.end=ce.sentreg.end;
+	  newedge.bind=prsrtable[*j].bind;
+	  addtoagenda(chart,newedge);
+	}
+      }
+    }
+  }
+  map<regionc,vector<int> >::iterator k=incompsentregmap.find(reg);
+	if (k!=compsentregmap.end())
+	  for (vector<int>::iterator m=k->second.begin();m!=k->second.end();m++)
+	    if (chart[*m].source=='p')
+	      chart[*m].state='s';
+
+	for (vector<edgec>::iterator k=compchart[i][j].begin();k!=compchart[i][j].end();k++)
+	  if (k->source!='d')
+	    k->state='s';
+	for (vector<edgec>::iterator k=incompchart[i][j].begin();k!=incompchart[i][j].end();k++)
+	  if (k->source!='d')
+	    k->state='s';
+      }
+    }
+  }
+}
+
+void updateindex(map<edgekeyc,int> & edgekeymap, map<loccatc,vector<int> > & compbeginmap, map<loccatc,vector<int> > & compendmap, map<loccatc,vector<int> > & incompbeginmap, map<loccatc,vector<int> > & incompendmap, edgec & edge)
+{
+  edgekeyc edgekey(edge.prsid,edge.dotreg,edge.sentreg,edge.bind);
+}
+
+  /*
+  for (vector<string>::iterator i=prsrset.begin();i!=prsrset.end();i++) {
+    string prsid;
+    cfgc cfg;
+    size_t head;
+    string bind;
+    parserulentry(*i,prsid,cfg,head,bind);
+    if (cfg.part.front()==edge.cfg.reduct) {
+      edgec newedge;
+      newedge.state='a';
+      newedge.source='p';
+      newedge.prsid=prsid;
+      newedge.cfg=cfg;
+      newedge.head=head;
+      newedge.dotreg.begin=0;
+      newedge.dotreg.end=0;
+      newedge.sentreg.begin=edge.sentreg.begin;
+      newedge.sentreg.end=edge.sentreg.begin;
+      newedge.bind=bind;
+      checkadd(agenda,newedge);
+    }
+
+    if ((cfg.part.size()>1) && (cfg.part.back()==edge.cfg.reduct)) {
+      edgec newedge;
+      newedge.state='a';
+      newedge.source='p';
+      newedge.prsid=prsid;
+      newedge.cfg=cfg;
+      newedge.head=head;
+      newedge.dotreg.begin=cfg.part.size();
+      newedge.dotreg.end=cfg.part.size();
+      newedge.sentreg.begin=edge.sentreg.end;
+      newedge.sentreg.end=edge.sentreg.end;
+      newedge.bind=bind;
+      checkadd(agenda,newedge);
+    }
+  }
+  */
+  /*
+  for (vector<string>::iterator i=prsrset.begin();i!=prsrset.end();i++) {
+    string prsid;
+    cfgc cfg;
+    size_t head;
+    string bind;
+    parserulentry(*i,prsid,cfg,head,bind);
+    if ((edge.dotreg.end<edge.cfg.part.size()) && (cfg.reduct==edge.cfg.part[edge.dotreg.end])) {
+      edgec newedge;
+      newedge.state='a';
+      newedge.source='p';
+      newedge.prsid=prsid;
+      newedge.cfg=cfg;
+      newedge.head=head;
+      newedge.dotreg.begin=0;
+      newedge.dotreg.end=0;
+      newedge.sentreg.begin=edge.sentreg.end;
+      newedge.sentreg.end=edge.sentreg.end;
+      newedge.bind=bind;
+      checkadd(agenda,newedge);
+    }
+
+    if ((edge.dotreg.begin>0) && (cfg.reduct==edge.cfg.part[edge.dotreg.begin-1])) {
+      edgec newedge;
+      newedge.state='a';
+      newedge.source='p';
+      newedge.prsid=prsid;
+      newedge.cfg=cfg;
+      newedge.head=head;
+      newedge.dotreg.begin=cfg.part.size();
+      newedge.dotreg.end=cfg.part.size();
+      newedge.sentreg.begin=edge.sentreg.begin;
+      newedge.sentreg.end=edge.sentreg.begin;
+      newedge.bind=bind;
+      checkadd(agenda,newedge);
+    }
+  }
+  */
+  /*
+  for (size_t k=0; k<edge.sentreg.begin; k++) {
+    size_t s=incompchart[k][edge.sentreg.begin].size();
+    for (size_t i=0;i<s;i++) {
+      edgec & ice=incompchart[k][edge.sentreg.begin][i];
+      if ((ice.dotreg.end<ice.cfg.part.size()) && (match(edge.cfg,ice.cfg.part[ice.dotreg.end]))) {
+	string nbind;
+	if (unity(ice,ice.dotreg.end,edge,nbind)!=FAIL) {
+	  edgec newedge=ice;
+	  newedge.dotreg.end++;
+	  newedge.sentreg.begin=k;
+	  newedge.sentreg.end=edge.sentreg.end;
+	  newedge.bind=nbind;
+	  newedge.son.push_back(edge.id);
+	  checkadd(agenda,newedge);
+	}
+      }
+    }
+  }
+
+  for (size_t k=edge.sentreg.end+1; k<=chnsent.length(); k++) {
+    size_t s=incompchart[edge.sentreg.end][k].size();
+    for (size_t i=0;i<s;i++) {
+      edgec & ice=incompchart[edge.sentreg.end][k][i];
+      if ((ice.dotreg.begin>0) && (match(edge.cfg,ice.cfg.part[ice.dotreg.begin-1]))) {
+	string nbind;
+	if (unity(ice,ice.dotreg.begin-1,edge,nbind)!=FAIL) {
+	  edgec newedge=ice;
+	  newedge.dotreg.begin--;
+	  newedge.sentreg.begin=edge.sentreg.begin;
+	  newedge.sentreg.end=k;
+	  newedge.bind=nbind;
+	  newedge.son.insert(newedge.son.begin(),edge.id);
+	  checkadd(agenda,newedge);
+	}
+      }
+    }
+  }
+  */
+  /*
+    if (edge.dotreg.end<edge.cfg.part.size()) {
+    for (size_t k=edge.sentreg.end+1; k<=chnsent.length(); k++) {
+    size_t s=compchart[edge.sentreg.end][k].size();
+    for (size_t i=0;i<s;i++) {
+    edgec & ce=compchart[edge.sentreg.end][k][i];
+    if (match(ce.cfg,edge.cfg.part[edge.dotreg.end])) {
+    string nbind;
+    if (unity(edge,edge.dotreg.end,ce,nbind)!=FAIL) {
+    edgec newedge=edge;
+    newedge.dotreg.end++;
+    newedge.sentreg.end=k;
+    newedge.bind=nbind;
+    newedge.son.push_back(ce.id);
+    checkadd(agenda,newedge);
+    }
+    }
+    }
+    }
+    }
+
+    if (edge.dotreg.begin>0) {
+    for (size_t k=0; k<edge.sentreg.begin; k++) {
+    size_t s=compchart[k][edge.sentreg.begin].size();
+    for (size_t i=0;i<s;i++) {
+    edgec & ce=compchart[k][edge.sentreg.begin][i];
+    if (match(ce.cfg,edge.cfg.part[edge.dotreg.begin-1])) {
+    string nbind;
+    if (unity(edge,edge.dotreg.begin-1,ce,nbind)!=FAIL) {
+    edgec newedge=edge;
+    newedge.dotreg.begin--;
+    newedge.sentreg.begin=k;
+    newedge.bind=nbind;
+    newedge.son.insert(newedge.son.begin(),ce.id);
+    checkadd(agenda,newedge);
+    }
+    }
+    }
+    }
+    }
+  */
+      //if ((i->cfg.reduct==edge.cfg.reduct) && (i->bind==edge.bind))
+    //cout << "--comp size--(" << edge.sentreg.begin << "," << edge.sentreg.end << ") " << compchart[edge.sentreg.begin][edge.sentreg.end].size() << endl;
+    //cout << "--incomp size--(" << edge.sentreg.begin << "," << edge.sentreg.end << ") " << incompchart[edge.sentreg.begin][edge.sentreg.end].size() << endl;
+class loccatc {
+  size_t loc;
+  string cat;
+  bool operator<(loccatc const & other) const {
+    if (begin<other.begin)
+      return(true);
+    else if (begin>other.begin)
+      return(false);
+    else // begin==other.begin
+      return(reduct<other.reduct);
+  }
+};
+
+class ceendc {
+  size_t end;
+  string reduct;
+  bool operator<(ceendc const & other) const {
+    if (end<other.end)
+      return(true);
+    else if (end>other.end)
+      return(false);
+    else 
+      return(reduct<other.reduct);
+  }
+};
+
+class icebeginc {
+  size_t begin;
+  string lpart;
+  bool operator<(icebeginc const & other) const {
+    if (begin<other.begin)
+      return(true);
+    else if (begin>other.begin)
+      return(false);
+    else 
+      return(lpart<other.lpart);
+  }
+};
+
+class iceendc {
+  size_t end;
+  string rpart;
+  bool operator<(iceendc const & other) const {
+    if (end<other.end)
+      return(true);
+    else if (end>other.end)
+      return(false);
+    else 
+      return(rpart<other.rpart);
+  }
+};
+
+
+/*
+bool compatible(vector<regionc> & freezereg, regionc & reg)
+{
+  for (vector<regionc>::iterator i=freezereg.begin();i!=freezereg.end();i++) {
+    if (reg.outside(*i) || reg.contain(*i) || (reg==(*i)))
+      ;
+    else
+      return(false);
+  }
+  return(true);
+}
+
+bool regionc::outside(regionc & reg)
+{
+  if ((end<=reg.begin) || (begin>=reg.end))
+    return(true);
+  else
+    return(false);
+}
+
+bool regionc::contain(regionc & reg)
+{
+  if ((begin<reg.begin) && (end>reg.end))
+    return(true);
+  else if ((begin==reg.begin) && (end>reg.end))
+    return(true);
+  else if ((begin<reg.begin) && (end==reg.end))
+    return(true);
+  else
+    return(false);
+}
+
+void addfreeze(vector<regionc> & freezereg, regionc & reg)
+{
+  vector<regionc> temp;
+  for (vector<regionc>::iterator i=freezereg.begin();i!=freezereg.end();i++) {
+    assert(reg.outside(*i) || reg.contain(*i) || i->contain(reg) || (*i)==reg);
+    if (reg.outside(*i))
+      temp.push_back(*i);
+    else if (reg.contain(*i))
+      ;
+    else // (i->contain(reg) || *i==reg)
+      return;
+  }
+  temp.push_back(reg);
+  freezereg=temp;
+}
+*/
+vp 16994:-2 (vpzz6)
++---dp 388:-2 (dp00)
+    +---d 0:-2 (d)
+        +---都
++---vp 16795:-2 (vpshide1)
+    +---v 2:-2 (v)
+        +---是
+    +---vp 15845:-2 (vpzz8)
+        +---tp 13882:-2 (tpzai)
+            +---p 15:-2 (p1)
+                +---在
+            +---dj 8724:-2 (djvp1)
+                +---np 703:-2 (np00)
+                    +---n 20:-2 (n)
+                        +---普京
+                +---vp 6776:-2 (vpsb1)
+                    +---vp 714:-2 (vp00)
+                        +---v 22:-2 (vA)
+                            +---当
+                    +---np 735:-2 (np00)
+                        +---n 25:-2 (n)
+                            +---总统
+            +---f 26:-2 (f)
+                +---期间
+        +---vp 1971:-2 (vpsbu1)
+            +---vp 742:-2 (vp00)
+                +---v 27:-2 (v)
+                    +---获得
+            +---v 30:-2 (v)
+                +---解决
+    +---u 31:-2 (u)
+        +---的
+
+bool cross(vector<regionc> & freezereg, regionc & reg)
+{
+  for (vector<regionc>::iterator i=freezereg.begin();i!=freezereg.end();i++) {
+    if (across(*i,reg))
+      return(true);
+  }
+  return(false);
+}
+
+bool across(regionc & reg1, regionc & reg2)
+{
+  if (((reg2.begin<reg1.begin) && (reg2.end>reg1.begin) && (reg2.end<reg1.end)) ||
+      ((reg2.begin>reg1.begin) && (reg2.begin<reg1.end) && (reg2.end>reg1.end)))
+    return(true);
+  else
+    return(false);
+}
+
+bool aoutside(regionc & reg1, regionc & reg2)
+{
+  if ((reg2.end<=reg1.begin) || (reg2.begin>=reg1.end))
+    return(true);
+  else if ((reg2.begin<reg1.begin) && (reg2.end>reg1.end))
+    return(true);
+  else if ((reg2.begin=reg1.begin) && (reg2.end>reg1.end))
+    return(true);
+  else if ((reg2.begin<reg1.begin) && (reg2.end==reg1.end))
+    return(true);
+  else
+    return(false);
+}
+
+/*
+void setsilence(edgec & edge)
+{
+  size_t sentlength=chnsent.length();
+  for (size_t i=0;i<sentlength;i++) {
+    for (size_t j=i+1;j<=sentlength;j++) {
+      if (((i<edge.sentreg.begin) && (j>edge.sentreg.begin)) ||
+	  ((i<edge.sentreg.end) && (j>edge.sentreg.end))) {
+	for (vector<edgec>::iterator k=compchart[i][j].begin();k!=compchart[i][j].end();k++)
+	  k->state='s';
+	for (vector<edgec>::iterator k=incompchart[i][j].begin();k!=incompchart[i][j].end();k++)
+	  k->state='s';
+      }
+      if (((i>edge.sentreg.begin) && (j<edge.sentreg.end)) ||
+	  ((i==edge.sentreg.begin) && (j<edge.sentreg.end)) ||
+	  ((i>edge.sentreg.begin) && (j==edge.sentreg.end))) {
+	for (vector<edgec>::iterator k=compchart[i][j].begin();k!=compchart[i][j].end();k++)
+	  k->state='s';
+	for (vector<edgec>::iterator k=incompchart[i][j].begin();k!=incompchart[i][j].end();k++)
+	  k->state='s';
+      }
+    }
+  }
+}
+  for (size_t begin=0;begin<edge.sentreg.begin;begin++) {
+    for (size_t end=edge.sentreg.begin+1;end<=sentlength;end++) {
+      for (vector<edgec>::iterator i=compchart[begin][end].begin();i!=compchart[begin][end].end();i++)
+	if (i->source!='d')
+	  i->state='s';
+    }
+  }
+
+
+
+*/ 
+
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    edgec & sone=findedge(*i);
+    sone.state='s';
+  }
+  for (vector<edgec>::iterator i=compchart[edge.sentreg.begin][edge.sentreg.end].begin();i!=compchart[edge.sentreg.begin][edge.sentreg.end].end();i++)
+    i->state='s';
+}  /*
+  if (((edge.dotreg.end<edge.cfg.part.size()) && !ispos(edge.cfg.part[edge.dotreg.end])) ||
+      ((edge.dotreg.begin>0) && !ispos(edge.cfg.part[edge.dotreg.begin-1]))) {
+    size_t intropos=prsrbase.find("&&");
+    while (intropos!=string::npos) {
+      string prsid;
+      cfgc cfg;
+      size_t head;
+      string bind;
+      parserule(intropos,prsid,cfg,head,bind);
+      if ((edge.dotreg.end<edge.cfg.part.size()) && (cfg.reduct==edge.cfg.part[edge.dotreg.end])) {
+	edgec newedge;
+	newedge.state='a';
+	newedge.source='p';
+	newedge.prsid=prsid;
+	newedge.cfg=cfg;
+	newedge.head=head;
+	newedge.dotreg.begin=0;
+	newedge.dotreg.end=0;
+	newedge.sentreg.begin=edge.sentreg.end;
+	newedge.sentreg.end=edge.sentreg.end;
+	newedge.bind=bind;
+	checkadd(agenda,newedge);
+      }
+      
+      if ((edge.dotreg.begin>0) && (cfg.reduct==edge.cfg.part[edge.dotreg.begin-1])) {
+	edgec newedge;
+	newedge.state='a';
+	newedge.source='p';
+	newedge.prsid=prsid;
+	newedge.cfg=cfg;
+	newedge.head=head;
+	newedge.dotreg.begin=cfg.part.size();
+	newedge.dotreg.end=cfg.part.size();
+	newedge.sentreg.begin=edge.sentreg.begin;
+	newedge.sentreg.end=edge.sentreg.begin;
+	newedge.bind=bind;
+	checkadd(agenda,newedge);
+      }
+      intropos=prsrbase.find("&&",intropos+2);
+    }
+  }
+  */
+void printbestparse(vector<int> & parseresult)
+{
+  cout << endl << "----------------------" << endl;
+  assert(!parseresult.empty());
+  int prev=parseresult[0];
+  for (vector<int>::iterator i=parseresult.begin()+1;i!=parseresult.end();i++) {
+    for (vector<edgec>::iterator j=compchart[prev][*i].begin();j!=compchart[prev][*i].end();j++) {
+      recurprinttree(*j);
+      cout << endl;
+      recurshowtree(*j,0);
+      break;
+    }
+    prev=*i;
+  }
+}
+
+vp 9076:-2 (vpsba)
++---vp 6943:-2 (vpsb1)
+    +---vp 6376:-2 (vpsbu1)
+        +---vp 3691:-2 (vpzz6)
+            +---dp 388:-2 (dp00)
+                +---d 0:-2 (d)
+                    +---都
+            +---vp 1486:-2 (vpsb1)
+                +---vp 871:-2 (vpsbu1)
+                    +---vp 389:-2 (vp00)
+                        +---v 2:-2 (v)
+                            +---是
+                    +---v 18:-2 (v)
+                        +---在
+                +---np 703:-2 (np00)
+                    +---n 20:-2 (n)
+                        +---普京
+        +---v 22:-2 (vA)
+            +---当
+    +---np 735:-2 (np00)
+        +---n 25:-2 (n)
+            +---总统
++---ap 7279:-2 (apdez5)
+    +---vp 4593:-2 (vpzzb)
+        +---sp 739:-2 (sp02)
+            +---f 26:-2 (f)
+                +---期间
+        +---vp 1971:-2 (vpsbu1)
+            +---vp 742:-2 (vp00)
+                +---v 27:-2 (v)
+                    +---获得
+            +---v 30:-2 (v)
+                +---解决
+    +---u 31:-2 (u)
+        +---的
+
+&& {djcz9} dj->np !vp np :: $.内部结构=存在,
+        %vp.内部结构=单词|附加|状中,%vp.配价数=1,%vp.宾语=否,%np.语义类=人类|空间,%vp.主体=%%np,
+        IF %%np.语气=疑问 THEN $!=%vp @语气,$==%%np @语气,$.主题成分=%%np ENDIF
+        || %%np.语义类=人,%np.ccat=r,%np.代词子类=ra
+        => CS(T/np NP//np !VP/vp) %NP==%VP @NNUM @NPER 
+        => CS(NP/np !VP/vp NP//np ) %NP==%VP @NNUM @NPER,%NP.RSUBC=RPERS   /* => CS(NP/np VP/vp H//np)  */
+        || IF %np.语义类=空间 FALSE,IF %%np.语义类=人 FALSE
+        => CS(NP//np !VP/vp P<to> NP/np) %NP==%VP @NNUM @NPER,%NP.RSUBC=RPERS,%%NP.RCASE=OBJ         /* 他发生什么事了 */
+        || %np.语义类=空间 
+        => CS(NP//np !VP/vp P<in> NP/np) %NP==%VP @NNUM @NPER,%NP.RSUBC=~RPERS            /*这个村子发生了很大的变化*/
+
+&& {npdz22} np->ap !ap :: $.内部结构=组合定中,$.定语=%ap,$.中心语=%%ap,
+        %ap.内部结构=的字,%ap.中心语.cpcat=~dj,%ap.ccat=~a~b~z,
+        %%ap.内部结构=单词|状中,%%ap.ccat=~b,%%ap.兼类=~n,
+        IF %%ap.内部结构=状中,%%ap.状语.yx=最 FALSE
+        ||  IF %ap.中心语.ccat=n,%ap.语义类=人类 FALSE,
+            IF %ap.中心语.ccat=r,$.中心语.代词子类=ra FALSE           /* ~年轻的漂亮 */
+        => NP(AP/ap !AP//ap)                                  /*潜在的危险 生活的不安定 几千年的努力*/
+        => NP(AP/ap !NP//ap)                                 
+        => NP(NP/ap !NP//ap) %NP.NCASE=POSS                   
+        => NP(!NP//ap PP/ap)                                  /*他心里的秘密 心里的秘密*/
+        => NP(NP/ap !AP//ap)                                  /*经济的不稳定*/
+        ||     IF %ap.中心语.ccat=n,%ap.语义类=人类 TRUE
+        => NP(AP/ap !NP//ap)                                  /*自己的幸福*/
+        => NP(NP/ap !NP//ap) %NP.NCASE=POSS                            /*人民的幸福 汤姆的错*/
+        || IF %ap.中心语.ccat=r,$.中心语.代词子类=ra TRUE
+         => NP(T/ap !NP//ap) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM            /*你的健康*/
+         => NP(T/ap !NP//ap) %T.TSUBC=TPOSS 
+         => NP(AP/ap !NP//ap)
+  /*
+  for (vector<int>::iterator i=trnsresult.begin();i!=trnsresult.end();i++)
+    cout << *i << " ";
+  cout << endl;
+  */
+/*
+bool valunity(string & lval, string & rval, string & valtype, string & opera, vector< vector<string> > & valset, string & nval)
+{
+  string lv, rv;
+  removespace(lval,lv);
+  removespace(rval,rv);
+  vector<string> lvalset;
+  vector<string> rvalset;
+  valsepa(lv,lvalset);
+  valsepa(rv,rvalset);
+  for (vector<string>::iterator i=lvalset.begin();i!=lvalset.end();i++) {
+    for (vector<string>::iterator j=rvalset.begin();j!=rvalset.end();j++) {
+      uresultc res=opunity((*i),(*j),valtype,opera,valset);
+      if (res==SUCC)
+	nval=(*i)+"|";
+    }
+  }
+  if (nval.empty())
+    return(false);
+  else {
+    nval=nval.substr(0,nval.size()-1);
+    return(true);
+  }
+}
+*/
+/*
+uresultc valunity(string & lval, string & rval, string & valtype, string & opera, vector< vector<string> > & valset)
+{
+  if ((lval.find("$")!=string::npos) ||
+      (rval.find("$")!=string::npos))
+    return(WAIT);
+  else if ((lval.find("%")!=string::npos) &&
+	   (rval.find("%")!=string::npos)) {
+    if (lval==rval)
+      return(SUCC);
+    else
+      return(FAIL);
+  }
+  else if (lval.find("%")!=string::npos) {
+    if (rval.empty())
+      return(SUCC);
+    else
+      return(WAIT);
+  }
+  else if (rval.find("%")!=string::npos) {
+    if (lval.empty())
+      return(SUCC);
+    else
+      return(WAIT);
+  }
+  else{
+    string lv, rv;
+    removespace(lval,lv);
+    removespace(rval,rv);
+    vector<string> lvalset;
+    vector<string> rvalset;
+    valsepa(lv,lvalset);
+    valsepa(rv,rvalset);
+    for (vector<string>::iterator i=lvalset.begin();i!=lvalset.end();i++) {
+      for (vector<string>::iterator j=rvalset.begin();j!=rvalset.end();j++) {
+	uresultc res=opunity((*i),(*j),valtype,opera,valset);
+	if (res==SUCC)
+	  return(SUCC);
+      }
+    }
+    return(FAIL);
+  }
+}
+*/
+
+
+  /*  
+  size_t intropos=feat.find("$.");
+  while (intropos!=string::npos) {
+    feat.replace(intropos,2,"");
+    intropos=feat.find("$.");
+  }
+  size_t eqpos=feat.find("=");
+  while (eqpos!=string::npos) {
+    if (feat[eqpos-1]=='!')
+      feat.replace(eqpos-1,2,":~");
+    else if (feat[eqpos+1]=='=')
+      feat.replace(eqpos,2,":");
+    else
+      feat.replace(eqpos,1,":");
+    eqpos=feat.find("=");
+  }
+  feat="["+feat+"]";
+  */
+  /*
+  else if ((featname==ccat) || (featname==hanyucilei)) {
+    map<int,enchartidxc>::iterator i=enchartidx.find(ce.id);
+    assert(i!=enchartidx.end());
+    int eid=i->second.eid;
+    edgec edge;
+    findedge(eid,edge);
+    findccat(edge,featval);
+  }
+  */
+  /*
+  if (edge.head<edge.son.size()) {
+    edgec headedge;
+    enfindedge(edge.son[edge.head],headedge);
+    transmit(headedge.bind,feat);
+  }
+  */
+  /*
+  else if ((lval[0]=='[') || (rval[0]=='[')) {
+    assert((lval[0]=='[') && (rval[0]=='['));
+    lval.replace(0,1,"");
+    size_t rbrapos=lval.rfind("]");
+    assert(rbrapos!=string::npos);
+    lval.replace(rbrapos,1,"");
+    size_t colonpos=lval.find(":");
+    while (colonpos!=string::npos) {
+      lval.replace(colonpos,1,"=");
+      colonpos=lval.find(":");
+    }
+    cfgc cfg;
+    cfg.part.push_back("");
+    edgec ce;
+    string nbind;
+    ce.bind=rval;
+    uresultc res=basunity(cfg,lval,0,ce,nbind);
+    return(res);
+  }
+  */
+&& {vpzza} vp->np !vp :: $.内部结构=状中,$.状语=%np,$.中心语=%vp,$==%vp @被动,
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF         /*什么时候能回来*/
+        || %np.内部结构=~单词,%np.定语.cpcat=mp|mcp,%np.语义类=时间,%vp.内部结构=述补|述宾|状中|单词,
+               IF %vp.yx=有,%vp.宾语.语义类=时间 FALSE
+        => VP(!VP/vp P<in> NP/np)        /*两个月学完*/
+        => VP(!VP/vp DP/np)              /*什么时候干此事*/
+        => VP(!CS/vp DP/np)              /*什么时候发生了这个事故*/
+         || %np.内部结构=定中,%vp.配价数=1|2|3,%np.语义类=~时间~人为事物~空间,%np.定语.cpcat=mp,%np.定语.ccat=~g~r,
+                IF %np=%vp.主体 FALSE, 
+        IF %vp.趋向动词=是 FALSE,
+        IF %vp.配价数=2|3,%np=%vp.客体 FALSE 
+        => VP(!VP/vp P<with> NP/np)                                       /*一句话就说服了他 ~我自己的愿望来说*/
+        || %np.内部结构=单词,%np.汉字=餐|饭, 
+          IF %vp.状语.ccat=c FALSE,            /*吃完~<午饭而后去买东西>*/
+                           IF %vp.宾语=No FALSE                              /* ~饭散步 */
+        => VP(!VP/vp P<for> NP/np)                           /*那个男孩早餐常吃两个面包*/
+
+  for (vector<int>::iterator i=trnsresult.begin();i!=trnsresult.end();i++) {
+    edgec sedge;
+    findedge(*i,sedge);
+    /*
+    if (!sentregin(sedge.sentreg,edge.sentreg))
+      temp.push_back(*i);
+    */
+    if (sedge.sentreg<edge.sentreg)
+      temp.push_back(*i);
+  }
+
+void addrnametab(vector<string> & rnametab, string & name)
+{
+  int repeat=1;
+  for (map<string,edgec>::iterator i=netable.begin();i!=netable.end();i++) {
+    size_t catbpos=i->first.find_first_not_of('%');
+    if (cat==i->first.substr(catbpos))
+      repeat++;
+  }
+  string intro;
+  for (int i=0;i<repeat;i++)
+    intro+="%";
+  string name=intro+cat;
+  netable.insert(pair<string,edgec>(name,edge));
+  for (vector<string>::iterator i=rnametable
+}
+
+11 (vp00:17) sentreg(3,6) dotreg(0,1) VP->V -> 9 
+14 (np00:17) sentreg(6,15) dotreg(0,1) NP->N -> 12 
+17 (vpsb1:-1) sentreg(3,15) dotreg(0,2) VP->VP NP -> 11 14 
+18 (:-2) sentreg(6362048,0) dotreg(3220977384,6356980) V->be -> 
+19 (:-2) sentreg(3,6) dotreg(0,1) V->be -> 
+9 (:-2) sentreg(0,2043892) dotreg(3220977624,1690447) V->V<be> V -> 18 19 
+21 (:-2) sentreg(6,15) dotreg(0,1) N->Chinese -> 
+22 (:-2) sentreg(140256176,1) dotreg(138728616,134553056) N->"'s" -> 
+12 (:-2) sentreg(140290312,2043892) dotreg(3220977624,1690447) N->N N<"'s"> -> 21 22 
+
+
+9 (:11) sentreg(3,6) dotreg(0,1) V->be -> 
+11 (vp00:17) sentreg(3,6) dotreg(0,1) VP->V -> 9 
+12 (:14) sentreg(6,15) dotreg(0,1) N->Chinese -> 
+14 (np00:17) sentreg(6,15) dotreg(0,1) NP->N -> 12 
+17 (vpsb1:-1) sentreg(3,15) dotreg(0,2) VP->VP NP -> 11 14 
+
+11 (vp00:17) sentreg(3,6) dotreg(0,1) VP->V -> 9 
+14 (np00:17) sentreg(6,15) dotreg(0,1) NP->N -> 12 
+17 (vpsb1:-1) sentreg(3,15) dotreg(0,2) VP->VP NP -> 11 14 
+18 (:-2) sentreg(2802624,0) dotreg(3220082824,2797556) V->be -> 
+19 (:-2) sentreg(3,6) dotreg(0,1) V->be -> 
+20 (:-2) sentreg(0,6754292) dotreg(3220083064,6400847) V->V<be> V -> 18 19 
+21 (:-2) sentreg(6,15) dotreg(0,1) N->Chinese -> 
+22 (:-2) sentreg(162694064,1) dotreg(161166504,134552960) N->"'s" -> 
+23 (:-2) sentreg(162728200,6754292) dotreg(3220083064,6400847) N->N N<"'s"> -> 21 22 
+
+11 (vp00:17) sentreg(3,6) dotreg(0,1) VP->V 
+14 (np00:17) sentreg(6,15) dotreg(0,1) NP->N 
+17 (vpsb1:-1) sentreg(3,15) dotreg(0,2) VP->VP NP 
+18 (:2527220) sentreg(2532288,0) dotreg(3216369320,2527220) V->be 
+19 (:11) sentreg(3,6) dotreg(0,1) V->be 
+20 (:-1078597708) sentreg(0,10452980) dotreg(3216369560,10099535) V->V<be> V 
+21 (:14) sentreg(6,15) dotreg(0,1) N->Chinese 
+22 (:0) sentreg(163562416,1) dotreg(162034856,134552960) N->"'s" 
+23 (:-1078597708) sentreg(163596552,10452980) dotreg(3216369560,10099535) N->N N<"'s"> 
+
+void enrecurposttrval(int fid, edgec & edge, vector<edgec> & tranchart)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    
+  }
+  edge.father=fid;
+  tranchart.push_back(edge);
+}
+
+/*
+void choosebesttrns(map<int, vector<edgec> > & enchart, vector<int> & trnsresult)
+{
+  for (map<int, vector<edgec> >::iterator i=enchart.begin();i!=enchart.end();i++) {
+    if (!i->second.empty()) {
+      edgec edge;
+      findedge(i->first,edge);
+      modifytrnsresult(edge.sentreg,trnsresult);
+    }
+  }
+}
+
+void modifytrnsresult(regionc reg,vector<int> & trnsresult)
+{
+  vector<int> newresult;
+  for (vector<int>::iterator i=trnsresult.begin();i!=trnsresult.end();i++) {
+    if ((*i)<(int)reg.begin)
+      newresult.push_back(*i);
+    else
+      break;
+  }
+  newresult.push_back(reg.begin);
+  newresult.push_back(reg.end);
+  trnsresult=newresult;
+}
+*/
+
+/*
+void choosebest(int bpos, int epos, vector<edgec> & tranedges)
+{
+  int sentlength=epos-bpos;
+  int currcount;
+  vector<int> wordcount(sentlength+1);
+  vector<int> traceback(sentlength+1);
+  vector<int> tracefront(sentlength+1);
+  
+  for (int i=0; i<=sentlength; i++) {
+    wordcount[i]=100000000;
+    traceback[i]=i-1;
+    tracefront[i]=i+1;
+  }
+
+  wordcount[0]=0;
+  for (int i=0; i<=sentlength; i++) {
+    for (int j=0; j<i; j++) {
+      if (hastranedge(j+bpos,i+bpos))
+	currcount=wordcount[j]-3*(i-j);
+      else if (isword(j+bpos,i+bpos))
+	currcount=wordcount[j]-2*(i-j);
+      else
+	currcount=wordcount[j]+2*(i-j);
+      
+      if (currcount < wordcount[i]) {
+	traceback[i]=j;
+	wordcount[i]=currcount;
+      }
+    }
+  }
+  
+  for (int i=sentlength; i>0; i=traceback[i])
+    tracefront[traceback[i]]=i;
+  
+  for (int i=0; i<sentlength; i=tracefront[i]) {
+    edgec enedge;
+    if (gettranedge(i+bpos,tracefront[i]+bpos,enedge)) {
+      enprintsent(enedge);
+      tranedges.push_back(enedge);
+    }
+    else if (!enedge.prsid.empty()) {
+      cout << "[no tran:";
+      recurprinttree(enedge);
+      cout << "] ";
+    }
+    else
+      cout << "[no entry:" << chnsent.substr(i+bpos,tracefront[i]-i) << "] ";
+  }
+  cout << endl;
+}
+*/
+
+void atransform(edgec & edge, vector<edgec> & enedges)
+{
+  if (edge.cfg.reduct!="unknown") {
+    if (ispos(edge.cfg.reduct)) { // edge no son, check dictn
+      boost::match_results<string::const_iterator> m;
+      if ((edge.cfg.reduct=="m") && (boost::regex_match(edge.cfg.part.front(),m,numreg))) {
+	string entran="M<"+edge.cfg.part.front()+">";
+	edgec enedge;
+	createsone(entran,enedge);
+	enedge.sentreg=edge.sentreg;
+	enedges.push_back(enedge);
+	enchartidx.insert(pair<int,int>(enedge.id,edge.id));
+      }
+      else {
+	string entry;
+	getentry(edge.cfg.part.front(),entry);
+	string catentry;
+	getcatentry(edge.prsid,entry,catentry);
+	string tranentry;
+	gettranentry(edge,catentry,tranentry);
+	vector<string> transet;
+	string septor="=>";
+	getset(tranentry,septor,transet);
+	dicttranedge(edge,transet,enedges);
+      }
+    }
+    else {
+      string rule;
+      getrule(edge.source,edge.prsid,rule);
+      string tranentry;
+      gettranentry(edge,rule,tranentry);
+      vector<string> transet;
+      string tranid;
+      string septor="=>";
+      getset(tranentry,septor,transet);
+      prsrtranedge(edge,transet,enedges);
+    }
+  }
+}
+
+/*
+void transform(vector< vector< vector<edgec> > > & chart, map<int,vector<edgec> > & enchart)
+{
+  initialenchart(enchart);
+  int sentlength=(int)chnsent.length();
+  for (int span=1;span<=sentlength;span++)
+    for (int start=0;start<=sentlength-span;start++) {
+      int end=start+span;
+      for (vector<edgec>::iterator i=chart[start][end].begin();i!=chart[start][end].end();i++) {
+	vector<edgec> enedges;
+	cout << i->id << "(" << i->prsid << ") " << chnsent.substr(start,span) << " : ";
+	atransform(*i,enedges);
+	for (vector<edgec>::iterator j=enedges.begin();j!=enedges.end();j++) {
+	  cout << j->id << "(" << j->swiid << "," << j->tranid << " ";
+	  enprintsent(*j);
+	  cout << ")";
+	}
+	cout << endl;
+	if (!enedges.empty())
+	  enchart.insert(pair< int,vector<edgec> >(i->id,enedges));
+      }
+    }
+  choosebest(tranedges);
+}
+*/
+
+/*
+void gettranchart(map< int, vector<edgec> > & enchart, vector<edgec> & tranchart)
+{
+  for (map<int,vector<edgec> >::iterator i=enchart.begin();i!=enchart.end();i++) {
+    tranchart.insert(tranchart.end(),i->second.begin(),i->second.end());
+  }
+}
+
+void printtranchart(vector<edgec> & tranchart)
+{
+  for (vector<edgec>::iterator i=tranchart.begin();i!=tranchart.end();i++) {
+    printtrantree(*i);
+    cout << endl;
+  }
+}
+
+void printtrantree(edgec & edge)
+{
+  //if (!edge.son.empty())
+  cout << "(" << edge.id << ":" << edge.prsid << ":" << edge.father << ") ";
+  cout << edge.cfg.reduct << " [ ";
+  if (!edge.son.empty()) {
+    for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+      edgec sone;
+      findtranedge(*i,sone);
+      printtrantree(sone);
+    }
+  }
+  else
+    cout << edge.cfg.part.front();
+  cout << " ] ";
+}
+
+
+void findtranedge(int eid, edgec & edge)
+{
+  for (vector<edgec>::iterator i=tranchart.begin();i!=tranchart.end();i++) {
+    if (i->id==eid) {
+      edge=*i;
+      return;
+    }
+  }
+  assert(false);
+}
+
+
+void marktrnsresult(vector<edgec> & tranchart)
+{
+  for (vector<edgec>::reverse_iterator i=tranchart.rbegin();i!=tranchart.rend();i++) {
+    if (i->father==-2)
+      assignfathertran(tranchart,*i);
+  }
+}
+
+void assignfathertran(vector<edgec> & tranchart, edgec & edge)
+{
+  edge.father=-1;
+  recurassigntran(tranchart,edge);
+}
+
+void recurassigntran(vector<edgec> & tranchart, edgec & edge)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    for (vector<edgec>::iterator j=tranchart.begin();j!=tranchart.end();j++) {
+      if (*i==j->id) {
+	j->father=edge.id;
+	recurassigntran(tranchart,*j);
+	break;
+      }
+    }
+  }
+}
+
+bool forestdesc(int eid, vector<edgec> & forest)
+{
+  for (vector<edgec>::iterator i=forest.begin();i!=forest.end();i++) {
+    if (treedesc(eid,*i))
+      return(true);
+  }
+  return(false);
+}
+
+bool treedesc(int eid, edgec & edge)
+{
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    if (eid==*i)
+      return(true);
+    else {
+      edgec sone;
+      findtranedge(*i,sone);
+      if (treedesc(eid,sone))
+	return(true);
+    }
+  }
+  return(false);
+}
+*/
+
+bool sentregin(int eid, vector<int> & trnsresult)
+{
+  edgec edge;
+  findedge(eid,edge);
+  for (vector<int>::iterator i=trnsresult.begin();i!=trnsresult.end();i++) {
+    edgec bedge;
+    finedge(*i,bedge);
+    if ((edge.sentreg.begin>=bedge.sentreg.begin) && (edge.sentreg.end<=bedge.sentreg.end))
+      return(true);
+  }
+  return(false);
+}
+
+
+      assignfather(*i,edge.id);
+      edgec sone;
+      findsone(*i,sone);
+      recurassignparse(chart,sone);
+    }
+  }
+}
+
+void assignfather(int sonid, int fatherid)
+{
+  map<int,regionc>::iterator i=comedgeidx.find(sonid);
+  assert(i!=comedgeidx.end());
+  for (vector<edgec>::iterator j=compchart[i->second.begin][i->second.end].begin();j!=compchart[i->second.begin][i->second.end].end();j++) {
+    if (j->id==*i) {
+      j->father=fatherid;
+      return;
+    }
+  }
+  assert(false);
+}
+  /*
+  int sentlength=epos-bpos;
+  int currcount;
+  vector<int> wordcount(sentlength+1);
+  vector<int> traceback(sentlength+1);
+  vector<int> tracefront(sentlength+1);
+  
+  for (int i=0; i<=sentlength; i++) {
+    wordcount[i]=100000000;
+    traceback[i]=i-1;
+    tracefront[i]=i+1;
+  }
+
+  wordcount[0]=0;
+  for (int i=0; i<=sentlength; i++) {
+    for (int j=0; j<i; j++) {
+      if (hastranedge(j+bpos,i+bpos))
+	currcount=wordcount[j]-3*(i-j);
+      else if (isword(j+bpos,i+bpos))
+	currcount=wordcount[j]-2*(i-j);
+      else
+	currcount=wordcount[j]+2*(i-j);
+      
+      if (currcount < wordcount[i]) {
+	traceback[i]=j;
+	wordcount[i]=currcount;
+      }
+    }
+  }
+  
+  for (int i=sentlength; i>0; i=traceback[i])
+    tracefront[traceback[i]]=i;
+  
+  for (int i=0; i<sentlength; i=tracefront[i]) {
+    edgec enedge;
+    if (gettranedge(i+bpos,tracefront[i]+bpos,enedge)) {
+      enprintsent(enedge);
+      tranedges.push_back(enedge);
+    }
+    else if (!enedge.prsid.empty()) {
+      cout << "[no tran:";
+      recurprinttree(enedge);
+      cout << "] ";
+    }
+    else
+      cout << "[no entry:" << chnsent.substr(i+bpos,tracefront[i]-i) << "] ";
+  }
+  cout << endl;
+  */
+    vector<edgec> enedges;
+      cout << j->id << "(" << j->prsid << ") " << chnsent.substr(start,span) << " : ";
+      atransform(*j,enedges);
+      if (!enedges.empty())
+	enchart.insert(pair< int,vector<edgec> >(j->id,enedges));
+      for (vector<edgec>::iterator k=enedges.begin();k!=enedges.end();k++) {
+	cout << k->id << "(" << k->swiid << "," << k->tranid << " ";
+	enprintsent(*k);
+	cout << ")";
+      }
+      cout << endl;
+    }
+  void recurmarkedges(int fid, edgec & edge)
+{
+  edge.father=fid;
+  if (!edge.son.empty()) {
+    for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+      edgec sone;
+      findedge(*i,sone);
+      recurmarkedges(edge.id,sone);
+    }
+  }
+}
+
+void getroot(vector<string> & words, edgec & root)
+{
+  for (vector<edgec>::iterator i=compchart[0][chnsent.length()].begin();i!=compchart[0][chnsent.length()].end();i++) {
+    root=(*i);
+    break;
+  }
+}
+
+  /*
+  cout << "total " << compchart[0][chnsent.length()].size() << " trees" << endl;
+  for (vector<edgec>::iterator i=compchart[0][chnsent.length()].begin();i!=compchart[0][chnsent.length()].end();i++) {
+    cout << endl << "--------------------" << endl;
+    printtree(*i);
+    cout << endl;
+    showtree(*i,0);
+  }
+  */
+      //boost::regex keyreg("(\\$\\$\\s)"+(*i)+"\\s");
+      //if (boost::regex_search(locdictn,m,keyreg,boost::match_default|boost::format_first_only)) {
+      //size_t ebpos=m[0].first-locdictn.begin();
+      /*
+      boost::match_results<string::const_iterator> m;
+      boost::regex keyreg("(\\$\\$\\s)"+sent.substr(j,i-j)+"\\s");
+      if (boost::regex_search(dictn,m,keyreg,boost::match_default|boost::format_first_only)) {
+      */
+    size_t dolpos=i->find("$=");
+    if (dolpos!=string::npos) {
+      
+    }
+  //pretraveltree(tree,edge,nota,dese);
+void finddesedge(string & tree, edgec & edge, string & nota, edgec & dese)
+{
+  
+  cout << "here" << endl;
+}
+
+	class cnameedgepair {
+	public:
+	  string name;
+	  edgec edge;
+	};
+/*
+void recurtran(edgec & edge)
+{
+  string feat;
+  vector<string> bindset;
+  vector<string> bindset2;
+  assert(edge.bind.find("IF")==string::npos);
+  getabindset(edge.bind,bindset);
+  for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++) {
+    if (i->find("@")!=string::npos) {
+      vector<string> atset;
+      getatset((*i),atset);
+      string opera;
+      string lval;
+      string rval;
+      getopeval((*i),lval,opera,rval);
+      for (vector<string>::iterator i=atset.begin();i!=atset.end();i++) {
+	string atbind=lval+"."+*i+opera+rval+"."+*i;
+	bindset2.push_back(atbind);
+      }
+    }
+    else 
+      bindset2.push_back(*i);
+  }
+  for (vector<string>::iterator i=bindset2.begin();i!=bindset2.end();i++) {
+    string lval,opera,rval;
+    getopeval((*i),lval,opera,rval);
+    string colon;
+    operatran(opera,colon);
+    if (lval.find("$.")!=string::npos) {
+      feat+=lval.substr(2)+colon+rval;
+    }
+    else if ((lval[0]=='%') && (lval.find(".")!=string::npos)) {
+      size_t dotpos=lval.find(".");
+      string sonnota=lval.substr(0,dotpos);
+      int sonid=findsonid(edge,sonnota);
+      for (vector<edgec>::iterator i=enchart.begin();i!=enchart.end();i++) {
+	if (sonid==i->id) {
+	  string featname=lval.substr(dotpos+1);
+	  string nfeat;
+	  // featunity(i->bind,featname,colon,rval,nfeat);
+	  i->bind=nfeat;
+	  break;
+	}
+      }
+    }
+  }
+  edge.bind=feat;
+  for (vector<int>::iterator i=edge.son.begin();i!=edge.son.end();i++) {
+    edgec sone;
+    enfindedge((*i),sone);
+    recurtran(sone);
+  }
+}
+*/
+
+ /*
+void featunity(string & feat, string & featname, string & colon, string & rval, string & nfeat)
+{
+  nfeat=feat;
+  size_t namepos=nfeat.find(featname);
+  if (namepos!=string::npos) {
+    size_t ocopos=nfeat.find(":",namepos);
+    assert(ocopos!=string::npos);
+    nfeat.replace(ocopos,1,colon);
+    size_t spos=ocopos+1;
+    size_t epos;
+    if (nfeat[spos]!='[') {
+      epos=spos;
+      while ((epos<nfeat.size()) && (nfeat[epos]!=',') && (nfeat[epos]!=']'))
+	epos++;
+    }
+    else {
+      epos=nfeat.find("]",spos);
+      assert(epos!=string::npos);
+      epos++;
+    }
+    nfeat.replace(spos,epos-spos,rval);
+  }
+  else
+    nfeat.replace(0,1,"["+featname+colon+rval+",");
+}
+ */
+
+  /*
+void operatran(string & opera, string & colon)
+{
+  if ((opera=="=") || (opera=="=="))
+    colon=":";
+  else if (opera=="!=")
+    colon=":~";
+  else
+    assert(false);
+}
+  */
+      /*
+	for (vector<string>::iterator k=locnewe.cfg.part.begin();k!=locnewe.cfg.part.end();k++) {
+	if (((*k)=="~") || ((*k)==catword)) {
+	locnewe.dotreg.begin=k-locnewe.cfg.part.begin();
+	locnewe.dotreg.end=k-locnewe.cfg.part.begin()+1;
+	(*k)=newedge.cfg.reduct;
+	locnewe.son.push_back(newedge.id);
+	locnewe.sentreg=i->sentreg;
+	break;
+	}
+	else {
+      */
+    /*
+    for (vector<edgec>::iterator i=enedges.begin();i!=enedges.end();i++)
+      enchart.insert(pair<int,int>(i->id,id));
+    */
+
+    /*
+    size_t bpos=0;
+    while (!temp.empty() && (temp[bpos]==' '))
+      bpos++;
+    size_t epos=bpos;
+    while ((epos<temp.size()) && (temp[epos]!='(') && (temp[epos]!= '<'))
+      epos++;
+    string cat=temp.substr(bpos,epos-bpos);
+    string word;
+    if (temp[epos]=='<') {
+      size_t ranpos=temp.find(">");
+      word=temp.substr(epos+1,ranpos-epos-1);
+    }
+    else {
+      size_t rbrapos=temp.find(")");
+      word=temp.substr(epos+1,rbrapos-epos-1);
+    }
+
+    size_t fpos=temp.find("$=[");
+    string bind;
+    if (fpos!=string::npos)
+      bind=temp.substr(fpos+2);
+    else
+      bind="";
+    edgec enedge;
+    enedge.id=eeid++;
+    enedge.swiid=edge.swiid;
+    enedge.tranid=tranid;
+    enedge.cfg.reduct=cat;
+    enedge.cfg.part.push_back(word);
+    enedge.bind=bind;
+    enedge.sentreg=edge.sentreg;
+    enedge.dotreg=edge.dotreg;
+    enedges.push_back(enedge);
+    enchartidx.insert(pair<int,int>(enedge.id,edge.id));
+    */
+  /*
+    for (size_t i=0;i<=sentlength;i++) {
+    vector< map<int,vector<edgec> > > vmv;
+    for (size_t j=0;j<=sentlength;j++) {
+    map<int,vector<edgec> > mv;
+    vmv.push_back(mv);
+    }
+    enchart.push_back(vmv);
+    }
+  */
+	/*
+	  size_t ebpos=dictn.find("$$ "+sent.substr(j,i-j)); //+" ");
+	  if (ebpos!=string::npos) {
+	  size_t eepos=dictn.find("$$",ebpos+i-j+3);
+	  string entry=dictn.substr(ebpos,eepos-ebpos);
+	  locdictn+=entry;
+	*/
+    /*
+    size_t ranpos=temp.find("<");
+    size_t lanpos=temp.find(">");
+    string cat=temp.substr(bpos,ranpos-bpos);
+    string word=temp.substr(ranpos+1,lanpos-ranpos-1);
+    */
+//vector< vector< map<int,vector<edgec> > > > enchart;
+//map<int,enchartidxc> enchartidx;
+
+
+    string septor="~";
+    vector<string> notset;
+    getset(lval,septor,notset);
+    for (vector<string>::iterator i=notset.begin();i!=notset.end();i++) {
+      uresultc res=pureunity((*i),rval,valtype,valset);
+      if (res==SUCC)
+	return(FAIL);
+    }
+    return(SUCC);
+  }
+  else if ((lval[0]!='~') && (rval[0]=='~')) {
+    string septor="~";
+    vector<string> notset;
+    getset(rval,septor,notset);
+    for (vector<string>::iterator i=notset.begin();i!=notset.end();i++) {
+      uresultc res=pureunity(lval,(*i),valtype,valset);
+      if (res==SUCC)
+	return(FAIL);
+    }
+    return(SUCC);
+  }
+  else {
+    return(SUCC);
+  }
+  */
+  if ((lval[0]=='~') && (rval[0]=='~')) 
+    return(SUCC);
+  else if ((lval[0]!='~') && (rval[0]!='~')) {
+    uresultc res=pureunity(lval,rval,valtype,valset);
+    return(res);
+  }
+  else if ((lval[0]!='~') && (rval[0]=='~')) {
+    
+  }
+
+
+    getset(rval,septor,randset);
+  for (vector<string>::iterator i=landset.begin();i!=landset.end();i++)
+    for (vector<string>::iterator j=landset.begin();j!=randset.end();j++) {
+      
+    }
+
+    getset(lval,septor,landset);
+    vector<string> lvalset;
+    getcompvalset(lval,lvalset);
+    vector<string> rvalset;
+    getcompvalset(rval,rvalset);
+      if (idxi!=enchart[sentregend][sentregend].end())
+	idxi->second.push_back(sone);
+      else {
+	vector<edgec> newsones;
+	newsones.push_back(sone);
+	enchart[sentregend][sentregend].insert(pair<int, vector<edgec> >(-1,newsones));
+      }
+enchart[i->second.sentbegin][i->second.sentend].find(i->second.eid);
+  assert(j!=enchart[i->second.sentbegin][i->second.sentend].end());
+  for (vector<edgec>::iterator k=j->second.begin();k!=j->second.end();k++) {
+    if (k->id==eeid) {
+      edge=(*k);
+      return;
+    }
+  }
+  assert(false);
+}
+
+    /*
+    const boost::regex idreg("\\{[A-Z|a-z|0-9|\\.]+\\}");
+    boost::match_results<std::string::const_iterator> what; 
+    if (regex_search(temp,what,idreg)) {
+      swiid=string(what[0].first+1,what[0].second-1);
+      temp=boost::regex_replace(temp,idreg,"");
+    }
+    */
+	/*
+	if (!enedges.empty()) {
+	  enchart[start][end].insert(pair< int,vector<edgec> >(i->id,enedges));
+	  for (vector<edgec>::iterator j=enedges.begin();j!=enedges.end();j++) {
+	    cout << j->id << " " << j->cfg.reduct << "->";
+	    for (vector<string>::iterator ii=j->cfg.part.begin();ii!=j->cfg.part.end();ii++)
+	      cout << *ii << " ";
+	    //addenchartidx(enchartidx,j->id,i->id,start,end);
+	  }
+	}
+	cout << endl;
+	*/
+  string enred;
+  vector<string> itemset;
+  getitemset(trancfg,enred,enword,nota,itemset);
+  if (itemset.empty()) {
+    if (nota.empty()) {
+      edgec sone;
+      createsone(*j,sone);
+      sone.sentreg.begin=j-itemset.begin();
+      sone.sentreg.end=j-itemset.begin()+1;
+      locchart.push_back(sone);
+      map< int,vector<edgec> >::iterator idxi=enchart[sentregend][sentregend].find(-1);
+      if (idxi!=enchart[sentregend][sentregend].end())
+	idxi->second.push_back(sone);
+      else {
+	vector<edgec> newsones;
+	newsones.push_back(sone);
+	enchart[sentregend][sentregend].insert(pair<int, vector<edgec> >(-1,newsones));
+      }
+      addenchartidx(enchartidx,sone.id,-1,sentregend,sentregend);
+    }
+  }
+}  
+
+/*
+		   
+    vector<edgec> enegs;
+    genetranedge(edge,trancfg,tranbind,enegs);
+  }
+}
+    /*
+    const boost::regex idreg("\\{[A-Z|a-z|0-9|\\.]+\\}");
+    boost::match_results<std::string::const_iterator> what; 
+    if (regex_search(temp,what,idreg)) {
+      tranid=string(what[0].first,what[0].second);
+      temp=boost::regex_replace(temp,idreg,"");
+    }
+    */
+  if (in[0]=='\"') {
+    size_t rquopos=in.find("\"",1);
+    assert(rquopos!=string::npos);
+    out=in.substr(1,rquopos-1);
+  }
+    
+    /*
+    if (featval[0]=='%') {
+      int sonid=findsonid(tempedge,featval);
+      enfindedge(sonid,tempedge);
+    }
+    */
+  /*
+  if (featname[0]=='%') {
+    valtype="Edge";
+    ostringstream oss;
+    oss << ce.id;
+    featval="eid"+oss.str();
+  }
+  else 
+  */
+    /*
+    if (featval[0]=='%')
+      findsonedge(tempedge,featval,tempedge);
+    if ((jufachengfen.find(","+(*i)+",")!=string::npos) && 
+	(featval.empty())) {
+      edgec empedge;
+      tempedge=empedge;
+    }
+    */
+  //subsents.push_back(string(it,end));
+
+  /*
+  vector<string> numwords;
+  vector<string> subsents;
+  boost::regex numreg("[0-9]+");
+  boost::match_results<string::const_iterator> m;
+  if (boost::regex_search(sent,m,numreg)) {
+    string::const_iterator prei=sent.begin();
+    for (size_t i=0;i<m.size();i++) {
+      subsents.push_back(string(prei,m[i].first));
+      numwords.push_back(string(m[i].first,m[i].second));
+      prei=m[i].second;
+    }
+    subsents.push_back(string(prei,(string::const_iterator)sent.end()));
+    for (size_t i=0;i<subsents.size();i++) {
+      vector<string> subwords;
+      dictsegment(subsents[i],subwords);
+      words.insert(words.end(),subwords.begin(),subwords.end());
+      if (i<numwords.size())
+	words.push_back(numwords[i]);
+    }
+  }
+  else
+    dictsegment(sent,words);
+  */
+size_t dictnfind(string & word)
+{
+  string entkey="$$ "+word;
+  size_t keypos=dictn.find(entkey);
+  return keypos;
+}
+
+  for (map<int,vector<edgec> >::iterator i=enchart[0][sentlength].begin();i!=enchart[0][sentlength].end();i++) {
+    for (vector<edgec>::iterator j=i->second.begin();j!=i->second.end();j++) {
+	   printtrans(*j);
+    }
+  }
+void addtoenchart(vector<edgec> & enchart, vector<edgec> & edgeset)
+{
+  for (vector<edgec>::iterator i=edgeset.begin();i!=edgeset.end();i++) {
+    enchart.push_back(*i);
+  }
+}
+
+  for (int j=1;j<=(int)chnsent.length();j++)
+    for (int i=j-1;i>=0;i--) {
+      for (vector<edgec>::iterator k=chart[i][j].begin();k!=chart[i][j].end();k++) {
+	vector<edgec> enedges;
+	atransform(*k,enedges);
+	enchart[i][j].insert(pair< int,vector<edgec> >(k->id,enedges));
+      }
+    }
+      string tranred;
+      gettranred(tran,tranred);
+      if ((redcat.empty()) || (tranred==redcat))
+
+/*
+  void entransmit(edgec & edge, string & feat)
+  {
+  assert(edge.head<edge.son.size());
+  int headid=edge.son[edge.head];
+  edgec headedge;
+  enfindedge(headid,headedge);
+  string hfeat=headedge.bind;
+  vector<string> featset;
+  getabindset(feat,featset);
+
+  for (vector<string>::iterator i=featset.begin();i!=featset.end();i++) {
+  size_t colonpos=i->find(":");
+  assert(colonpos!=string::npos);
+  string name=i->substr(0,colonpos);
+  string nval=i->substr(colonpos+1);
+  size_t namepos=hfeat.find(name);
+  if (namepos!=string::npos) {
+  size_t ocopos=hfeat.find(":",namepos);
+  assert(ocopos!=string::npos);
+  size_t spos=ocopos+1;
+  size_t epos;
+  if (hfeat[spos]!='[') {
+  epos=spos;
+  while ((epos<hfeat.size()) && (hfeat[epos]!=',') && (hfeat[epos]!=']'))
+  epos++;
+  }
+  else {
+  epos=hfeat.find("]",spos);
+  assert(epos!=string::npos);
+  epos++;
+  }
+  hfeat.replace(spos,epos-spos,nval);
+  }
+  else
+  hfeat.replace(0,1,"["+*i+",");
+  }
+
+  size_t zxypos=hfeat.find(zhongxinyu);
+  if (zxypos!=string::npos) {
+  string hcat=edge.cfg.part[edge.head];
+  int rep=1;
+  for (size_t i=0;i<edge.head;i++)
+  if (edge.cfg.part[i]==hcat)
+  rep++;
+  string intro;
+  for (int i=0;i<rep;i++)
+  intro += "%";
+  intro += hcat;
+  size_t colonpos=hfeat.find(":",zxypos);
+  size_t ezxypos=colonpos+1;
+  while ((hfeat[ezxypos]!=',') && (hfeat[ezxypos]!=']'))
+  ezxypos++;
+  hfeat.replace(colonpos+1,ezxypos-colonpos-1,intro);
+  }
+
+  feat=hfeat;
+  }
+*/
+void transform(edgec & chroot, edgec & enroot)
+{
+  assignfather(chroot);
+  vector<edgec> enedges;
+  string redcat;
+  for (vector<edgec>::iterator i=compchart[0][chnsent.length()].begin();i!=compchart[0][chnsent.length()].end();i++)
+    recurtransform(*i,redcat,0,enedges);
+  //recurtransform(chroot,redcat,0,enedges);
+  assert(!enedges.empty());
+  enroot=enedges.back();
+  printtrans(enroot);
+  /*
+  for (vector<edgec>::iterator i=enchart.begin();i!=enchart.end();i++) {
+    printtrans(*i);
+    cout << endl;
+  }
+  */
+}
+
+void recurtransform(edgec & edge, string & redcat, size_t loc, vector<edgec> & enedges)
+{
+  if (ispos(edge.cfg.reduct)) { // edge no son, check dictn
+    string entry;
+    getentry(edge.cfg.part.front(),entry);
+    string catentry;
+    getcatentry(edge.prsid,entry,catentry);
+    string tranentry;
+    gettranentry(edge,catentry,tranentry);
+    vector<string> transet;
+    gettranset(tranentry,redcat,transet);
+    initialedge(edge,transet,loc,enedges);
+    enchart.insert(enchart.end(),enedges.begin(),enedges.end());
+  }
+  else { // edge has son, check prsrbase
+    string rule;
+    getrule(edge.source,edge.prsid,rule);
+    string tranentry;
+    gettranentry(edge,rule,tranentry);
+    vector<string> transet;
+    string tranid;
+    gettranset(tranentry,redcat,transet);
+    for (vector<string>::iterator i=transet.begin();i!=transet.end();i++) {
+      string temp=*i;
+      string tranid;
+      const boost::regex idreg("\\{[A-Z|a-z|0-9|\\.]+\\}");
+      boost::match_results<std::string::const_iterator> what; 
+      if (regex_search(temp,what,idreg)) {
+	tranid=string(what[0].first,what[0].second);
+	temp=boost::regex_replace(temp,idreg,"");
+      }
+      string trancfg;
+      string tranbind;
+      sepatranentry(temp,trancfg,tranbind);
+      string enred;
+      vector<string> itemset;
+      getitemset(trancfg,enred,itemset);
+      vector<edgec> locchart;
+      for (vector<string>::iterator j=itemset.begin();j!=itemset.end();j++) {
+	edgec sone;
+	string encat;
+	if (j->find("/")!=string::npos) {
+	  getsonecat(edge,(*j),sone,encat);
+	  vector<edgec> sonedges;
+	  recurtransform(sone,encat,j-itemset.begin(),sonedges);
+	  locchart.insert(locchart.end(),sonedges.begin(),sonedges.end());
+	}
+	else {
+	  edgec sone;
+	  createsone(*j,j-itemset.begin(),sone);
+	  locchart.push_back(sone);
+	  enchart.push_back(sone);
+	}
+      }
+      edgec enedge;
+      getenedge(edge,enred,itemset,tranbind,enedge);
+      vector<edgec> enegs;
+      parseonerule(enedge,locchart,loc,enegs);
+      for (vector<edgec>::iterator j=enegs.begin();j!=enegs.end();j++)
+	j->tranid=tranid;
+      enedges.insert(enedges.end(),enegs.begin(),enegs.end());
+      enchart.insert(enchart.end(),enegs.begin(),enegs.end());
+    }
+  }
+}
+
+      //edgec rootedge;
+      //findrootedge(edge,rootedge);
+      /*
+      int repeat=1;
+      size_t bpos=1;
+      while ((bpos<featname.size()) && (featname[bpos]=='%')) {
+	repeat++;
+	bpos++;
+      }
+      size_t epos=bpos;
+      while ((epos<featname.size()) && (featname[epos]!='.'))
+	epos++;
+      if (epos<featname.size()) {
+	string cat=featname.substr(bpos,epos-bpos);
+	edgec sone;
+	findsonedge(edge,repeat,cat,sone);
+	string fname=featname.substr(epos+1);
+	findfeatval(sone,fname,featval,valtype,valset);
+      }
+      else
+	featval=featname;
+      */
+    /*
+    if (featval.empty() && i!=nameset.end()-1) {
+      valtype="";
+      vector< vector<string> > empvalset;
+      valset=empvalset;
+      break;
+    }
+    */
+&& {apsbu8} ap->!ap mp :: $.内部结构=组合述补,$.述语=%ap,$!=%ap @补语,$.补语=%mp,
+        IF %ap.内部结构=附加 THEN %ap.附加语.yx=了 ENDIF
+        || %ap.内部结构=单词|附加,%mp.内部结构=数量,%mp.量词子类=动量,%ap.yx=~暖和
+        => AP(!AP/ap)                                                    /*亮了几下*/
+        || %ap.内部结构=单词|附加,%mp.内部结构=数量,%mp.量词子类=动量,%ap.yx=暖和
+        => VP(!V<have> T<a> AP/ap)                                        /*暖和一下*/
+        || %ap.内部结构=单词|附加,%mp.内部结构=数量|单词,
+           IF %mp.内部结构=数量 THEN %mp.量词子类=不定 ENDIF
+        => AP(T<a> A<little> !AP/ap) %AP.DEGR=COMP                        /*慢了一点 开明一些*/
+        || %ap.内部结构=附加|述补,%mp.量词子类=~不定~动量,
+           IF %ap.内部结构=附加 THEN %ap.附加语.yx=了 ENDIF,
+           IF %ap.内部结构=述补,%ap.补语.内部结构=~单词 THEN %ap.补语.cpcat=~mp ENDIF
+        => AP(!AP/ap P<for> NP/mp)                                        /*干净不了三天*/
+        || %ap.内部结构=单词|附加,%ap.语义类=性能|境况|性质|外形,%mp.量词子类=度量
+        => AP(NP/mp !AP/ap)                                                /*这条鱼重五斤*/
+        || %ap.内部结构=单词|附加,%ap.语义类=性能|境况|性质|外形,%mp.量词子类=时量,%mp.yx=~岁,$!=%ap @主体,$.主体.sem=时间  
+        => AP(AP/ap P<for> NP/mp)                                       /*慢三分钟*/
+        || %ap.内部结构=单词|附加,%ap.语义类=性能|境况|性质|外形,%mp.量词子类=时量,%mp.yx=岁
+        => AP(NP/mp !AP/ap) %AP.DEGR=COMP                               /*小两岁*/
+&& {djnp1} dj->np np :: $.内部结构=主谓,%%np.连接成分=No,$.主语=%np,$.谓语=%%np,            /*~学生还是老师*/
+        IF %np.语气=疑问 THEN $==%np @语气,$.主题成分=%np ENDIF,
+        IF %%np.语气=疑问 THEN $==%%np @语气,$.主题成分=%%np ENDIF,
+        IF %%np.内部结构=单词 THEN %%np.名谓语=Yes ENDIF
+        || %np.内部结构=~单词,%np.语义类=人类|构件|人为事物,%%np.内部结构=~组合定中,%%np.语义类=构件|人为事物
+        => CS(NP/np !VP(!V<have> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER                 /*那个人黄头发*/
+        || %np.内部结构=~单词,%np.语义类=人为事物,%%np.yx=钱
+        => CS(NP/np !VP(!V<cost> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER                 
+        || %np.语义类=人,%%np.ccat=~q,%%np.语义类=人,%%np.定语.cpcat=~sp,%%np.内部结构=单词|粘合定中
+        => CS(NP/np !VP(!V<be> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER          /*小王急性子 ~<我们><班里最快乐的男孩>*/
+        || %np.定语.cpcat=mp,%np.语义类=时间,%%np.定语.cpcat=mp,%%np.语义类=时间
+        => CS(NP/np !VP(!V<be> NP//np)) %NP.RCASE=SUB     /*一个月四个星期*/
+
+    if (featval.find("eid")!=string::npos) {
+      size_t eidpos=featval.find("eid");
+      string eidstr=featval.substr(eidpos+3);
+      int sonid=atoi(eidstr);
+      findedge(sonid,tempedge);
+    }
+/*
+string lianjiechengfen="连接成分";
+string dingyu="定语";
+string binyu="宾语";
+string buyu="补语";
+string fujiayu="附加语";
+string zhuti="主体";
+*/
+    size_t idbpos=swibind.find("{");
+    if (idbpos!=string::npos) {
+      size_t idepos=swibind.find("}",idbpos);
+      edge.swiid=swibind.substr(idbpos+1,idepos-idbpos-1);
+      swibind.replace(idbpos,idepos+1-idbpos,"");
+      //const boost::regex swireg("\\{[A-Z|a-z|0-9]\\}");
+      //swibind= boost::regex_replace(swibind,swireg,"");
+    }
+    /*
+      const boost::sregex_iterator j(temp.begin(),temp.end(),swireg);
+      string swiid=j->str();
+      swiid.replace(0,1,"");
+      swiid.replace(swiid.size()-1,1,"");
+      string swibind= boost::regex_replace(temp,swireg,"");
+    */
+#through: through.cc segment.cc postag.cc parse.cc unity.cc prsrbase.cc chongdie.cc transform.cc agree.cc generate.cc enunity.cc
+#	$(CC) through.cc segment.cc postag.cc parse.cc unity.cc prsrbase.cc chongdie.cc transform.cc agree.cc generate.cc enunity.cc# $(CPPFLAGS) $(LFLAGS) -o through
+
+#g++ -c -I/usr/include/boost-1_33_1/ -o regexp.o regexp.cpp
+
+#g++ -o regexp.exe regexp.o -lboost_program_options-gcc-mt-s -lboost_regex-gcc-mt-s
+
+through.o: through.cc
+	$(CC) $(CPPFLAGS) -c through.cc
+
+dictn.o: dictn.cc
+	$(CC) $(CPPFLAGS) -c dictn.cc
+
+segment.o: segment.cc
+	$(CC) $(CPPFLAGS) -c segment.cc
+
+postag.o: postag.cc
+	$(CC) $(CPPFLAGS) -c postag.cc
+
+parse.o: parse.cc
+	$(CC) $(CPPFLAGS) -c parse.cc
+
+unity.o: unity.cc
+	$(CC) $(CPPFLAGS) -c unity.cc
+
+prsrbase.o: prsrbase.cc
+	$(CC) $(CPPFLAGS) -c prsrbase.cc
+
+chongdie.o: chongdie.cc
+	$(CC) $(CPPFLAGS) -c chongdie.cc
+
+transform.o: transform.cc
+	$(CC) $(CPPFLAGS) -c transform.cc
+
+agree.o: agree.cc
+	$(CC) $(CPPFLAGS) -c agree.cc
+
+generate.o: generate.cc
+	$(CC) $(CPPFLAGS) -c generate.cc
+
+enunity.o: enunity.cc
+	$(CC) $(CPPFLAGS) -c enunity.cc
+
+  int headid=edge.son[edge.head];
+  edgec headedge;
+  findedge(headid,headedge);
+  string hfeat=headedge.bind;
+    
+  vector<string> featset;
+  getabindset(feat,featset);
+  for (vector<string>::iterator i=featset.begin();i!=featset.end();i++) {
+    size_t colonpos=i->find(":");
+    assert(colonpos!=string::npos);
+    string name=i->substr(0,colonpos);
+    string nval=i->substr(colonpos+1);
+    size_t namepos=hfeat.find(","+name+":");
+    if (namepos==string::npos)
+      namepos=hfeat.find("["+name+":");
+    if (namepos!=string::npos) {
+      size_t ocopos=hfeat.find(":",namepos);
+      assert(ocopos!=string::npos);
+      size_t spos=ocopos+1;
+      size_t epos;
+      if (hfeat[spos]!='[') {
+	epos=spos;
+	while ((epos<hfeat.size()) && (hfeat[epos]!=',') && (hfeat[epos]!=']'))
+	  epos++;
+      }
+      else {
+	epos=hfeat.find("]",spos);
+	assert(epos!=string::npos);
+	epos++;
+      }
+      hfeat.replace(spos,epos-spos,nval);
+    }
+    else
+      hfeat.replace(0,1,"["+*i+",");
+  }
+
+  /*
+  size_t zxypos=hfeat.find(zhongxinyu);
+  if (zxypos!=string::npos) {
+    string hcat=edge.cfg.part[edge.head];
+    int rep=1;
+    for (size_t i=0;i<edge.head;i++)
+      if (edge.cfg.part[i]==hcat)
+	rep++;
+    string intro;
+    for (int i=0;i<rep;i++)
+      intro += "%";
+    intro += hcat;
+    size_t colonpos=hfeat.find(":",zxypos);
+    size_t ezxypos=colonpos+1;
+    while ((hfeat[ezxypos]!=',') && (hfeat[ezxypos]!=']'))
+      ezxypos++;
+    hfeat.replace(colonpos+1,ezxypos-colonpos-1,intro);
+  }
+  */
+
+  feat=hfeat;
+	
+  }
+  size_t bfspos=arrowpos+2;
+  while (cfgstr[bfspos]==' ')
+    bfspos++;
+  
+  while (fspos!=string::npos) {
+    if (cfgstr[bfspos]!='!') {
+      cfg.part.push_back(cfgstr.substr(bfspos,fspos-bfspos));
+    }
+    else {
+      head=cfg.part.size();
+      cfg.part.push_back(cfgstr.substr(bfspos+1,fspos-bfspos-1));
+    }
+    bfspos=fspos+1;
+    fspos=cfgstr.find(" ",fspos+1);
+  }
+  size_t idbpos=entry.find("{");
+  size_t idepos=entry.find("}");
+  prsid=entry.substr(idbpos+1,idepos-idbpos-1);
+  size_t bindpos=entry.find("::");
+  size_t swipos=entry.find("||");
+  size_t tranpos=entry.find("=>");
+  string cfgstr=entry.substr(0,min(bindpos,min(swipos,tranpos)));
+  size_t arrowpos=cfgstr.find("->");
+  assert(arrowpos!=string::npos);
+  size_t bspos=cfgstr.rfind(" ",arrowpos);
+  assert(bspos!=string::npos);
+  cfg.reduct=cfgstr.substr(bspos+1,arrowpos-bspos-1);
+  size_t fspos=cfgstr.find(" ",arrowpos);
+  size_t bfspos=arrowpos+2;
+  while (fspos!=string::npos) {
+    if (cfgstr[bfspos]!='!') {
+      cfg.part.push_back(cfgstr.substr(bfspos,fspos-bfspos));
+    }
+    else {
+      head=cfg.part.size();
+      cfg.part.push_back(cfgstr.substr(bfspos+1,fspos-bfspos-1));
+    }
+    bfspos=fspos+1;
+    fspos=cfgstr.find(" ",fspos+1);
+  }
+  
+  if (bindpos!=string::npos) {
+    string bindstr=entry.substr(bindpos,min(swipos,tranpos)-bindpos);
+    size_t bsppos=bindstr.find(" ");
+    size_t esppos=bindstr.find_last_not_of(" ");
+    bind=bindstr.substr(bsppos+1,esppos-bsppos-1);
+  }
+}
+
+  if (sentreg.end-sentreg.begin==2) {
+    if (tags[sentreg.begin].word==tags[sentreg.begin+1].word) {
+      if (
+
+(tags[sentreg.begin].cat=="a") && 
+	  (tags[sentreg.begin+1].cat=="a"))
+	featval="AA";
+      else if ((tags[sentreg.begin].cat=="d") && 
+	       (tags[sentreg.begin+1].cat=="d"))
+	featval="DD";
+      else if ((tags[sentreg.begin].cat=="v") && 
+	       (tags[sentreg.begin+1].cat=="v"))
+	featval="VV";
+    }
+    else if ((tags[sentreg.begin].cat=="r") && 
+	     (tags[sentreg.begin+1].word==liang))
+      featval="R俩";
+    else if ((tags[sentreg.begin].cat=="n") && 
+	     (tags[sentreg.begin+1].word==er))
+      featval="N儿";
+  }
+  else if (sentreg.end-sentreg.begin==3) {
+    if ((tags[sentreg.begin].cat=="v") && (tags[sentreg.begin+2].cat=="v") && (tags[sentreg.begin+1].word==le))
+      featval="V了V";
+    else if ((tags[sentreg.begin].cat=="v") && (tags[sentreg.begin+2].cat=="v") && (tags[sentreg.begin+1].word==yi))
+      featval="V一V";
+    else if ((tags[sentreg.begin].cat=="v") && (tags[sentreg.begin+2].cat=="n") && (tags[sentreg.begin+1].word==le))
+      featval="V了N";
+    else if ((tags[sentreg.begin].cat=="v") && (tags[sentreg.begin+1].cat=="v") && (tags[sentreg.begin+2].cat=="n"))
+      featval="VVN";
+    else if ((tags[sentreg.begin].cat=="v") && (tags[sentreg.begin+2].cat=="n") && (tags[sentreg.begin+1].word==guo))
+      featval="V过N";
+    else if ((tags[sentreg.begin].cat=="m") && 
+	     (tags[sentreg.begin+1].cat=="n") && 
+	     (tags[sentreg.begin+2].word==er))
+      featval="NM儿";
+  }
+  else if (sentreg.end-sentreg.begin==4) {
+    if ((tags[sentreg.begin].cat=="a") && 
+	(tags[sentreg.begin+1].cat=="a") && 
+	(tags[sentreg.begin+2].cat=="a") && 
+	(tags[sentreg.begin+3].cat=="a") &&
+	(tags[sentreg.begin].word==tags[sentreg.begin+1].word) &&
+	(tags[sentreg.begin+2].word==tags[sentreg.begin+3].word))
+      featval="AABB";
+    else if ((tags[sentreg.begin].cat=="a") && 
+	     (tags[sentreg.begin+1].cat=="a") && 
+	     (tags[sentreg.begin+2].cat=="a") && 
+	     (tags[sentreg.begin+3].cat=="a") &&
+	     (tags[sentreg.begin].word==tags[sentreg.begin+2].word) &&
+	     (tags[sentreg.begin+1].word==tags[sentreg.begin+3].word))   
+      featval="ABAB";
+    else if ((tags[sentreg.begin].cat=="u") && 
+	     (tags[sentreg.begin+2].cat=="u") &&
+	     (tags[sentreg.begin+1].cat=="v") && 
+	     (tags[sentreg.begin+3].cat=="v") &&
+	     (tags[sentreg.begin].word==tags[sentreg.begin+2].word) &&
+	     (tags[sentreg.begin+1].word==tags[sentreg.begin+3].word))   
+      featval="UVUV";
+    else if ((tags[sentreg.begin].cat=="v") &&
+	     (tags[sentreg.begin+1].word==le) &&
+	     (tags[sentreg.begin+2].word==yi) &&
+	     (tags[sentreg.begin+3].cat=="n"))
+      featval="V了一N";
+    else if ((tags[sentreg.begin].cat=="v") &&
+	     (tags[sentreg.begin+1].word==guo) &&
+	     (tags[sentreg.begin+2].word==yi) &&
+	     (tags[sentreg.begin+3].cat=="n"))
+      featval="V过一N";
+    else if ((tags[sentreg.begin].cat=="v") &&
+	     (tags[sentreg.begin+1].word==bu) &&
+	     (tags[sentreg.begin+2].word==le) &&
+	     (tags[sentreg.begin+3].cat=="n"))
+      featval="V不了N";
+  }
+}
+    size_t pos=dictn.find(word);
+    assert(pos!=string::npos);
+    size_t pos2=dictn.find("**",pos);
+    assert(pos2!=string::npos);
+    size_t idbpos=dictn.find("{",pos2);
+    size_t idepos=dictn.find("}",pos2);
+    string catid=dictn.substr(idbpos+1,idepos-idbpos-1);
+    size_t pos3=dictn.find(" ",pos2);
+    assert(pos3!=string::npos);
+    size_t pos4=dictn.find(" ",pos3+1);
+    assert(pos4!=string::npos);
+    size_t pos5=dictn.find("$=[",pos4);
+    assert(pos5!=string::npos);
+    size_t pos6=dictn.find(" ",pos5);
+    size_t pos7=dictn.find("=>",pos5);
+    size_t pos8=dictn.find("||",pos5);
+
+    tagc tag;
+    tag.word=*i;
+    tag.cat=dictn.substr(pos3+1,pos4-pos3-1);
+    tag.catid=catid;
+    tag.feat=dictn.substr(pos5+2,min(pos6,min(pos7,pos8))-pos5-2);
+    tags.push_back(tag);
+
+  /*
+  string temptype;
+  string remain=featname;
+  string tempval=ce.bind;
+  edgec tempedge=ce;
+  while (!remain.empty()) {
+    string temprem;
+    string tempname;
+    size_t pos=0;
+    while ((pos<remain.size()) && (remain[pos]!='.'))
+      pos++;
+    if (remain[pos]=='.') {
+      tempname=remain.substr(0,pos);
+      assert(pos+1<remain.size());
+      temprem=remain.substr(pos+1);
+    }
+    else {
+      tempname=remain;
+      temprem="";
+    }
+
+    string tempfeat;
+    tempfeat=tempval;
+    tempval="";
+    basfeatval(tags,tempedge,tempfeat,tempname,tempval,temptype,valset);
+    if (tempval[0]!='%') {
+      edgec nulle;
+      tempedge=nulle;
+    }
+    else {
+      int sonid=findsonid(tempedge,tempval);
+      edgec sonedge;
+      findedge(sonid,sonedge);
+      tempfeat=sonedge.bind;
+      tempedge=sonedge;
+    }
+    remain=temprem;
+  }
+  featval=tempval;
+  valtype=temptype;
+  */
+  
+
+  string remain=featname;
+  edgec tempedge=ce;
+  while (!remain.empty()) {
+    v
+    string tempname;
+    size_t pos=0;
+    while ((pos<remain.size()) && (remain[pos]!='.'))
+      pos++;
+    if (remain[pos]=='.') {
+      tempname=remain.substr(0,pos);
+      assert(pos+1<remain.size());
+      remain=remain.substr(pos+1);
+    }
+    else {
+      tempname=remain;
+      remain="";
+    }
+
+    else if (
+    else {
+      string lfname,lfval;
+      string lvaltype;
+      vector< vector<string> > lvalset;
+      if (lval.find(percat)!=string::npos) {
+	string temp=lval.substr(percat.size());
+	removespace(temp,lfname);
+	enfindfeatval(tags,ce,lfname,lfval,lvaltype,lvalset);
+      }
+      else
+	lfval=lval;
+      string rfname,rfval;
+      string rvaltype;
+      vector< vector<string> > rvalset;
+      if (rval.find(percat)!=string::npos) {
+	string temp=rval.substr(percat.size());
+	removespace(temp,rfname);
+	enfindfeatval(tags,ce,rfname,rfval,rvaltype,rvalset);
+      }
+      else
+	rfval=rval;
+      uresultc res;
+      if (!lvaltype.empty())
+	res=valunity(lfval,rfval,lvaltype,opera,lvalset);
+      else
+	res=valunity(lfval,rfval,rvaltype,opera,rvalset);
+      if (res==WAIT)
+	nbind=lfval+opera+rfval+",";
+      return(res);
+    }
+  /*
+  size_t bpos=0;
+  size_t commapos=bind.find(",");
+  while (commapos!=string::npos) {
+    string temp=bind.substr(bpos,commapos-bpos);
+    string ntemp;
+    removespace(temp,ntemp);
+    if (!ntemp.empty())
+      bindset.push_back(ntemp);
+    bpos=commapos+1;
+    commapos=bind.find(",",bpos);
+  }
+  if (bind.substr(bpos).find("=")!=string::npos) {
+    string temp=bind.substr(bpos);
+    string ntemp;
+    removespace(temp,ntemp);
+    if (!ntemp.empty())
+      bindset.push_back(ntemp);
+  }
+  */
+      /*
+      size_t sonno;
+      size_t percpos=1;
+      while (tempval[percpos]=='%') 
+	percpos++;
+      string syncat=tempval.substr(percpos);
+      for (vector<string>::iterator i=tempedge.cfg.part.begin();i!=tempedge.cfg.part.end();i++) {
+	if (*i==syncat)
+	  percpos--;
+	if (percpos==0) {
+	  sonno=i-tempedge.cfg.part.begin();
+	  break;
+	}
+      }
+      int sonid=ce.son[sonno];
+      */
+
+    /*
+    // one unity %a=%b form
+    int repeat=1;
+    for (size_t i=0;i<loc;i++) {
+      if (cfg.part[i]==cfg.part[loc])
+	repeat++;
+    }
+    string intro;
+    for (int i=0;i<repeat;i++)
+      intro += "%";
+    intro += cfg.part[loc]+".";
+    
+    size_t intropos=bind.find(intro);
+    if (intropos==string::npos) {
+      if (bind.empty())
+	return(SUCC);
+      else {
+	nbind=bind+",";
+	return(WAIT);
+      }
+    }
+    else {
+      string valtype;
+      string featval;
+      vector< vector<string> > valset;
+      size_t snpos=intropos+intro.size();
+      size_t enpos=snpos;
+      while ((enpos<bind.size()) && 
+	     (bind[enpos]!='=') && 
+	     (bind[enpos]!='!'))
+	enpos++;
+      string featname=bind.substr(snpos,enpos-snpos);
+      string temp;
+      removespace(featname,temp);
+      featname=temp;
+      findfeatval(tags,ce,featname,featval,valtype,valset);
+      size_t equpos=bind.find("=");
+      size_t notpos=bind.find("!");
+      size_t soppos=min(equpos,notpos);
+      size_t eoppos=soppos;
+      while ((bind[eoppos]=='!') || (bind[eoppos]=='='))
+	eoppos++;
+      string opera=bind.substr(soppos,eoppos-soppos);
+      string bindval;
+      if (intropos<equpos)
+	bindval=bind.substr(eoppos);
+      else
+	bindval=bind.substr(0,soppos);
+      uresultc res=valunity(featval,bindval,valtype,opera,valset);
+      if (res==WAIT) {
+	if (intropos<equpos)
+	  nbind=featval+opera+bindval+",";
+	else
+	  nbind=bindval+opera+featval+",";
+      }
+      return(res);
+    }
+    */
+void entransition(edgec & edge, string & feat)
+{
+  string nfeat;
+  vector<string> bindset;
+  getbindset(edge.bind,bindset);
+  for (vector<string>::iterator i=bindset.begin();i!=bindset.end();i++) {
+    string nafeat;
+    if (i->find("@")!=string::npos) {
+      vector<string> atset;
+      getatset((*i),atset);
+      string opera;
+      string lfeat;
+      string rfeat;
+      getopeval((*i),lfeat,opera,rfeat);
+      for (vector<string>::iterator i=atset.begin();i!=atset.end();i++) {
+	string atbind=lfeat+"."+*i+opera+rfeat+"."+*i;
+	basentran(edge,atbind,nafeat);
+	if (!nafeat.empty()) 
+	  nfeat+=nafeat+",";
+      }
+    }
+    else {
+      basentran(edge,*i,nafeat);
+      if (!nafeat.empty())
+	nfeat+=nafeat+",";
+    }
+  }
+  feat=nfeat;
+}
+
+void basentran(edgec & edge, string & bind, string & feat)
+{
+  string lval,opera,rval;
+  getopeval(bind,lval,opera,rval);
+  string colon;
+  operatran(opera,colon);
+  if (lval.find("$.")!=string::npos)
+    feat=lval.substr(2)+colon+rval;
+  else if ((lval[0]=='%') && (lval.find(".")!=string::npos)) {
+    size_t dotpos=lval.find(".");
+    string sonnota=lval.substr(0,dotpos);
+    int sonid=findsonid(edge,sonnota);
+    for (vector<edgec>::iterator i=enchart.begin();i!=enchart.end();i++) {
+      if (sonid==i->id) {
+	i->bind += lval.substr(dotpos+1)+colon+rval;
+	break;
+      }
+    }
+  }
+}
+
+/*
+{
+      string afeat=i->substr(2);
+      size_t eqpos=afeat.find("=");
+      if (afeat[eqpos-1]=='!')
+	afeat.replace(eqpos-1,2,":~");
+      else if (afeat[eqpos+1]=='=')
+	afeat.replace(eqpos,2,":");
+      else
+	afeat.replace(eqpos,1,":");
+    }
+    else if ((*i)[0]=='%') {
+      int repeat=1;
+      size_t bpos=1;
+      while ((*i)[bpos]=='%')
+	bpos++;
+    }
+    else 
+      ;
+    feat += afeat+",";
+  }
+}
+*/
+
+void entransition(edgec & edge, edgec & nedge)
+{
+
+  string feat=edge.bind;
+  size_t intropos=feat.find("$.");
+  while (intropos!=string::npos) {
+    feat.replace(intropos,2,"");
+    intropos=feat.find("$.");
+  }
+  size_t eqpos=feat.find("=");
+  while (eqpos!=string::npos) {
+    if (feat[eqpos-1]=='!')
+      feat.replace(eqpos-1,2,":~");
+    else if (feat[eqpos+1]=='=')
+      feat.replace(eqpos,2,":");
+    else
+      feat.replace(eqpos,1,":");
+    eqpos=feat.find("=");
+  }
+  entransmit(edge,feat);
+  nedge=edge;
+  nedge.bind=feat;
+}
+
+void entransmit(edgec & edge, string & feat)
+{
+  assert(edge.head<edge.son.size());
+  int headid=edge.son[edge.head];
+  edgec headedge;
+  enfindedge(headid,headedge);
+  string hfeat=headedge.bind;
+
+  vector<string> featset;
+  size_t bpos=0;
+  size_t commapos=feat.find(",");
+  while (commapos!=string::npos) {
+    featset.push_back(feat.substr(bpos,commapos-bpos));
+    bpos=commapos+1;
+    commapos=feat.find(",",bpos);
+  }
+  if (feat.substr(bpos).find(":")!=string::npos) {
+    featset.push_back(feat.substr(bpos));
+  }
+
+  for (vector<string>::iterator i=featset.begin();i!=featset.end();i++) {
+    size_t colonpos=i->find(":");
+    assert(colonpos!=string::npos);
+    string name=i->substr(0,colonpos);
+    string nval=i->substr(colonpos+1);
+    size_t namepos=hfeat.find(name);
+    if (namepos!=string::npos) {
+      size_t ocopos=hfeat.find(":",namepos);
+      assert(ocopos!=string::npos);
+      size_t spos=ocopos+1;
+      size_t epos;
+      if (hfeat[spos]!='[') {
+	epos=spos;
+	while ((epos<hfeat.size()) && (hfeat[epos]!=',') && (hfeat[epos]!=']'))
+	  epos++;
+      }
+      else {
+	epos=hfeat.find("]",spos);
+	assert(epos!=string::npos);
+	epos++;
+      }
+      hfeat.replace(spos,epos-spos,nval);
+    }
+    else
+      hfeat.replace(0,1,"["+*i+",");
+  }
+
+  size_t zxypos=hfeat.find(zhongxinyu);
+  if (zxypos!=string::npos) {
+    string hcat=edge.cfg.part[edge.head];
+    int rep=1;
+    for (size_t i=0;i<edge.head;i++)
+      if (edge.cfg.part[i]==hcat)
+	rep++;
+    string intro;
+    for (int i=0;i<rep;i++)
+      intro += "%";
+    intro += hcat;
+    size_t colonpos=hfeat.find(":",zxypos);
+    size_t ezxypos=colonpos+1;
+    while ((hfeat[ezxypos]!=',') && (hfeat[ezxypos]!=']'))
+      ezxypos++;
+    hfeat.replace(colonpos+1,ezxypos-colonpos-1,intro);
+  }
+
+  feat=hfeat;
+}
+
+  for (vector<edgec>::iterator i=enchart.begin();i!=enchart.end();i++) {
+    printtrans(*i);
+    cout << endl;
+  }
+void seekfeatval(vector<tagc> & tags, edgec & edge, string & featname, string & featval, string & valtype, vector< vector<string> > & valset)
+{
+  string remain=featname;
+  string tempval=ce.bind;
+  edgec tempedge=edge;
+  string temptype;
+  while (!remain.empty()) {
+    string temprem;
+    string tempname;
+    size_t pos=0;
+    while ((pos<remain.size()) && (remain[pos]!='.'))
+      pos++;
+    if (remain[pos]=='.') {
+      tempname=remain.substr(0,pos);
+      assert(pos+1<remain.size());
+      temprem=remain.substr(pos+1);
+    }
+    else {
+      tempname=remain;
+      temprem="";
+    }
+
+    string tempfeat;
+    tempfeat=tempval;
+    tempval="";
+    basseekval(tags,tempedge,tempfeat,tempname,tempval,temptype,valset);
+    if (tempval[0]!='%') {
+      edgec nulle;
+      tempedge=nulle;
+    }
+    else {
+      size_t sonno;
+      size_t percpos=1;
+      while (tempval[percpos]=='%') 
+	percpos++;
+      string syncat=tempval.substr(percpos);
+      for (vector<string>::iterator i=tempedge.cfg.part.begin();i!=tempedge.cfg.part.end();i++) {
+	if (*i==syncat)
+	  percpos--;
+	if (percpos==0) {
+	  sonno=i-tempedge.cfg.part.begin();
+	  break;
+	}
+      }
+      int sonid=ce.son[sonno];
+      edgec sonedge;
+      findedge(sonid,sonedge);
+      tempfeat=sonedge.bind;
+      tempedge=sonedge;
+    }
+    remain=temprem;
+  }
+  featval=tempval;
+  valtype=temptype;
+}
+
+void basseekval(vector<tagc> & tags, edgec & edge, string & feat, string & featname, string & featval, string & valtype, vector< vector<string> > & valset)
+{
+  string defval;
+  if (featname==hanzi) {
+    valtype="Symbol";
+    featval=edge.cfg.part.front();
+  }
+  else if (featname=="yx") {
+    valtype="Symbol";
+    if (!edge.cfg.reduct.empty()) {
+      for (size_t i=edge.sentreg.begin;i!=edge.sentreg.end;i++)
+	featval += tags[i].word;
+    }
+    else
+      featval="";
+  }
+  else if (featname==chongdie) {
+    valtype="Symbol";
+    procchongdie(tags,edge.sentreg,featval);
+  }
+  else if (featname==yuyilei) {
+    valtype="Hierar";
+    size_t featpos=feat.find(featname);
+    if (featpos!=string::npos) {
+      size_t colonpos=feat.find(":",featpos);
+      assert(colonpos!=string::npos);
+      size_t commapos=feat.find(",",featpos);
+      size_t braktpos=feat.find("]",featpos);
+      featval=feat.substr(colonpos+1,min(commapos,braktpos)-colonpos-1);
+    }
+    else
+      featval="";
+  }
+  else if (featname=="ccat") {
+    valtype="Symbol";
+    findccat(edge,featval);
+  }
+  else if (featname=="cpcat") {
+    valtype="Symbol";
+    featval=edge.cfg.reduct;
+  }
+  else if (jufachengfen.find(featname)!=string::npos) {
+    valtype="jufachengfen";
+    size_t featpos=feat.find(featname);
+    if (featpos!=string::npos) {
+      size_t colonpos=feat.find(":",featpos);
+      assert(colonpos!=string::npos);
+      size_t commapos=feat.find(",",featpos);
+      size_t braktpos=feat.find("]",featpos);
+      featval=feat.substr(colonpos+1,min(commapos,braktpos)-colonpos-1);
+    }
+    else 
+      featval="";
+  }
+  else if (featname==yinjie) {
+    valtype="Number";
+    if (!edge.cfg.reduct.empty()) {
+      int wl=0;
+      for (size_t i=edge.sentreg.begin;i!=edge.sentreg.end;i++)
+	wl += tags[i].word.size();
+      stringstream temp;
+      temp << wl/2;
+      featval=temp.str();
+    }
+    else
+      featval="0";
+  }
+  else {
+    checkmodel(featname,valtype,defval,valset);
+    bool found=getfeatval(feat,featname,featval);
+    while (!found) {
+      edgec fedge;
+      findedge(edge.father,fedge);
+      found=getfeatval(fedge.feat,featname,featval);
+    }
+    if (!found)
+      featval=defval;
+  }
+}
+
+void recurtransform(vector<tagc> & tags, edgec & edge, string & redcat, vector<edgec> & enedges)
+{
+  if (ispos(edge.cfg.reduct)) { // edge no son, check dictn
+    string entry;
+    getentry(edge.cfg.part.front(),entry);
+    string catentry;
+    getcatentry(edge.prsid,entry,catentry);
+    string tranentry;
+    gettranentry(edge,catentry,tranentry);
+    createedge(edge,tranentry,enedges);
+  }
+  else { // edge has son, check prsrbase
+    string rule;
+    getrule(edge.prsid,rule);
+    string tranentry;
+    gettranentry(edge,rule,tranentry);
+
+    vector<string> swiset;
+    getswiset(rule,swiset);
+    for (vector<string>::iterator i=swiset.begin();i!=swiset.end();i++) {
+      string swibind;
+      string tranentry;
+      separate(*i,swibind,tranentry);
+      if (agree(swibind,edge)) {
+	string trancfg;
+	string tranbind;
+	sepatranentry(tranentry,trancfg,tranbind);
+	string enred;
+	vector<string> itemset;
+	getitemset(trancfg,enred,itemset);
+	for (vector<string>::iterator i=itemset.begin();i!=itemset.end();i++) {
+	  edgec sone;
+	  string encat;
+	  getsonecat(edge,(*i),sone,encat);
+	  vector<edgec> sonedges;
+	  recurtransform(tags,sone,encat,sonedges);
+	  addtoenchart(enchart,sonedges);
+	}
+	edgec enedge;
+	getenedge(edge,enred,itemset,tranbind,enedge);
+	parseonerule(enedge,enchart,enedges);
+      }
+    }
+  }
+}
+
+void gettranset(string & entry, vector<string> & transet)
+{
+  size_t bpos=entry.find("=>");
+  if (bpos!=string::npos) {
+    size_t epos=entry.find("=>",bpos+2);
+    while (bpos!=string::npos) {
+      string tran=entry.substr(bpos+2,epos-bpos-2);
+      transet.push_back(tran);
+      bpos=epos;
+      epos=entry.find("=>",bpos+2);
+    }
+  }
+}
+
+void getswiset(string & entry, vector<string> & swiset)
+{
+  size_t bpos=entry.find("||");
+  if (bpos!=string::npos) {
+    size_t epos=entry.find("||",bpos+2);
+    while (bpos!=string::npos) {
+      string swi=entry.substr(bpos+2,epos-bpos-2);
+      swiset.push_back(swi);
+      bpos=epos;
+      epos=entry.find("||",bpos+2);
+    }
+  }
+}
+
+void addtoagenda(queue<edgec> & agenda, edgec & edge)
+{
+  for (queue<edgec>::iterator i=agenda.front();i!=agenda.back();i++) {
+    if ((i->dotreg.end==edge.dotreg.end) && (i->bind==edge.bind))
+      return;
+  }
+  agenda.push(edge);
+}
+
+void transform(vector<tagc> & tags, edgec & edge, edgec & enedge)
+{
+  size_t prspos=prsrbase.find("{"+edge.prsid+"}");
+  if (prspos==string::npos) {
+    enedge.id=eeid++;
+    enedge.cfg=edge.cfg;
+    enchart.push_back(enedge);
+  }
+  else {
+    size_t endpos=prsrbase.find("&&",prspos+3);
+    string prsbuf=prsrbase.substr(prspos,endpos-prspos);
+    size_t swipos=prsbuf.find("||");
+    while (swipos!=string::npos) {
+      size_t tranpos=prsbuf.find("=>",swipos);
+      string temp=prsbuf.substr(swipos+2,tranpos-swipos-2);
+      string swibind;
+      removespace(temp,swibind);
+      uresultc res=checkswitch(tags,edge,swibind);
+      if (res==SUCC) {
+	size_t mpos=tranpos+2;
+	while (prsbuf[mpos]==' ')
+	  mpos++;
+	string temp=prsbuf.substr(mpos);
+	string tranrule;
+	string rem;
+	getoneunit(temp,tranrule,rem);
+	size_t lbpos=tranrule.find("(");
+	if (lbpos!=string::npos) {
+	  enedge.id=eeid++;
+	  enedge.cfg.reduct=tranrule.substr(0,lbpos);
+	  size_t rbpos=tranrule.rfind(")");
+	  assert(rbpos!=string::npos);
+	  string remain=tranrule.substr(lbpos+1,rbpos-lbpos-1);
+	  string onetran;
+	  while (!remain.empty()) {
+	    string temp=remain;
+	    getoneunit(temp,onetran,remain);
+	    size_t trpos=onetran.find("/");
+	    if (trpos!=string::npos) {
+	      int repeat=1;
+	      size_t mpos=trpos+1;
+	      while (onetran[mpos]=='/') {
+		repeat++;
+		mpos++;
+	      }
+	      string encat=onetran.substr(0,trpos);
+	      string chcat=onetran.substr(mpos);
+	      int sonno;
+	      for (vector<string>::iterator i=edge.cfg.part.begin();i!=edge.cfg.part.end();i++) {
+		if (chcat==(*i))
+		  repeat--;
+		if (repeat==0) {
+		  sonno=i-edge.cfg.part.begin();
+		  break;
+		}
+	      }
+	      edgec sone;
+	      edgec esone;
+	      findedge(edge.son[sonno],sone);
+	      transform(tags,sone,esone);
+	      enedge.son.push_back(esone.id);
+	    }
+	    else {
+	      string encat;
+	      string enword;
+	      size_t langpos=onetran.find("<");
+	      if (langpos!=string::npos) {
+		size_t rangpos=onetran.find(">");
+		encat=onetran.substr(0,langpos);
+		enword=onetran.substr(langpos+1,rangpos-langpos-1);
+	      }
+	      else
+		encat=onetran;
+	      edgec esone;
+	      esone.id=eeid++;
+	      esone.cfg.reduct=encat;
+	      esone.cfg.part.push_back(enword);
+	      enchart.push_back(esone);
+	      enedge.son.push_back(esone.id);
+	    }
+	    tranrule=remain;
+	  }
+	  enchart.push_back(enedge);
+	}
+	else {
+	  cout << "here2";
+	}
+	break;
+      }
+      else 
+	swipos=prsbuf.find("||",tranpos);
+    }
+  }
+}
+
+void getoneunit(string & bigunit, string & subunit, string & rem)
+{
+  size_t mpos=0;
+  int branum=0;
+  while (mpos<bigunit.size()) {
+    if ((bigunit[mpos]==' ') &&  (branum==0))
+      break;
+    if (bigunit[mpos]=='(')
+      branum++;
+    else if (bigunit[mpos]==')')
+      branum--;
+    mpos++;
+  }
+  subunit=bigunit.substr(0,mpos);
+  while (bigunit[mpos]==' ')
+    mpos++;
+  rem=bigunit.substr(mpos);
+}
+
+uresultc checkswitch(vector<tagc> & tags, edgec & edge, string & bind)
+{
+  edgec ice=edge;
+  ice.bind=bind;
+  size_t loc=0;
+  while (loc<ice.cfg.part.size()) {
+    ice.dotreg.end=loc;
+    edgec ce;
+    findedge(ice.son[loc],ce);
+    string nbind;
+    if (unity(tags,ice,loc,ce,nbind)==FAIL)
+      return(FAIL);
+    else {
+      loc++;
+      ice.bind=nbind;
+    }
+  }
+  assert(ice.bind.empty());
+  return(SUCC);
+}
+
+void printentree(edgec & enedge)
+{
+  cout << enedge.cfg.reduct << " [ ";
+  if (!enedge.son.empty()) {
+    for (vector<int>::iterator i=enedge.son.begin();i!=enedge.son.end();i++) {
+      edgec sone=enchart[*i];
+      printentree(sone);
+    }
+  }
+  else
+    cout << enedge.cfg.part.front();
+  cout << " ] ";
+}
+
+void addincompchart(edgec & edge)
+{
+  incompchart[edge.sentreg.begin][edge.sentreg.end].push_back(edge);
+  incedgeidx.insert(pair<int,regionc>(edge.id,edge.sentreg));
+}
+
+void addcompchart(edgec & edge)
+{
+  // edge.bind change from $.name=val to name:val
+  /*
+  if (!ispos(edge.cfg.reduct)) {
+    string feat=edge.bind;
+    size_t intropos=feat.find("$.");
+    while (intropos!=string::npos) {
+      feat.replace(intropos,2,"");
+      intropos=feat.find("$.");
+    }
+    size_t eqpos=feat.find("=");
+    while (eqpos!=string::npos) {
+      feat.replace(eqpos,1,":");
+      eqpos=feat.find("=");
+    }
+    transmit(edge,feat);
+    edgec newedge=edge;
+    newedge.bind=feat;
+     compchart[edge.sentreg.begin][edge.sentreg.end].push_back(newedge);
+  }
+  else
+  */
+    compchart[edge.sentreg.begin][edge.sentreg.end].push_back(edge);
+  comedgeidx.insert(pair<int,regionc>(edge.id,edge.sentreg));
+}
+
+    if (tempval[0]!='%') {
+      tempfeat=tempval;
+      basfeatval(tags,tempedge,tempfeat,tempname,tempval,temptype,valset);
+    }
+    else {
+      size_t sonno;
+      size_t percpos=1;
+      while (tempval[percpos]=='%') 
+	percpos++;
+      string syncat=tempval.substr(percpos);
+      for (vector<string>::iterator i=tempedge.cfg.part.begin();i!=tempedge.cfg.part.end();i++) {
+	if (*i==syncat)
+	  percpos--;
+	if (percpos==0) {
+	  sonno=i-tempedge.cfg.part.begin();
+	  break;
+	}
+      }
+      int sonid=ce.son[sonno];
+      edgec sonedge;
+      findedge(sonid,sonedge);
+      tempfeat=sonedge.bind;
+      basfeatval(tags,sonedge,tempfeat,tempname,tempval,temptype,valset);
+      tempedge=sonedge;
+    }
+  map<int,regionc>::iterator i=edgeidx.find(headid);
+  assert(i!=edgeidx.end());
+  for (vector<edgec>::iterator j=compchart[i->second.begin][i->second.end].begin(); j!=compchart[i->second.begin][i->second.end].end(); j++) {
+    if (j->id==headid) {
+      feat += j->bind;
+      return;
+    }
+  }
+  assert(false);
+
+void findhead(edgec & edge, edgec & headedge)
+{
+  assert(edge.head<edge.son.size());
+  int headid=edge.son[edge.head];
+  map<int,regionc>::iterator i=edgeidx.find(headid);
+  assert(i!=edgeidx.end());
+  for (vector<edgec>::iterator j=compchart[i->second.begin][i->second.end].begin(); j!=compchart[i->second.begin][i->second.end].end(); j++) {
+    if (j->id==headid) {
+      headedge=(*j);
+      return;
+    }
+  }
+  assert(false);
+}
+
+
+
+  /*
+      if (featname.find(".")==string::npos)
+      findfeatval(tags,ce,featname,featval,valtype);
+    else {
+      size_t dotpos=featname.find(".");
+      string tmpname=featname.substr(0,dotpos);
+      string tmpval;
+      string tmptype;
+      findfeatval(tags,ce,tmpname,tmpval,tmptype);
+    }
+  */
+
+      cout << edge.id << " " << edge.cfg.reduct << "->";
+      for (vector<string>::iterator j=edge.cfg.part.begin(); j!=edge.cfg.part.end(); j++)
+	cout << *j << " ";
+      cout << endl;
+      cout << i->id << " " << i->dotreg.end << " " << i->cfg.part.size() << endl;
+
+    size_t equpos=bind.find("=",intropos);
+    size_t notpos=bind.find("!",intropos);
+    string featname=bind.substr(intropos+intro.size(),min(equpos,notpos)-intropos-intro.size());
+
+  
+  
+
+  size_t tbpos=model.find_first_not_of(' ',colonpos+1);
+  size_t lbraktpos=model.find("{",tbpos);
+  size_t ebpos=lbraktpos-1;
+  while (isspace(model[ebpos]))
+    ebpos--;
+  valtype=model.substr(tbpos,ebpos-tbpos+1);
+  size_t rbraktpos=model.find("}",lbraktpos);
+  size_t ncolpos=model.find(":",rbraktpos);
+  string defbuf=model.substr(rbraktpos+1,ncolpos-rbraktpos-1);
+  size_t defpos=defbuf.find("Default=");
+  if (defpos!=string::npos) {
+    size_t vspos=defpos+8;
+    size_t vepos=defpos+8;
+    while (!isspace(defbuf[vepos]))
+      vepos++;
+    defval=defbuf.substr(vspos,vepos-vspos);
+  }
+  string val=model.substr(lbraktpos+1,rbraktpos-lbraktpos-1);
+  commavalset(val,valset);
+/*
+class incompedgec {
+public:
+  int id;
+  cfgc cfg;
+  size_t head;
+  string bind;
+  region dotreg;
+  vector<int> son;
+};
+
+class compedgec {
+public:
+  int id;
+  cfgc cfg; 
+  size_t head;
+  string feat;
+  vector<int> son;
+};
+*/
+
+  size_t bpos=val.find_first_not_of(' ');
+  size_t epos=val.find(' ',bpos);
+  nval=val.substr(bpos,epos-bpos);
+
+
+
+    string lv=lval;
+    string rv=rval;
+    if ((lv=="YES") or (lv=="是"))
+      lv="Yes";
+    if ((rv=="YES") or (rv=="是"))
+      rv="Yes";
+    if ((lv=="NO") or (lv=="否"))
+      lv="No";
+    if ((rv=="NO") or (rv=="否"))
+      rv="No";
+    if (lv==rv)
+      return(SUCC);
+    else
+      return(FAIL);
+  vector<string> bindset;
+  size_t commapos=bind.find(",");
+  if (commapos!=string::npos) {
+    size_t bpos=0;
+    while (commapos!=string::npos) {
+      bindset.push_back(bpos,commapos-bpos);
+      bpos=commapos+1;
+      commapos=bind.find(",",bpos);
+    }
+  }
+  else 
+    bindset.push_back(bind);
+uresultc notunity(uresultc ures)
+{
+  if (ures==SUCC)
+    return(FAIL);
+  else if (ures==FAIL)
+    return(SUCC);
+  else
+    return(WAIT);
+}
+/*
+uresult sigunion(sigbindc sigbind, featc feat, bindc & nsbind)
+{
+  uresult res;
+  if (sigbind is common) {
+    basbindc bbind=sigbind;
+    res=basicunion(bbind,feat,nsbind);
+  }
+  else if (sigbind is IF <bind> TRUE) {
+    extract(sigbind,bind);
+    res=union(bind,feat,nsbind);
+  } 
+  else if (sigbind is IF <bind> FALSE) {
+    extract(sigbind,bind);
+    res=union(!bind,feat,nsbind);
+  }
+  else if (sigbind is IF <bind1> THEN <bind2> ENDIF) {
+    extract(sigbind,bind1,bind2);
+    res=union(!bind1 or bind2,feat,nsbind);
+  }
+  else if (sigbind is IF <bind1> ELSE <bind2> ENDIF) {
+    extract(sigbind,bind1,bind2);
+    res=union(bind1 or bind2,feat,nsbind);
+  }
+  else if (sigbind is IF <bind1> THEN <bind2> ELSE <bind3> ENDIF) {
+    extract(sigbind,bind1,bind2,bind3);
+    res=union(((!bind1 or bind2) and (bind1 or bind3)),feat,nsbind);
+  }
+  return(res);
+}
+
+uresult basunion(basbindc bbind, featc feat, bindc & nsbind)
+{
+  // bbind的形式是 %1.属性名=属性值，当前part（或component）用%%表示，
+  // 将bbind根据等号分成两部分，如果是属性值（查model可知），则不变，
+  // 如果有%出现，则后面一定是属性名，如果是%%，则在feat中查相关属性名，
+  // feat的形式是 属性名：属性值，得到对应的属性值。如果不是%%，则说明要等待
+  // 后续的part的属性集。
+  
+  separate(bbind,left,right,oper);
+  replace(left,feat,nleft);
+  replace(right,feat,nright);
+  if (nleft和nright都是原子属性值) {
+    nsbind=NULL;
+    res=valunion(nleft,nright,oper);
+    return(res);
+  }
+  else {
+    nsbind="nleft=nright";
+    return(WAIT);
+  }
+} 
+
+uresult valunion(featvalc val1, featvalc val2,oper)
+{
+  //
+}
+*/
+  return(SUCC);
+  /*
+  bool retval=SUCC;
+  for (each sigbind in bind) {
+    bool res=sigunion(sigbind,feat,nsbind);
+    if (res==FAIL) 
+      return(FAIL);
+    else if (res==WAIT) {
+      nbind += nsbind;
+      retval=WAIT;
+    }
+  }
+  return(retval);
+  */
+  string intro="%"+cfg.part[loc]+".";
+  pos=bind.find(intro);
+  while (pos!=string::npos) {
+    
+  }
+  
+typedef string bindc;
+typedef string sigbindc;
+typedef string basbindc;
+
+void initialize(vector<tagc> & tags)
+{
+  // initialize matrix structure of chart (incompchart and compchart)
+  for (size_t i=0; i<=tags.size(); i++) {
+    vector< vector<incompedgec> > vvice;
+    vector< vector<compedgec> > vvce;
+    for (size_t j=0; j<=tags.size(); j++) {
+      vector<incompedgec> vecice;
+      vector<compedgec> vecce;
+      vvice.push_back(vecice);
+      vvce.push_back(vecce);
+    }
+    incompedge.push_back(vvice);
+    compedge.push_back(vvce);
+  }
+    
+  // bottom-up initialize
+  for (vector<tagc>::iterator i=tags.begin(); i!=tags.end(); i++) {
+    size_t arrowpos=prsrbase.find("->");
+    while (arrowpos!=string::npos) {
+      cfgc cfg;
+      int head;
+      string bind;
+      parserule(arrowpos,cfg,head,bind);
+      if (firstmatch(cfg,i->word,i->tag)) {
+	string rembind,curbind;
+	separate(bind,0,rembind,curbind);
+	string nbind;
+	if (union(curbind,i->feat,nbind)!=FAIL) {
+	  agenedgec newedge;
+	  newedge.id=eid++;
+	  newedge.cfg=cfg;
+	  newedge.head=head;
+	  newedge.dotreg={0,1};
+	  newedge.sentreg={i,i+1};
+	  newedge.bind=rembind+nbind;
+	  agenda.push(newedge);
+	}
+      }
+      if ((cfg.part.size()>1) && (lastmatch(cfg,i->word,i->tag))) {
+	string rembind,curbind;
+	separate(bind,cfg.part.size()-1,rembind,curbind);
+	if (union(curbind,i->feat,nbind)!=FAIL) {
+	  agenedgec newedge;
+	  newedge.id=eid++;
+	  newedge.cfg=cfg;
+	  newedge.head=head;
+	  newedge.dotreg={rule.part.length-1,rule.part.length};
+	  newedge.sentreg={i,i+1};
+	  newedge.bind=rembind+nbind;
+	  agenda.push(newedge);
+	}
+      }
+      arrowpos=prsrbase.find("->",arrowpos+2);
+    }
+  }
+}
+
+/*
+void postag(vector<wordc> words, vector< vector<wordc> > sents)
+{
+  vector<string> tags;
+  vector< vector<string> > senttags;
+  for (each word in words) {
+    tags=dictn.findtag(word.text);
+    senttags.push_back(tags);
+  }
+  // 将句子整理成多个句子，每个句子中的词只有一个词类标注
+  createsents(words,senttags,sents);
+  // vector< vector<wordc> > sents;
+}
+*/
+  for (vector<string>::iterator i=chnwords.begin(); i!=chnwords.end(); i++)
+    cout << i->c_str() << " ";
+  cout << endl;
+
+    bool res;
+    extract(sigbind,bind1,bind2);
+    bool res1=union(bind1,feat,nbind1);
+    bool res2=union(bind2,feat,nbind2);
+    switch ( res1 and res2 ): {
+      case (res1==SUCC) && (res2==FAIL):
+	res=FAIL;
+	break;
+      case (res1==SUCC) && (res2==SUCC):
+	res=SUCC;
+	break;
+      case (res1==SUCC) && (res2==WAIT):
+	res=WAIT;
+	nsbind=nbind2;
+	break;
+      case (res1==FAIL) && (res2==FAIL):
+	;
+      case (res1==FAIL) && (res2==SUCC):
+	;
+      case (res1==FAIL) && (res2==WAIT):
+	res=SUCC;
+	break;
+      case (res1==WAIT) && (res2==SUCC):
+	res=SUCC;
+	break;
+      case (res1==WAIT) && (res2==FAIL):
+	res=WAIT;
+	nsbind=!nbind1;
+	break;
+      case (res1==WAIT) && (res2==WAIT):
+	res=WAIT;
+	nsbind=(!nbind1 or nbind2);
+	break;
+      }
+
+    vector< pair<rule,loc> > rulelocs=rulebase.find(tag in part);
+    for (each rule in rulelocs) {
+      edgec newedge;
+      newedge.ruleid=rulelocs.rule.id;
+      newedge.dotreg={rulelocs.loc,rulelocs.loc+1};
+      newedge.sentreg={i,i+1};
+      addagenda(newedge);
+    }
+  }
+}
+void find(compchart, edge, vector<edge> & lefedges, vector<edge> & rigedges)
+{
+  int i=edge.sentreg.begin;
+  int j=edge.sentreg.end;
+  for (each cedge in compchart[j][]) {
+    if ((rulebase[cedge.ruleid].reduct==rulebase[edge.ruleid].part[edge.dotloc.end]) &&
+	(union(cedge.feat,edge.bind)==SUCC))
+      lefedges.push_back(cedge);
+  }
+  for (each cedge in compchart[][i]) {
+    if ((rulebase[cedge.ruleid].reduct==rulebase[edge.ruleid].part[edge.dotloc.begin-1]) &&
+	(cedge.sentreg.end==) &&
+	(union(cedge.feat,edge.bind)==SUCC))
+      rigedges.push_back(cedge);
+  }
+}

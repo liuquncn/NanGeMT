@@ -1,0 +1,315 @@
+/* 特殊词的组合切分歧义处理   A+B-->1, AB-->2 */
+@@ 高峰(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.yx=最|更} SELECT 1
+OTHERWISE SELECT 2
+
+@@ 分成(A+B, AB)
+CONDITION  FIND(R,NEXT,X){%X.ccat=m} SELECT 1
+OTHERWISE SELECT 3
+
+@@ 认错(A+B, AB)
+CONDITION  FIND(R,NEXT,X){%X.yx=人} SELECT 1
+OTHERWISE SELECT 3
+
+@@ 上门(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.yx=关|带} SELECT 1
+OTHERWISE SELECT 3
+
+@@ 到家(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.yx=很|最|非常|十分|特别} SELECT 2
+CONDITION FIND(L,NEXT,X){%X.yx=刚|刚刚|才} SELECT 1
+OTHERWISE SELECT 3
+
+/*他正中目标*/
+@@ 正中(A+B, AB)
+CONDITION  FIND(R,NEXT,X){%X.yx=目标|靶} SELECT 1
+OTHERWISE SELECT 3
+
+@@ 人为(A+B, AB)
+CONDITION  %AB.yx=人为 SELECT 3
+
+@@ 大雪(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.ccat=q} SELECT 1
+OTHERWISE SELECT 3
+
+@@ 穿着(A+B, AB)
+CONDITION %AB.yx=穿着 SELECT 3
+
+@@ 好些(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.yx=最|更} SELECT 1
+OTHERWISE SELECT 2
+
+@@ 上来(A+B, AB)
+CONDITION FIND(L,NEXT,X) {%X.ccat=v,%X.ccat=~n} SELECT 2
+OTHERWISE SELECT 3
+
+@@ 的话(A+B, AB)
+CONDITION  FIND(R,NEXT,X){%X.ccat=~w} SELECT 1
+CONDITION  FIND(L,NEAR,X){%X.yx=听|相信|同意} SELECT 1
+CONDITION  FIND(L,NEAR,X){%X.yx=如果|假如|假设|要是|若|如若} SELECT 2
+OTHERWISE SELECT 1
+
+@@ 个人(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.ccat=m} SELECT 1
+
+@@ 他用(A+B, AB)
+CONDITION  FIND(L,NEXT,X){%X.yx=挪作|于} SELECT 2
+OTHERWISE  SELECT 1
+
+@@ 十分(A+B, AB)
+CONDITION  FIND(R,NEXT,X){%X.ccat=a} SELECT 2
+CONDITION  FIND(R,NEXT,X){%X.yx=钟} SELECT 1
+CONDITION  FIND(L,NEXT,X){%X.yx=点|时|小时} SELECT 1
+CONDITION  FIND(R,NEXT,X){%X.ccat=m} SELECT 1
+
+@@ 一发(A+B, AB)
+CONDITION  FIND(R,NEXT,X){%X.ccat=a|z|d|v,%X.yx=~现}, SELECT 2
+OTHERWISE  SELECT 1
+
+@@ 把手(A+B,AB)
+CONDITION  FIND(L,NEXT,X){%X.yx=这|那|哪|每|多少|各|某|儿 }  SELECT 2
+CONDITION  FIND(L,NEXT,X){%X.ccat=m|q} SELECT 2
+CONDITION  FIND(R,NEXT,X){%X.ccat=v} SELECT 1
+
+@@的话(A+B,AB)
+CONDITION   FIND(R,NEXT,X){%X.ccat=w} SELECT 2  
+CONDITION   FIND(R,NEXT,X){%X.yx= " "} SELECT 2 
+
+@@将来(A+B,AB)
+CONDITION   FIND(R,NEXT,X){%X.ccat=f|s} SELECT 1
+
+@@前来(A+B,AB)
+CONDITION   FIND(L,NEXT,X){%X.ccat=q} SELECT 1
+
+@@往后(A+B,AB)
+CONDITION   FIND(R,NEXT,X){%X.ccat=v} SELECT 1
+
+@@在下(A+B,AB)
+CONDITION   FIND(R,NEXT,X){%X.yx=个} SELECT 1
+CONDITION   FIND(R,NEXT,X){%X.ccat=t} SELECT 1
+
+@@*(A+B,AB)
+CONDITION %AB.yx=穿着|补过|按着|朝着|沉着, FIND(R,NEXT,X){%X.ccat=n|m} SELECT 1
+
+@@得手(A+B,AB)
+CONDITION FIND(L,NEXT,X){%X.ccat=v|a} SELECT 1
+
+@@正点(A+B,AB)
+CONDITION  FIND(R,NEXT,X){%X.ccat=u|m|n} SELECT 1
+
+@@着呢(A+B,AB)
+CONDITION  FIND(L,NEXT,X){%X.ccat=v}, NOFIND(L,NEXT,X){%X.ccat=a} SELECT 1
+
+@@完了(A+B,AB)
+CONDITION  FIND(L,NEXT,X){%X.ccat=d|v} SELECT 1
+
+@@好不(A+B,AB)
+CONDITION   FIND(R,NEXT,X){%X.yx=好} SELECT 1
+
+@@正在(A+B,AB)
+CONDITION  %AB.yx=正在 SELECT 3
+
+@@吃水(A+B,AB)
+CONDITION  FIND(L,NEXT,X){%X.ccat=d} SELECT 1
+
+@@不是(A+B,AB)
+CONDITION  FIND(R,FAR,X){%X.yx=就是|而是} SELECT 2 
+OTHERWISE SELECT 1
+
+@@只有(A+B,AB)
+CONDITION  FIND(R,FAR,X){%X.yx=才|才能} SELECT 2 
+OTHERWISE SELECT 1
+
+@@才能(A+B,AB)
+CONDITION   FIND(L,FAR,X){%X.yx=只有|除非} SELECT 2
+CONDITION   FIND(L,NEXT,X){%X.ccat=v|p} SELECT 2
+CONDITION   FIND(LR,NEAR,X){%X.yx=发挥} SELECT 2
+CONDITION   FIND(R,NEXT,X){%X.ccat=f|s} SELECT 1
+
+@@总是(A+B,AB)
+ CONDITION FIND(L,FAR,X) { %X.yx=尽管|不论|不管|无论 } SELECT 2
+ CONDITION FIND(R,NEXT,X){%X.ccat=n,%X.ccat=v|a|d} SELECT 3
+ CONDITION FIND(R,NEXT,X){%X.ccat=v|a|d} SELECT 2
+ CONDITION FIND(R,NEXT,X){%X.ccat=n} SELECT 1
+OTHERWISE SELECT 2
+
+@@还是(A+B,AB)
+ CONDITION FIND(L,FAR,X) { %X.yx=尽管|不管|无论|不论  } SELECT 2
+ CONDITION FIND(R,NEXT,X){%X.ccat=n,%X.ccat=v|a|d} SELECT 3
+ CONDITION FIND(R,NEXT,X){%X.ccat=v|a|d} SELECT 2
+ CONDITION FIND(R,NEXT,X){%X.ccat=n} SELECT 1
+OTHERWISE SELECT 3
+
+@@就是(A+B,AB)
+ CONDITION FIND(L,FAR,X){%X.yx=慢说|不用说|别说|不是} SELECT 2
+ CONDITION FIND(R,FAR,X){%X.yx=也} SELECT 2
+OTHERWISE SELECT 1
+
+@@不用说(AB+C,ABC)
+CONDITION  FIND(R,NEXT,X){%X.yx=了} SELECT 1
+CONDITION  FIND(R,NEXT,X){%X.ccat=w} SELECT 1
+OTHERWISE SELECT 2
+
+@@是因为(A+B,AB)
+CONDITION FIND(L,FAR,X){%X.yx=之所以} SELECT 2
+OTHERWISE SELECT 1
+
+@@一部分(A+B,AB)
+CONDITION FIND(L,NEXT,X){%X.yx=第} SELECT 1
+OTHERWISE SELECT 3
+@@不是(A+B,AB)
+CONDITION FIND(R,FAR,X){%X.yx=就是|而是} SELECT 2
+OTHERWISE SELECT 1
+
+@@有一点(A+B,AB)
+CONDITION FIND(R,NEXT,X) {%X.ccat=a|z} SELECT 2
+OTHERWISE SELECT 1
+
+@@不大(A+B,AB)
+CONDITION FIND(R,NEXT,X) {%X.ccat=a|z} SELECT 2
+OTHERWISE SELECT 1
+
+@@研究所(A+B,AB)
+CONDITION FIND(L,NEXT,X){%X.yx=个} SELECT 2
+CONDITION FIND(L,NEXT,X){%X.yx=项} SELECT 1
+OTHERWISE SELECT 3
+
+@@马上(A+B,AB)
+CONDITION %AB.yx=马上 SELECT 3
+
+@@能干(A+B,AB)
+CONDITION FIND(L,NEXT,X){%X.yx=很|最|非常|十分|特别} SELECT 2
+CONDITION FIND(LR,NEAR,X){%X.yx=事|工作} SELECT 1
+OTHERWISE SELECT 3
+
+@@或是(A+B,AB)
+CONDITION FIND(LR,FAR,X){%X.yx=或是} SELECT 2
+OTHERWISE SELECT 1
+
+@@不可能(A+BC,AB+C)
+CONDITION %A.yx=不,%BC.yx=可能 SELECT 1
+
+@@人才(A+B,AB)
+CONDITION %AB.yx=人才 SELECT 3
+
+/* 处理交集型切分歧义  A+BC-->1, AB+C-->2, A+B+C-->3  */
+@@  *(A+BC, AB+C)
+     CONDITION  %A.ccat =p, %BC.ccat =n |f |s |t SELECT 1
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.yx==来|去|上|下|进|出|回|过|起|开|到|完,
+                        FIND(L,NEXT,X) {%X.ccat=v},%BC.ccat=n SELECT 1
+
+@@  *(A+BC, AB+C)
+      CONDITION  %AB.ccat =s SELECT 2
+
+@@  *(A+BC, AB+C)
+       CONDITION  %C.yx=们|生|家|长 SELECT 2 
+
+@@  *(A+BC, AB+C)
+      CONDITION %A.ccat=v, %BC.ccat=n|f|s|r|t, %AB.ccat=t|r|f|s,%C.ccat=n SELECT 2
+      CONDITION %A.ccat=v, %BC.ccat=n|f|s|r|t, %AB.ccat=n, %C.ccat=f|a  SELECT 2
+      CONDITION %A.ccat=v, %BC.ccat=n|f|s|r|t, FIND(L,NEXT,X){%X.ccat=q }, %AB.ccat=n, %C.ccat=n SELECT 2
+      CONDITION %A.音节=1,%A.ccat=v, %BC.ccat=n|f|s|r|t, %C.yx =集|员|队|书|机|时|人|权 SELECT 2  /* ~<修理工>人*/
+      CONDITION %A.ccat=v, %BC.ccat=n|f|s|r|t, %AB.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去 SELECT 2
+      
+@@  *(A+BC, AB+C)
+      CONDITION %A.ccat=v|a, %BC.ccat=v, %BC.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去 SELECT 1
+      CONDITION %AB.ccat=v|a, %C.ccat=v, %C.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去 SELECT 2
+
+@@  *(A+BC, AB+C)
+   CONDITION  %A.ccat=v,%BC.ccat=a,%C.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去 SELECT 2
+
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=v, %BC.ccat=b|d|t, %AB.ccat=r, %C.ccat=n SELECT 2
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=d, %BC.ccat=a, %AB.ccat=d/*, %B.ccat=d |a*/  SELECT 2
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=d, %BC.ccat=d, %AB.ccat=/*l|*/a SELECT 2
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=c, %BC.ccat=n, %A.ccat=~m , %AB.ccat=s, %c.ccat=n SELECT 2
+     CONDITION %A.ccat=c, %BC.ccat=n, %BC.ccat=~n, %AB.ccat=s, %c.ccat=n SELECT 2
+
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=r, %BC.ccat=a|f|d SELECT 1
+ 
+@@  *(A+BC, AB+C)
+    CONDITION %A.ccat=v, %BC.ccat=y SELECT 1
+
+@@  *(A+BC, AB+C)      
+     CONDITION  %A.ccat=n,%BC.ccat=v,%C.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去 SELECT 2
+
+@@  *(A+BC, AB+C)
+      CONDITION %A.ccat=m, %BC.ccat=q SELECT 1
+      /*CONDITION %A.ccat=q, %BC.ccat=n */
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=f, %BC.ccat=n SELECT 1
+
+@@  *(A+BC, AB+C)
+     CONDITION %A.ccat=n, %BC.ccat=a|f,%AB.yx=~浪费 SELECT 1
+     CONDITION %A.ccat=n, %BC.ccat=n,%C.yx=儿|子 SELECT 1
+
+@@  *(A+BC+D,AB+CD)
+     CONDITION %AB.yx=一发,%CD.yx=现在 SELECT 1
+
+@@ *(ABC+D,A+B+CD)
+      CONDITION %A.yx=上|下|进|出,%B.yx=了,%CD.ccat=n,FIND(L,NEXT,X){%X.ccat=v} SELECT 2   /* 戴<上了手套> 献<出了生命>*/
+
+@@ *(ABC,A+B+C)
+      CONDITION %A.yx=上|下|进|出,%B.yx=了,%C.ccat=n,FIND(L,NEXT,X){%X.ccat=v} SELECT 2   /* 派<出了车> */
+
+/* 处理组合型切分歧义:   A+B-->1, AB-->2 */
+@@  *(A+B,AB)
+     CONDITION %AB.yx=对虾|秒钟|分钟|厘米 SELECT 2
+     CONDITION %A.ccat=q, %B.ccat=n, %A.yx=年|分 SELECT 2
+     CONDITION %A.ccat=q, %B.ccat=n,FIND(L,NEXT,X){%X.yx= 一},%AB.ccat=v SELECT 2
+     CONDITION %A.ccat=q, %B.ccat=n,FIND(L,NEXT,X){%X.ccat=m}, NOFIND(L,NEXT,X){%X.yx=一个}, NOFIND(L,NEXT,X){%X.yx=一些} , NOFIND(L,NEXT,X){%X.yx=一切}, NOFIND(L,NEXT,X){%X.yx=多数}, NOFIND(L,NEXT,X){%X.yx=各种}, NOFIND(L,NEXT,X){%X.yx=许多} SELECT 1
+    CONDITION %A.ccat=q, %B.ccat=n,FIND(L,NEXT,X){%X.yx=这|那|哪|每|多少|各|某|儿}, %AB.ccat=~v, %AB.ccat=~f SELECT 1
+
+@@  *(A+B,AB)
+/*两个人中*/
+CONDITION %AB.yx=人中,FIND(L,NEXT,X){%X.yx=个} SELECT 1
+CONDITION %AB.yx=人中,FIND(L,NEXT,X){%X.yx=~个} SELECT 3
+CONDITION %A.ccat=n, %B.ccat=f, %AB.ccat=n|s|t|f SELECT 3
+CONDITION %A.ccat=n, %B.ccat=f, FIND(L,NEXT,X){%X.ccat=p|q} SELECT 1
+
+@@  *(A+B,AB)
+    CONDITION %A.ccat=u, %B.ccat=n, %A.yx=着|过, FIND(L,NEXT,X){%X.yx=v} SELECT 1
+
+@@  *(A+B,AB) 
+    CONDITION %A.ccat=v,%B.ccat=n,%A.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去, FIND(L,NEXT,X){%X.ccat=v},%AB.ccat=~s,%AB.ccat=~f,%B.yx=了|来 SELECT 1
+
+/* @@  *(A+B,AB)
+    CONDITION FIND(L,NEXT,X+Y){%X.yx=不,%Y.ccat=v }, %AB.ccat=~a SELECT 1 */
+
+@@  *(A+B,AB)
+    CONDITION FIND(R,NEXT,X){%X.yx=来|去|上|上来|上去|下|下来|下去|进|进来|进去|出|出来|出去|回|回来|回去|过|过来|过去|起|起来|开|开来|到|到来|到去},%AB.ccat=~v SELECT 2
+ 
+@@  *(A+B,AB)
+    CONDITION %AB.yx=一点|一时 SELECT 3
+    CONDITION %B.yx=月,%A.ccat=m SELECT 2
+    CONDITION %AB.yx=一发,FIND(R,NEXT,X) {%X.yx=现} SELECT 1
+    CONDITION %A.ccat=m, %B.ccat=q, FIND(R,NEXT,X){%X.ccat=n} SELECT 1
+    CONDITION %A.ccat=m, %B.ccat=q,FIND(L,NEXT,X){%X.ccat=v} SELECT 1
+    CONDITION %A.ccat=m, %B.ccat=q, %AB.ccat=/*l|*/m|b   SELECT 2
+    CONDITION %A.ccat=m, %B.ccat=q, %AB.ccat=d,FIND(R,NEXT,X){%X.ccat=v|a}   SELECT 2
+
+@@  *(A+B,AB)
+     CONDITION %A.ccat=f, %B.ccat=v, FIND(L,NEXT,X){%X.ccat=n}, FIND(L,NEXT,X){%X.ccat=~v}, %AB.ccat=~v,%AB.ccat=~a SELECT 1
+CONDITION %A.ccat=f, %B.ccat=v, FIND(L,NEXT,X){%X.yx=往} SELECT 1
+
+@@  *(A+B,AB) 
+    CONDITION %A.ccat=d,%B.ccat=v,%A.yx=不,%AB.音节=2,FIND(L,NEXT,X){%X.ccat=v},%AB.yx=~不安~不可~不同~不对  SELECT 1
+
+
+@@*(A+B,AB)
+CONDITION %AB.yx=到头|到手|到家|在家,FIND(R,NEXT,X){%X.ccat=f} SELECT 1
+
+@@*(A+B,AB)
+CONDITION %AB.yx=一头|一道,FIND(R,NEXT,X){%X.ccat=n|w} SELECT 1

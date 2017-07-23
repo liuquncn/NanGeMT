@@ -1,0 +1,1104 @@
+SemModel
+
+SemCat : sem=语义类 :  
+    {
+	sm1=事物, 
+            sm11=具体事物,
+            sm111=生物, 
+            sm1111=人类,
+            sm11111=人,  
+            sm111111=泛称,        	/* 男人 女人 老人 少年 我  你  他 自己 某某*/ 
+            sm111112=职业,        	/* 教师 工人 会计 医生 律师 */
+            sm111113=身份,        	/* 知识分子 叛徒 华侨 高个儿 庸人 外行*/
+            sm111114=亲属和关系,  	/* 父亲 阿姨 长辈 朋友*/
+            sm11112=集体,          	/* 工厂 委员会 医院 商店 剧团 犯罪团伙*/
+            sm1112=构件,            	/* 头 脸 鼻子 嘴 耳朵 头发 血液  骨头*/
+            sm1113=动物,              	/* 鸡 鸭 狗 猪 牛 羊 老虎 豹子 狐狸*/ 
+            sm1114=植物,          	            /* 树 草 花 牡丹 芍药 蔬菜 水果*/
+            sm1115=微生物,        	/* 细菌 霉菌 病毒*/
+            sm1116=排泄物,        	/* 汗 尿 粪便  奶水 眼泪*/
+            sm112=非生物,
+            sm1121=自然事物,
+            sm11210=其他自然物,        	/* 火  电  光  水  土  声音  颜色  灰尘*/
+            sm11211=天体,          	/* 太阳  月亮  星星*/
+            sm11212=地貌,          	/* 陆地  原野  沙漠*/
+            sm11213=气象,          	/* 风  雨  云  晚霞*/
+            sm1122=人为事物,
+            sm11221=建筑物,  	 	/* 楼房  别墅  礼堂 会议室 水库 庙*/
+            sm11222=可食物,		/* 菜 饭 面包 药 补品 维生素*/
+            sm11223=用具,		/* 剪子 刀子 伞  拖把  脸盆  衣架 匕首 钢笔 大炮*/
+            sm11224=服饰,		/* 西装 围裙 围巾 裤子 连衣裙*/
+            sm11225=材料,		/* 木材 钢铁 煤炭 玉石 玻璃*/
+            sm11226=作品,		/* 油画 文章 程序*/
+            sm12=抽象事物,
+            sm120=其他抽象事物,
+            sm121=事情,			/* 学潮 往事 命运 经验 形势 */
+            sm122=事理,			/* 规律 目的 条理 证据 关系 友谊*/
+            sm123=外观,			/* 形状 容貌 神情 态度 表情*/
+            sm124=性能,	 		/* 特征 性质 质量 力量 标准*/
+            sm125=性格,			/* 品行 道德 作风*/
+            sm126=意识,			/* 意图 幻想 兴趣 主意 见解 感情*/
+            sm127=信息,			/* 话 密码 声明 口信*/
+            sm128=生理,			/* 炎症 瘟疫 疾病*/
+            sm129=领域,			/* 社会 经济 文教 法律 科学 艺术*/
+            sm13=时间,
+            sm131=绝对时间,		/* 宋朝 三国 二十世纪*/
+            sm132=相对时间,		/* 昨天 当代 古代 今天*/
+            sm14=空间,
+            sm141=方位,			/* 东南  前面*/
+            sm142=具体空间,		/* 浙江省 西湖*/
+            sm143=抽象空间,		/* 基层 体坛 教育战线*/
+            sm2=性状,  
+     	sm21=外形,			/* 长 短 大 小 方 圆 尖*/
+     	sm22=表象,			/* 亮 紧 松 凉爽 粗糙*/
+	sm23=颜色,			/* 红 黄 鲜艳 素淡*/
+            sm24=味道,			/* 酸 甜 苦 辣*/
+     	sm25=性质,			/* 真 假 好 坏 空洞 伟大 可爱*/
+     	sm26=品格,			/* 善良 博学 幼稚 自私*/
+     	sm27=境况,			/* 繁忙 贫穷 危险 寂寞*/
+    	sm3=运动,
+    	sm31=关联,			/* 是 有 包括 等于 姓 含 存在*/
+     	sm32=心理活动,		/* 企图 认识 赞成 吝惜 重视*/
+     	sm33=行为动作,
+            sm330=对待,                          /*哀求 爱护 爱惜*/
+       	sm331=自变,			/* 死 病*/
+       	sm332=促变,			/* 繁荣 减少*/
+       	sm333=自为,			/* 笑 休息 咳嗽*/
+       	sm334=自移,			/* 游泳 走 跑*/
+       	sm335=搬移,			/* 扔 搬 推 扛*/
+          	sm336=给予,			/* 卖 送 发*/
+       	sm337=获取,			/* 买 取得*/
+       	sm338=创造,			/* 写 创建 描绘*/
+       	sm339=遭受			/* 遭到 受到 蒙受*/
+   }
+
+	SemAtt  :
+			{
+				value=配价数,
+				义项
+			}
+	SemVal (value) : Number Limited {0,1,2,3} Default=0
+	SemVal (义项) : Symbol Unlimited
+
+	SemAssAtt :
+			{
+				主体,  		/* 含施事,当事,领事等语义格 */
+				客体,  		/* 含受事,对象,结果等语义格 */
+				邻体,  		/* 相当于与事语义格               */
+                                                处所,  		/*       “ 处所|方式|工具”      */
+				方式,  		/*         三个语义范畴备用       */
+				工具   		/*                                                */
+			}
+	SemAssVal (主体) : RelMode=1
+	SemAssVal (客体) : RelMode=1
+	SemAssVal (邻体) : Default=NONE RelMode=1
+            SemAssVal (处所) : Default=NONE RelMode=1
+	SemAssVal (方式) : Default=NONE RelMode=1
+	SemAssVal (工具) : Default=NONE RelMode=1
+	
+EndModel
+
+
+SynModel (CHINESE)
+	LexCat : ccat=汉语词类 : 
+                 	      {
+				n,            		/*=名词*/
+				t,          		/*=时间词*/
+				s,          		/*=处所词*/
+				f,			/*=方位词*/
+				m,			/*=数词*/
+				q,			/*=量词*/
+				b,			/*=区别词*/
+				r,			/*=代词*/
+				v,			/*=动词*/
+				a,			/*=形容词*/
+				z,			/*=状态词*/
+				d,			/*=副词*/
+				p,			/*=介词*/
+				c,			/*=连词*/
+				u,			/*=助词*/
+				y,			/*=语气词*/
+				o,			/*=象声词*/
+				e,			/*=叹词*/
+				g,			/*=语素字*/
+                               		x,                      	/*=非语素字*/
+                              		h,                      	/*=前接成分*/
+                                		k,                      	/*=后接成分*/
+				w			/*=标点符号*/
+	        	      }
+
+	LexAtt(BaseForm) : yx   /*汉语原形*/
+	LexAtt(VaryForm) : bx   /*汉语变形*/
+
+	LexAtt : { 
+			yinjie=	音节, 
+			hanzi=	汉字,
+			dupform=重叠形式
+		     }
+
+	LexVal (yinjie) :  Number Unlimited Dynamic
+	LexVal (hanzi) :   Symbol Unlimited Dynamic
+	LexVal (dupform) : Symbol Unlimited Default=否 Dynamic
+
+	LexAtt [ccat:n] :
+					{
+						名词子类,
+						数名,
+						数量名,
+						个体量词,
+						前名,
+						后名,
+						前代,
+						前动,
+						后动,
+						名主语,
+						名谓语,
+						名宾语,
+						名状语,
+						处所单位,
+						临时量词,
+						兼类
+					}
+	LexAtt [ccat:t] :
+					{
+						前名,
+						后名,
+						后指量名,
+						前时,
+						后时,
+						时态,
+						时间单位,
+						兼类
+					}
+	LexAtt [ccat:s] :
+					{
+						前名,
+						后名,
+						前处,
+						后处,
+						专名,
+						兼类
+					}
+	LexAtt [ccat:f] :
+					{
+						前时,
+						前处,
+						前名,
+						前名的,
+						后名,
+						前方,
+						后方,
+						前动,
+						前介,
+						兼类
+					}
+	LexAtt [ccat:m] :
+					{
+						数词子类,
+						前副,
+						数主语,
+						数宾语,
+						数定语,
+						数谓语,
+						数补语,
+						兼类
+					}
+	LexAtt [ccat:q] :
+					{
+						量词子类,
+						表序,
+						表数,
+						变词性,
+						兼类,
+                        			            前时
+					}
+	LexAtt [ccat:r] :
+					{
+				     	            代词子类,
+						后名,
+						后的名,
+						后数量名,
+						后量名,
+						不,
+						没,
+						代主语,
+						代宾语,
+						代补语,
+						代谓语,
+						代状语,
+						兼类
+					}
+
+	LexAtt [ccat:v] :
+					{
+						系词,
+						助动词,
+						趋向动词,
+						补助动词,
+						形式动词,
+						准谓宾,
+						有的宾语,
+						前名,
+						后名,
+						外内,
+						体谓准,
+						双宾,
+						兼语句,
+						后动量词,
+						后时量词,
+						不,
+						没,
+						很,
+                                                                        被,
+						动结,
+						动趋,
+						趋向补语,
+						复数主语,
+						单作主语,
+						单作谓语,
+						单作状语,
+						单作补语,
+						单作宾语,
+						情态词,
+						谓词性主语,
+                                                                        离合,
+						重叠,
+						兼类
+					}
+
+	LexVal (体谓准) :   Symbol Limited { 体,谓,准,空 } Default= 空
+	LexVal (双宾)   :   Boolean { 是,否 } Default=否
+
+	LexAtt [ccat:v,体谓准:谓] :
+					{
+						动宾,
+						形宾,
+						状宾,
+						小句宾
+					}
+	LexAtt [ccat:v,双宾:是] :
+					{
+						前后等同,
+						前体后体,
+						前体后谓,
+						前体后句,
+						双宾可无,
+						直宾可无,
+						间接可无,
+						皆不可省,
+						间接用介
+					}
+	LexAtt [ccat:a] :
+					{
+						形容词子类,
+						准谓宾,
+						形的,
+						有的宾语,
+						不,
+						很,
+						前名,
+						形趋,
+						准宾语,
+						重叠词性,
+						谓词性主语,
+                        			            单作谓语,
+						形定语,
+						形谓语,
+						形补语,
+						形状语,
+						带补,
+						兼类
+					}
+	LexAtt [ccat:z] :
+					{
+						不,
+						很,
+						后名,
+						后的名,
+						后数量名,
+						的数量名,
+						状状语,
+						状谓语,
+						状补语,
+						后地动,
+						带的,
+						重叠,
+						兼类
+					}
+	LexAtt [ccat:b] :
+					{
+						带的,
+						后名,
+						后的名,
+						区主语,
+						区宾语,
+						区的主语,
+						是区的,
+						兼类
+					}
+	LexAtt [ccat:d] :
+					{
+						副词子类,
+						主前后,
+						副名,
+						副数量,
+						副的,
+						连接,
+						前照应,
+						后照应,
+						形副,
+						副介,
+						情态词,
+						搭配,
+						兼类
+					}
+	LexAtt [ccat:p] :
+					{
+						格标,
+						体谓,
+						带的定,
+						介补语,
+						介主前后,
+						单说,
+						省宾,
+						独立成分,
+						兼类
+					}
+	LexAtt [ccat:c] :
+					{
+						前中后,
+						连体,
+						连谓,
+						连句,
+						连主谓,
+						前照应,
+						后照应,
+						仅主前后,
+						兼类
+					}
+	LexAtt [ccat:u] :
+					{
+						前照应词,
+						后照应词,
+						兼类
+					}
+	LexAtt [ccat:y] :
+					{
+						句末,
+						主后,
+						状后,
+						述后,
+						前语,
+						后语,
+						兼类
+					}
+           LexAtt [ccat:g] :                        
+                                                           {
+                                                                        语素类
+                                                            }
+	LexAtt [ccat:w] :
+					{
+						句首,
+						句尾,
+						句中,
+						前照应,
+						后照应
+					}
+	
+	LexVal (名词子类) : Hierar Limited 
+					{
+						na,		/*=可数名词*/
+						nb,		/*=不可数名词*/
+						nc,		/*=可分名词*/
+						nd,		/*=不可分名词*/
+						ne,		/*=抽象名词*/
+						nf,		/*=无量名词*/
+						ng		/*=专有名词*/
+					} Default=na
+	LexVal (数词子类) : Symbol Limited
+					{
+						系数,
+						位数,
+						小数, 		/*零,半*/
+						数量,
+						助数, 		/* 多 几 分之 第 */
+				                        符号  		/* 1993 2565533 */
+					} Default=系数
+	LexVal (量词子类) : Symbol Limited
+					{
+						个体,
+						集体,
+						度量,
+						容量,
+						种类,
+						成形,
+						不定,
+						动量,
+						时量
+                     } Default=个体
+	LexVal (代词子类) : Hierar Limited 
+					{
+						ra,		/*=人称代词*/
+						rb,		/*=指示代词*/
+						rc		/*=疑问代词*/
+					} 
+	LexVal (形容词子类) : Hierar Limited 
+					{
+						aa,		/*可直接修饰名词*/
+						ab,		/*加“的”后可修饰名词*/
+						ac		/*不可修饰名词*/
+				   	} Default=aa
+	LexVal (副词子类) : Hierar Limited 
+					{
+						da,		/*"很"一类程度副词*/
+						db,		/*“仅”一类范围副词*/
+						dc,		/*否定副词*/
+						dd		/*其他副词*/
+					}
+	LexAtt [代词子类:ra] :
+					{
+						数,
+						人称,
+						性
+					}
+	LexAtt [代词子类:rb|rc] :
+					{
+						指代人,
+						指代事物,
+						指代时间,
+						指代处所,
+						指代方位,
+						指代数量,
+						指代行为,
+						指代性状,
+						指代程度,
+						泛指
+					}
+
+	LexVal (数名)     :   Symbol Limited { a,b,c,否=No=NO } Default=否
+	LexVal (数量名)   :   Boolean Default=是
+	LexVal (个体量词) :   Symbol Unlimited Default=NONE
+	LexVal (前名)     :   Boolean  { 是=可,否 } Default=是
+	LexVal (后名)     :   Boolean  { 是=可,否 } Default=是
+	LexVal (前代)     :   Boolean {是=可,否} Default=是
+	LexVal (前动)     :   Boolean {是=可,否} Default=否
+	LexVal (后动)     :   Boolean {是=可,否} Default=否
+	LexVal (名主语)   :   Symbol Limited { 否=No=NO,定,是=Yes=YES } Default=是
+	LexVal (名谓语)   :   Boolean {是=谓,否} Default=否
+	LexVal (名宾语)   :   Symbol Limited { 否=No=NO,定,是=Yes=YES } Default=是
+	LexVal (名状语)   :   Boolean {是=状,否} Default=否
+	LexVal (临时量词) :   Boolean Default=否
+	LexVal (兼类)     :   Symbol Unlimited Default=否
+	
+	
+	LexVal (后指量名) :   Boolean Default=否
+	LexVal (前时)     :   Boolean Default=否
+	LexVal (后时)     :   Boolean Default=否
+	LexVal (时间单位) :   Symbol Limited {年,季,月,周,天,午,时,分,秒,空=NONE} Default=空
+	LexVal (时态)     :   Symbol Limited { 过,未,现 } Default=现
+	
+	
+	LexVal (前处)     :   Boolean Default=否
+	LexVal (后处)     :   Boolean Default=否
+	LexVal (专名)     :   Boolean { 是=专,否 } Default=否
+	LexVal (处所单位) :   Symbol Limited { 国,省,市,县,镇,单位,乡,村,NONE } Default=NONE
+	
+	
+	LexVal (前名的)   :   Boolean Default=否
+	LexVal (前方)     :   Boolean Default=否
+	LexVal (后方)     :   Boolean Default=否
+	LexVal (前动)     :   Boolean  Default=否
+	LexVal (前介)     :   Symbol Unlimited 
+	
+	
+	LexVal (前副)     :   Symbol Unlimited Default=NONE
+	LexVal (数主语)   :   Boolean { 是=主,否 } Default=否
+	LexVal (数宾语)   :   Boolean { 是=宾,否 } Default=否
+	LexVal (数定语)   :   Boolean { 是=定,否 } Default=否
+	LexVal (数谓语)   :   Boolean { 是=谓,否 } Default=否
+	LexVal (数补语)   :   Boolean { 是=补,否 } Default=否
+	
+	
+	LexVal (表序)     :   Boolean { 是=序,否 } Default=否
+	LexVal (表数)     :   Boolean { 是=数,否 } Default=否
+	LexVal (变词性)   :   Symbol Unlimited Default=NONE
+	
+	
+	LexVal (后的名)   :   Boolean Default=是
+	LexVal (后数量名) :   Boolean Default=否
+	LexVal (后量名)   :   Boolean Default=否
+	LexVal (不)       :   Boolean Default=否
+	LexVal (没)       :   Boolean Default=否
+	LexVal (代主语)   :   Boolean { 是=主,否 } Default=Yes
+	LexVal (代宾语)   :   Boolean { 是=宾,否 } Default=Yes
+	LexVal (代补语)   :   Boolean { 是=补,否 } Default=否
+	LexVal (代谓语)   :   Boolean { 是=谓,否 } Default=否
+	LexVal (代状语)   :   Boolean { 是=状,否 } Default=否
+
+
+	LexVal (数)       :   Symbol Limited { 单,复 } Default=单
+	LexVal (性)       :   Symbol Limited { 男,女,不,中,NONE } Default=NONE
+	LexVal (人称)     :   Symbol Limited { 一,二,三,不,自,NONE } Default=NONE
+	LexVal (泛指)     :   Boolean { 是=泛,否 } Default=否
+	LexVal (指代人)   :   Boolean {是=人,否} Default=否
+	LexVal (指代事物) :   Boolean {是=物,否} Default=否
+	LexVal (指代时间) :   Boolean {是=时,否} Default=否
+	LexVal (指代处所) :   Boolean {是=处,否} Default=否
+	LexVal (指代方位) :   Boolean {是=方,否} Default=否
+	LexVal (指代行为) :   Boolean {是=动,否} Default=否
+	LexVal (指代性状) :   Boolean {是=形,否} Default=否
+	LexVal (指代数量) :   Boolean {是=数,否} Default=否
+	LexVal (指代程度) :   Boolean {是=副,否} Default=否
+	
+	LexVal (系词) 	  :   Boolean {是=系,否} Default=否
+	LexVal (助动词)   :   Boolean {是=助,否} Default=否
+	LexVal (趋向动词) :   Boolean { 是=趋,否} Default=否
+	LexVal (补助动词) :   Boolean {是=补,否} Default=否
+	LexVal (形式动词) :   Boolean {是=形,否} Default=否
+	LexVal (准谓宾)   :   Boolean { 是=准,否 } Default=否
+	LexVal (有的宾语) :   Boolean {是=有,否} Default=否
+	LexVal (外内)     :   Boolean { 是=内,否 } Default=否
+	LexVal (兼语句)   :   Boolean {是=兼,否} Default=否
+	LexVal (后动量词) :   Boolean { 是=动,否 } Default=否
+	LexVal (后时量词) :   Boolean { 是=时,否 } Default=否
+	LexVal (很)       :   Boolean  { 是=很,否 }
+            LexVal (被)       :   Boolean  { 是=被,否 } Default=否
+	LexVal (动结)   :   Symbol Limited { 是=Yes=YES=粘,得,介,否=No=NO } Default=否
+	LexVal (动趋)   :   Boolean { 是=趋,否 } Default=否
+	LexVal (趋向补语) :   Symbol Unlimited Default=~过
+	LexVal (复数主语) :   Boolean { 是=复,否 } Default=否
+	LexVal (单作主语) :   Boolean {是=可,否} Default=否
+	LexVal (单作谓语) :   Boolean {是=可,否} Default=否
+	LexVal (单作状语) :   Symbol Limited { 是=Yes=YES=可,地,否=No=NO } Default=否
+	LexVal (单作补语) :   Boolean {是=可,否} Default=否
+	LexVal (单作宾语) :   Boolean {是=可,否} Default=否
+	LexVal (情态词)   :   Boolean { 是=情,否 } Default=否
+	LexVal (动宾)     :   Boolean { 是=动,否 } Default=否
+	LexVal (形宾)     :   Boolean { 是=形,否 } Default=否
+	LexVal (状宾)     :   Boolean { 是=状,否 } Default=否
+	LexVal (小句宾)   :   Symbol Limited { 是=Yes=YES=陈述,疑问,否=No=NO } Default=否
+	LexVal (前后等同) :   Boolean { 是=等,否 } Default=否
+	LexVal (前体后体) :   Boolean { 是=体,否 } Default=否
+	LexVal (前体后谓) :   Boolean { 是=谓,否 } Default=否
+	LexVal (前体后句) :   Boolean { 是=句,否 } Default=否
+	LexVal (双宾可无) :   Boolean { 是=无,否 } Default=否
+	LexVal (直宾可无) :   Boolean Default=否
+	LexVal (间接可无) :   Boolean Default=否
+	LexVal (皆不可省) :   Boolean Default=否
+	LexVal (间接用介) :   Boolean { 是=介,否 } Default=否
+	LexVal (谓词性主语) : Boolean {是=可,否} Default=否
+            LexVal (离合):           Symbol Limited { 动结,动宾,动趋,否=No=NO } Default=否      
+	LexVal (重叠):           Symbol Unlimited Default=否
+	
+	
+	LexVal (形的)     :   Boolean {是=可,否} Default=否
+	LexVal (形趋)     :   Boolean {是=可,否} Default=否
+	LexVal (准宾语)   :   Boolean {是=可,否} Default=否
+	LexVal (重叠词性) :   Symbol Unlimited
+	LexVal (形定语)   :   Boolean { 是=定,否 } Default=否
+	LexVal (形状语)   :   Symbol Limited { 是=Yes=YES=可,地,否=No=NO } Default=是
+	LexVal (形补语)   :   Symbol Limited { 组,粘,否=No=NO } Default=否
+	LexVal (形谓语)   :   Symbol Limited { 是=Yes=YES,状,否=No=NO } Default=否
+	LexVal (带补)     :   Symbol Limited { 是=Yes=YES=粘,得,否=No=NO } Default=否
+	
+	
+	LexVal (带的)     :   Boolean {是=可,否} Default=是
+	LexVal (状状语)   :   Boolean { 是=状,否 } Default=否
+	LexVal (状谓语)   :   Boolean { 是=谓,否 } Default=否
+	LexVal (状补语)   :   Boolean { 是=补,否 } Default=否
+	LexVal (后地动)   :   Boolean Default=是
+	LexVal (的数量名) :   Boolean Default=是
+	
+	
+	LexVal (区的主语) :   Boolean Default=是
+	LexVal (区主语)   :   Boolean Default=否
+	LexVal (区宾语)   :   Boolean Default=否
+	LexVal (是区的)   :   Boolean Default=是
+	
+	LexVal (主前后)   :   Boolean {  是=前,否 } Default=否
+	LexVal (副名)     :   Boolean {是=可,否} Default=否
+	LexVal (副数量)   :   Boolean {是=可,否} Default=否
+	LexVal (副的)     :   Boolean {是=的,否} Default=否
+	LexVal (连接)     :   Boolean {是=连,否} Default=否
+	LexVal (前照应)   :   Symbol Unlimited Default=否
+	LexVal (后照应)   :   Symbol Unlimited Default=否
+	LexVal (形副)     :   Boolean Default=否
+	LexVal (副介)     :   Boolean {是=可,否} Default=否
+	LexVal (搭配)     :   Symbol Unlimited Default=NONE
+	
+
+	LexVal (格标) : Symbol Limited
+					{
+						施事,
+						受事,
+						与事,
+						处所,
+						时间,
+						工具,
+						目的,
+						原因,
+						对象,
+						根据,
+						来源,
+						NONE
+					} Default=NONE
+
+	LexVal (单说)     :   Boolean {是=可,否} Default=否
+	LexVal (独立成分) :   Boolean {是=可,否} Default=否
+	LexVal (介补语)   :   Boolean {是=补,否} Default=否
+	LexVal (省宾)     :   Boolean { 是=省,否 } Default=否
+	LexVal (带的定)   :   Boolean { 是=定,否 } Default=否
+	LexVal (体谓)     :   Symbol Limited { 体,谓 } Default=体
+	LexVal (介主前后) :   Symbol Limited { 前,后 }  Default=前|后
+
+
+	LexVal (连体)     :   Boolean {是=体,否} Default=否
+	LexVal (连谓)     :   Boolean {是=谓,否} Default=是
+	LexVal (连句)     :   Boolean {是=句,否} Default=是
+	LexVal (连主谓)   :   Boolean {是=可,否} Default=是
+	LexVal (前中后)   :   Symbol Limited { 前,中,后 }
+	LexVal (仅主前后) :   Symbol Limited { 前,后 }  Default=前|后
+	
+	
+	LexVal (前照应词) :   Symbol Unlimited Default=NONE
+	LexVal (后照应词) :   Symbol Unlimited Default=NONE
+	
+        LexVal (句末) :       Boolean Default=是
+	LexVal (主后) :       Boolean {是=可,否} Default=否
+	LexVal (状后) :       Boolean {是=可,否} Default=否
+	LexVal (述后) :       Boolean {是=可,否} Default=是
+	LexVal (前语) :       Symbol Unlimited Default=NONE
+	LexVal (后语) :       Symbol Unlimited Default=NONE
+
+	LexVal (语素类):      Symbol Limited { Ng,Ag,Vg,Tg } Default=Ng
+        	
+	LexVal (句首) :       Boolean
+	LexVal (句尾) :       Boolean
+	LexVal (句中) :       Boolean
+
+
+	PhrCat : cpcat=汉语短语分类 : 
+				{
+					vp,		/*=动词性短语*/
+					ap,		/*=形容词性短语*/
+					dp,		/*=副词性短语*/
+					pp,		/*=介词性短语*/
+					np,		/*=名词性短语*/
+					tp,		/*=时间词性短语*/
+					sp,		/*=处所词性短语*/
+					mp,		/*=数量短语*/
+					mcp,	            /*=数词短语*/
+					dj,		/*=单句 */
+					fj,		/*=复句*/
+					zj		/*=整句*/
+			   }
+
+	PhrAtt :
+		{
+				stru=内部结构,
+				bound=粘着,
+				alter=他义,          /* 借=>borrow|lend */
+				nplur=复数,
+				mood=语气
+		}
+	PhrAtt [ cpcat:vp|ap ] :
+		{
+				neg=否定,
+				pass=被动
+		}
+	PhrAtt [ cpcat:vp|np|ap|pp|dj|fj ] :
+		{
+				conj=作连接,
+				rela=作照应
+		}
+	PhrAtt [ cpcat:mcp ] :
+		{
+				scstru=数词结构
+		}
+
+	PhrVal (neg)   : Boolean Default=No
+	PhrVal (bound) : Boolean Default=No
+	PhrVal (alter) : Boolean Default=No Dynamic RelMode=1
+	PhrVal (nplur) : Boolean Default=No RelMode=1
+	PhrVal (pass)  : Boolean Default=No
+	PhrVal (conj)  : Boolean Default=No Dynamic RelMode=1
+	PhrVal (rela)  : Symbol Limited { 前,后,否 } Default=否 Dynamic RelMode=1
+
+	PhrVal (scstru) : Symbol Limited
+				{
+				 dc=单词,
+				 xw=系位, 		/* 三百 六十 */
+				 sz=数助, 		/* 三百多 六十几 */
+				 dw=多位, 		/* 三百六十 三百六十五 六十五 */
+				 xs=序数, 		/* 第六十 */
+				 fs=分数, 		/* 五分之一 */
+				 dx=多系 		/* 一九九五 */
+     			} Default=单词
+
+	PhrVal (mood) : Symbol Limited
+				{
+				excl=感叹,
+				impe=祈使,
+				decl=陈述,
+				ques=疑问
+				} Default=陈述 RelMode=1
+
+	PhrVal (stru) : Hierar Limited
+			{
+				dc=单词,
+				cd=重叠,
+				tw=同位,
+				lh=联合,
+				lw=连谓,
+				ls=连锁,
+				sb=述宾,
+				jb=介宾,
+				hb=双宾,
+				bu=述补,
+				bu1=组合述补,
+				bu2=粘合述补,
+				zz=状中,
+				dz=定中,
+				dz1=组合定中,
+				dz2=粘合定中,
+				de=的字,
+				so=所字,
+				fjia=附加,
+				sl=数量,
+				kz=扩展,
+				cz=存在,
+				you=有字,
+				shi=是字,
+				zw=主谓,
+				lc=连词,
+				px=平行,
+				zc=主从
+			} Default=单词
+
+	SynAssAtt :
+			{
+                                                题语,
+				主语,
+				谓语,
+				述语,
+				宾语,
+				间接宾语,
+				补语,
+				状语,
+				定语,
+				前项,        /* 联合结构的成分 */
+				后项,        /* 联合结构的成分 */
+				前谓,        /* 连谓结构的成分 */
+				后谓,        /* 连谓结构的成分 */
+				中心语,
+				附加语,
+				标点成分,
+				主题成分,    /* 感叹或提问的成分 */
+				连接成分     /* 关联词 */
+			}
+	SynAssVal (题语) :      RelMode=0
+            SynAssVal (主语) : 	RelMode=0
+	SynAssVal (谓语) : 	RelMode=0
+	SynAssVal (述语) : 	RelMode=0
+	SynAssVal (宾语) : 	RelMode=1
+	SynAssVal (间接宾语) :  RelMode=1
+	SynAssVal (补语) : 	RelMode=1
+	SynAssVal (状语) : 	RelMode=0
+	SynAssVal (定语) : 	RelMode=0
+	SynAssVal (前项) : 	RelMode=0
+	SynAssVal (后项) : 	RelMode=0
+	SynAssVal (前谓) : 	RelMode=0
+	SynAssVal (后谓) : 	RelMode=0
+	SynAssVal (中心语) :    RelMode=0
+	SynAssVal (附加语) :    RelMode=1
+	SynAssVal (标点成分) :  RelMode=1
+	SynAssVal (主题成分) :  Default=NONE Dynamic RelMode=1
+	SynAssVal (连接成分) :  Default=NONE Dynamic RelMode=1
+
+	Field (Digit) :m [数词子类:符号]
+	Field (Punct) :w
+	Field (Other) :n
+
+EndModel
+
+
+SynModel (ENGLISH)
+	LexCat : ECAT=英语词类 : 
+			{
+				A,  	/*形容词*/
+				C,  	/*并列连词*/
+				D,  	/*副词*/
+				M,  	/*数词*/
+				N,  	/*名词*/
+				R,  	/*代词*/
+				P,  	/*介词*/
+				T,  	/*限定词*/
+				U,  	/*助动词*/
+				V,  	/*动词*/
+				W   	/*标点*/
+			}
+	LexAtt(BaseForm) : YX           /*英语原形*/
+	LexAtt(VaryForm) : BX		/*英语变形*/
+
+	LexAtt [ECAT:A] :
+			{
+				ASUBC,
+				AMORF,
+				COMP,
+				SUPE,
+				COMPTYPE,
+				COMPPREP,
+				ARFLX
+			}
+	LexAtt [ECAT:D] :
+			{
+				DVPRE,  	/*能位于动词前面修饰动词*/
+				DVEND,  	/*能位于动词后面修饰动词*/
+				DADJV,  	/*可以修饰形容词副词*/
+				DSENT,  	/*位于句子前面对全句进行修饰*/
+				DPREP,  	/*可以位于介词的前面进行修饰*/
+				DHADV,  	/*可以位于状语从句的引导词前面进行修饰*/
+				DNPRE,  	/*可以位于名词短语的限定词、数词和不定代词的前面进行修饰*/
+				DNEND,   	/*可以位于名词短语的后面进行修饰*/
+				DVNEG,  	/*含否定意义的副词*/
+				DQUER,          /*含疑问意义的副词*/
+				DPAST,
+				DFUTR,
+				DCONT,
+				DPERF,
+				DMORF,
+				COMP,
+				SUPE,
+				DRFLX
+			}
+	LexAtt [ECAT:M] :
+			{
+				MSUBC
+			}
+	LexAtt [ECAT:N] :
+			{
+				NSUBC,
+				NMORF,
+				PLUR,
+				GEND,
+				NRFLX
+			}
+	LexAtt [ECAT:R] :
+			{
+				RSUBC,
+				RCASE,
+				RPER,
+				RNUM,
+				GEND
+			}
+	LexAtt [ECAT:T] :
+			{
+				TSUBC,
+				TNSUB,
+				TNNUM
+			}
+	LexAtt [ECAT:U] :
+		   {
+				USUBC,
+				UMORF,
+				URFLX
+			}
+	LexAtt [ECAT:V] :
+			{
+				VMORF,
+				VD,
+				VN,
+				VSUBC,
+				OBJTYPE,
+				DOBJTYPE,
+				IOBJTYPE,
+				COMPTYPE,
+				DOBJPREP,
+				IOBJPREP,
+				ERGT,
+				RECP,
+				VRFLX
+			}
+
+
+	LexVal (ASUBC) : Hierar Limited 
+			{
+				ANORM,  	/*普通形容词*/
+				APRED,  	/*只能作补语的形容词*/
+				AFORE,  	/*只能作前修饰定语的形容词*/
+				ABACK             /*只能作后修饰定语的形容词*/
+			} Default=ANORM
+	LexVal (MSUBC) : Hierar Limited 
+			{
+				MNUM,           /*基数词*/
+				MORD,       	/*序数词*/
+				MFRA        	/*分数词*/
+			} Default=MNUM Dynamic
+	LexVal (NSUBC) : Hierar Limited 
+			{
+				NCONT,  	                /*可数名词*/
+				NUCNT,  	                /*不可数名词*/
+				NUCNTMASS=NMASS,    /*整体名词 fish */
+				NUCNTPROP=NPROP,    /*专有名词*/
+				NCONTSNGL=NSNGL,    /*单数名词 think feeling shine */
+				NCONTPLUR=NPLUR,    /*复数名词 people family */
+				NCONTCOLL=NCOLL,    /*集合名词 committee */
+				NUCNTTITL=NTITL         /*称呼名词*/
+			} 
+	LexVal (RSUBC) : Hierar Limited 
+			{
+				RPERS,  	/*人称代词*/
+				RPOSS,  	/*名词性物主代词*/
+				RQUER,          /*疑问代词*/
+				RREFL,  	/*反身代词*/
+				RDEMO,  	/*指示代词*/
+				RINDF,  	/*不定代词*/
+				RCOMP    	/*复合不定代词*/
+			}
+	LexVal (RCASE) : Symbol Limited { SUB, OBJ } Default=SUB|OBJ
+	LexVal (RNUM)  : Symbol Limited { SNGL, PLUR } Default=SNGL
+	LexVal (RPER)  : Number Limited { 1, 2, 3 } Default=3
+	LexVal (TSUBC) : Hierar Limited 
+			{
+				TA,     	            /*不定冠词*/
+				TTHE,   	/*定冠词*/
+				TDEMO,  	/*指示限定词*/
+				TPOSS,  	/*物主限定词*/
+				TINDF,  	/*不定限定词*/
+				TPREV   	/*前位限定词, 可放在定冠词前修饰名词*/
+			}
+	LexVal (TNSUB) : Hierar Limited { NCONT, NUCNT }
+	LexVal (TNNUM) : Symbol Limited { SNGL,PLUR } RelMode=1
+	LexVal (USUBC) : Hierar Limited 
+			{
+				UDO,        /*助动词DO*/
+				UBE,        /*助动词BE*/
+				UHAVE,      /*助动词HAVE*/
+				UMOD        /*情态动词*/
+			}
+	LexVal (VSUBC) : Symbol Limited 
+			{
+				VI,         /*不及物动词*/
+				VO,         /*只带一个宾语的动词*/
+				VC,         /*只带一个补语的动词*/
+				VOO,        /*带双宾语的动词*/
+				VOC         /*带一个宾语一个补语的动词*/
+			 }
+			
+
+	LexVal (AMORF) : Symbol Limited { NONE,SUFF,PREF,IREG} Default=SUFF
+	LexVal (DPAST) : Boolean RelMode=1
+	LexVal (DFUTR) : Boolean RelMode=1
+	LexVal (DCONT) : Boolean RelMode=1
+	LexVal (DPERF) : Boolean RelMode=1
+	LexVal (DMORF) : Symbol Limited { NONE,SUFF,PREF,IREG} Default=SUFF
+	LexVal (NMORF) : Symbol Limited { IREG,REGU } Default=REGU
+	LexVal (UMORF) : Symbol Limited { IREG,REGU } Default=REGU
+	LexVal (VMORF) : Symbol Limited { IREG,REGU } Default=REGU
+	LexVal (COMP)  : Symbol Unlimited
+	LexVal (SUPE)  : Symbol Unlimited
+	LexVal (ARFLX) : Symbol Limited { UN,RT,ER,EST } Default=RT Dynamic RelMode=0
+	LexVal (DRFLX) : Symbol Limited { UN,RT,ER,EST } Default=RT Dynamic RelMode=0
+	LexVal (NRFLX) : Symbol Limited { UN,RT,NS } Default=RT Dynamic RelMode=0
+	LexVal (URFLX) : Symbol Limited { UN,RT,VS,VD,VN,VG } Default=RT Dynamic RelMode=0
+	LexVal (VRFLX) : Symbol Limited { UN,RT,VS,VD,VN,VG } Default=RT Dynamic RelMode=0
+	LexVal (COMPTYPE) : Symbol Limited { QU,PP,VG,CS,TOSUB,TOOBJ,NP,AP,DP,VN,TO,NF,NONE }
+	LexVal (COMPPREP) : Symbol Unlimited Default=NONE
+	
+	LexVal (DVPRE) : Boolean Default=Yes
+	LexVal (DVEND) : Boolean Default=No
+	LexVal (DADJV) : Boolean Default=Yes
+	LexVal (DSENT) : Boolean Default=No
+	LexVal (DPREP) : Boolean Default=No
+	LexVal (DHADV) : Boolean Default=No
+	LexVal (DNPRE) : Boolean Default=No
+	LexVal (DNEND) : Boolean Default=No
+	LexVal (DVNEG) : Boolean Default=No
+	LexVal (DQUER) : Boolean Default=No
+
+	LexVal (PLUR)  : Symbol Unlimited
+	LexVal (GEND)  : Symbol Limited { MALE,FEML,NONE }
+	
+	LexVal (VD)    	  : Symbol Unlimited
+	LexVal (VN)       : Symbol Unlimited
+	LexVal (ERGT)     : Boolean Default=No
+	LexVal (RECP)     : Boolean Default=No
+	LexVal (OBJTYPE)  : Symbol Limited { NP,TO,VG,CS,QU,PP,NF,REFL,NONE }
+	LexVal (DOBJTYPE) : Symbol Limited { NP,TO,VG,CS,QU,PP,REFL,NONE }
+	LexVal (IOBJTYPE) : Symbol Limited { AP,CS,NP,PP,REFL,NONE }
+	LexVal (DOBJPREP) : Symbol Unlimited
+	LexVal (IOBJPREP) : Symbol Unlimited
+
+
+
+
+	PhrCat : EPCAT=英语短语分类 : 
+			{
+				AP, 	/*形容词短语*/
+				DP, 	/*副词短语*/
+				NP, 	/*名词短语*/
+				VP, 	/*动词短语*/
+				PP, 	/*介词短语*/
+				CS, 	/*子句*/
+				SS 	/*整句*/
+			}
+
+	PhrAtt [ECAT:A] :
+			{
+				DEGR
+			}
+	PhrAtt [ECAT:D] :
+			{
+				DEGR
+			}
+	PhrAtt [ECAT:N] :
+			{
+				NNUM,
+				NPER,
+				NCASE
+			}
+	PhrAtt [ECAT:U] :
+			{
+				PAST,
+				FUTR,
+				CONT,
+				PERF,
+				NEG,
+				MOOD
+			}
+	PhrAtt [ECAT:V] :
+			{
+				FORM,
+				PAST,
+				FUTR,
+				CONT,
+				PERF,
+				AUXV,
+				NEG,
+				MOOD,
+				VOICE
+			}
+
+	PhrVal (DEGR) : Symbol Limited { POST,COMP,SUPE } Default=POST RelMode=1
+
+	PhrVal (NNUM) : Symbol Limited { SNGL,PLUR } Default=SNGL RelMode=1
+	PhrVal (NPER) : Number Limited { 1,2,3 } Default=3 RelMode=1
+	PhrVal (NCASE): Symbol Limited { POSS,COMM } Default=COMM RelMode=1
+
+	PhrVal (FORM) : Symbol Limited  { FF,RT,VG,VN } Default=FF RelMode=1
+	PhrVal (PAST) : Boolean Default=No RelMode=1
+	PhrVal (FUTR) : Boolean Default=No RelMode=1
+	PhrVal (CONT) : Boolean Default=No RelMode=1
+	PhrVal (PERF) : Boolean Default=No RelMode=1
+	PhrVal (AUXV) : Boolean Default=No RelMode=1
+	PhrVal (NEG)  : Boolean Default=No
+	PhrVal (MOOD) : Symbol Limited { INDI,IMPE,SBJN } Default=INDI RelMode=1
+	PhrVal (VOICE): Symbol Limited { ACTI,PASS } Default=ACTI RelMode=1
+
+	SynAssAtt : { SUB }
+
+	Field (Digit) : M
+	Field (Punct) : W
+	Field (Other) : N
+
+EndModel

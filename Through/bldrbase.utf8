@@ -1,0 +1,121 @@
+
+@@ be -- U [URFLX:VS] >> is
+@@ be -- U [NPER:1,NNUM:SNGL,URFLX:RT] >> am
+@@ be -- U [NPER:1,NNUM:PLUR,URFLX:RT] >> are
+@@ be -- U [NPER:2|3,URFLX:RT] >> are
+@@ be -- U [NNUM:SNGL,URFLX:VD] >> was
+@@ be -- U [NNUM:PLUR,URFLX:VD] >> were
+@@ be -- U [URFLX:VN] >> been
+@@ be -- U [URFLX:VG] >> being
+
+@@ do -- U [URFLX:VS] >> does
+@@ do -- U [URFLX:VD] >> did
+
+@@ have -- U [URFLX:VS] >> has
+@@ have -- U [URFLX:VD] >> had
+
+@@ * -- U [URFLX:VS] >> *s
+@@ * -- U [URFLX:VG] >> *ing
+@@ * -- U [UMORF:IREG,URFLX:VD] >> { VD }
+@@ * -- U [UMORF:IREG,URFLX:VN] >> { VN }
+@@ * -- U [UMORF:REGU,URFLX:VD] >> *ed
+@@ * -- U [UMORF:REGU,URFLX:VN] >> *ed
+
+@@ be -- V [VRFLX:VS] >> is
+@@ be -- V [NPER:3,NNUM:SNGL] >> is
+@@ be -- V [FORM:FF,NPER:1,NNUM:SNGL,VRFLX:RT] >> am
+@@ be -- V [FORM:FF,NPER:1,NNUM:PLUR,VRFLX:RT] >> are
+@@ be -- V [FORM:FF,NPER:2|3,VRFLX:RT] >> are
+@@ be -- V [NNUM:SNGL,VRFLX:VD] >> was
+@@ be -- V [NNUM:PLUR,VRFLX:VD] >> were
+@@ be -- V [VRFLX:VN] >> been
+@@ be -- V [VRFLX:VG] >> being
+
+@@ do -- V [VRFLX:VS] >> does
+@@ do -- V [VRFLX:VD] >> did
+@@ do -- V [VRFLX:VN] >> done
+
+@@ have -- V [VRFLX:VS] >> has
+@@ have -- V [VRFLX:VD] >> had
+@@ have -- V [VRFLX:VN] >> had
+
+@@ *ay -- V [VRFLX:VS] >> *ays
+@@ *ey -- V [VRFLX:VS] >> *eys
+@@ *oy -- V [VRFLX:VS] >> *oys
+@@ *uy -- V [VRFLX:VS] >> *uys
+@@ *y -- V [VRFLX:VS] >> *ies
+@@ *h -- V [VRFLX:VS] >> *hes
+@@ *o -- V [VRFLX:VS] >> *oes
+@@ *s -- V [VRFLX:VS] >> *ses
+@@ *x -- V [VRFLX:VS] >> *xes
+@@ *z -- V [VRFLX:VS] >> *zes
+@@ * -- V [VRFLX:VS] >> *s
+
+@@ *ie -- V [VRFLX:VG] >> *ying
+@@ *ee -- V [VRFLX:VG] >> *eeing
+@@ *e -- V [VRFLX:VG] >> *ing
+@@ * -- V [VRFLX:VG] >> *ing
+
+@@ *ay -- V [VMORF:REGU,VRFLX:VD|VN] >> *ayed
+@@ *ey -- V [VMORF:REGU,VRFLX:VD|VN] >> *eyed
+@@ *uy -- V [VMORF:REGU,VRFLX:VD|VN] >> *uyed
+@@ *oy -- V [VMORF:REGU,VRFLX:VD|VN] >> *oyed
+@@ *y -- V [VMORF:REGU,VRFLX:VD|VN] >> *ied
+@@ *e -- V [VMORF:REGU,VRFLX:VD|VN] >> *ed
+@@ * -- V [VMORF:REGU,VRFLX:VD|VN] >> *ed
+@@ * -- V [VMORF:IREG,VRFLX:VD] >> { VD }
+@@ * -- V [VMORF:IREG,VRFLX:VN] >> { VN }
+
+@@ *f -- R [RSUBC:RREFL,RNUM:PLUR] >> *ves
+
+@@ *ay -- N [NMORF:REGU,NRFLX:NS] >> *ays
+@@ *ey -- N [NMORF:REGU,NRFLX:NS] >> *eys
+@@ *oy -- N [NMORF:REGU,NRFLX:NS] >> *oys
+@@ *uy -- N [NMORF:REGU,NRFLX:NS] >> *uys
+@@ *y -- N [NMORF:REGU,NRFLX:NS] >> *ies
+@@ *s -- N [NMORF:REGU,NRFLX:NS] >> *ses
+@@ *x -- N [NMORF:REGU,NRFLX:NS] >> *xes
+@@ *z -- N [NMORF:REGU,NRFLX:NS] >> *zes
+@@ *sh -- N [NMORF:REGU,NRFLX:NS] >> *shes
+@@ *ch -- N [NMORF:REGU,NRFLX:NS] >> *ches
+@@ * -- N [NMORF:REGU,NRFLX:NS] >> *s
+@@ * -- N [NMORF:IREG,NRFLX:NS] >> { PLUR }
+
+@@ *ay -- A [AMORF:SUFF,ARFLX:ER] >> *ayer
+@@ *ey -- A [AMORF:SUFF,ARFLX:ER] >> *eyer
+@@ *oy -- A [AMORF:SUFF,ARFLX:ER] >> *oyer
+@@ *uy -- A [AMORF:SUFF,ARFLX:ER] >> *uyer
+@@ *y -- A [AMORF:SUFF,ARFLX:ER] >> *ier
+@@ *e -- A [AMORF:SUFF,ARFLX:ER] >> *er
+@@ * -- A [AMORF:SUFF,ARFLX:ER] >> *er
+@@ * -- A [AMORF:IREG,ARFLX:ER] >> { COMP }
+
+@@ *ay -- A [AMORF:SUFF,ARFLX:EST] >> *ayest
+@@ *ey -- A [AMORF:SUFF,ARFLX:EST] >> *eyest
+@@ *oy -- A [AMORF:SUFF,ARFLX:EST] >> *oyest
+@@ *uy -- A [AMORF:SUFF,ARFLX:EST] >> *uyest
+@@ *y -- A [AMORF:SUFF,ARFLX:EST] >> *iest
+@@ *e -- A [AMORF:SUFF,ARFLX:EST] >> *est
+@@ * -- A [AMORF:SUFF,ARFLX:EST] >> *est
+@@ * -- A [AMORF:IREG,ARFLX:EST] >> { SUPE }
+
+@@ *ly -- D [DMORF:SUFF,DRFLX:ER] >> *lier
+@@ *e -- D [DMORF:SUFF,DRFLX:ER] >> *er
+@@ * -- D [DMORF:SUFF,DRFLX:ER] >> *er
+@@ * -- D [DMORF:IREG,DRFLX:ER] >> { COMP }
+
+@@ *ly -- D [DMORF:SUFF,DRFLX:EST] >> *liest
+@@ *e -- D [DMORF:SUFF,DRFLX:EST] >> *est
+@@ * -- D [DMORF:IREG,DRFLX:EST] >> { SUPE }
+@@ * -- D [DMORF:SUFF,DRFLX:EST] >> *est
+
+@@ *three -- M [MSUBC:MORD] >> *third
+@@ *two -- M [MSUBC:MORD] >> *second
+@@ *one -- M [MSUBC:MORD] >> *first
+@@ *ve -- M [MSUBC:MORD] >> *fth
+@@ *ty -- M [MSUBC:MORD] >> *ieth
+@@ *e -- M [MSUBC:MORD] >> *th
+@@ *t -- M [MSUBC:MORD] >> *th
+@@ * -- M [MSUBC:MORD] >> *th
+@@ * -- M [MSUBC:MNUM,NNUM:PLUR,YX:one|ten|hundred|thousand|million|billion] >> *s
+@@ *y -- M [MSUBC:MNUM,NNUM:PLUR] >> *ies

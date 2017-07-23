@@ -1,0 +1,779 @@
+// created at 2012.5.28
+
+我是中国人
+我去张江上课
+1997年是李素丽最难忘的一年。
+很多中俄之间的大问题都是在普京当总统期间获得解决的
+我连代数几何都不懂，更不必说微积分了。
+我买了一双鞋。
+我买五个馒头。
+我买一斤大饼。
+我没有你那么聪明。
+我们把它看成是一种光荣。
+我们班上有五十多人。
+我们班有一半学生是团员。
+我们抄土匪的老窝。
+我们乘飞机去伦敦。
+我们工厂今年的产量比去年多一倍。
+我们工厂今年的产量是去年的两倍。
+我们可以去散散步或者去看看电视。
+我们认为这是一个错误。
+我们上班的时间是上午九点到下午四点。
+我们希望去爬泰山。
+我们有五种感觉：视觉、听觉、嗅觉、味觉和触觉。
+我们有新课题要申报。
+我们正在为即将到来的研讨会作准备。
+我母亲喜欢音乐。
+我疲倦得眼睛都睁不开了。
+我去图书馆借书。
+我少了两个苹果。
+我是会计。
+我希望你能给我送一些书来。
+我喜欢物理学。
+我喜欢英语。
+我想请你介绍介绍它的特点。
+我要吃苹果。
+我一读书就头疼。
+我一见到你就认出你来了。
+我以前从未听到过这样奇怪的事儿。
+我有朋友去巴黎。
+我有三个哥哥。
+我在院子里看到太阳一寸一寸地落下去。
+我住在海珠路129号。
+我昨天中午12点11分回去。
+我昨晚洗了个热水澡。
+我昨晚写了一封信。
+屋子收拾得挺干净。
+武汉气候炎热。
+物体传导热的能力不同。
+西湖是很美的地方。
+系统性、逻辑性是数学的主要特征之一。
+下了课，就去打篮球。
+下午老师都来学校了。
+夏天，井水很凉。
+现在十二点。
+小时候我们一起打过枣。
+小提琴的弦对好了。
+小庄每天乘11路公共汽车上学。
+写字台上可以摆放笔筒、台灯和闹钟。
+心脏有四个心室。
+学生们休息休息再干活。
+学校奖他一面锦旗。
+鸭子摇摇晃晃地走进池塘。
+鸭嘴兽是哺乳类。
+演出开始了。
+要是哥伦布没有发现美洲，别人也会发现的。
+要是你听取她的建议的话，你就会成功。
+要是晴天，我就去旅行。
+要是我怕死，我就不是共产党员了。
+要再来一杯咖啡吗？
+要做一个好孩子。
+一斤有十两。
+一颗卫星昨天发射升空。
+一辆车号为1789的302路公交汽车正停在辅路上。
+一枚宇宙火箭昨天升空。
+一年有十二个月。
+一只蜘蛛正在结网。
+议会将在下星期一开会。
+应用题的具体结构不是一成不变的。
+应用题中的已知条件是解答应用题的出发点和依据。
+用温度计测一测筒内的温度。
+油比水滑。
+有时他来，有时我去。
+有五百元一月就够生活了。
+与其说是粗心大意，不如说是不负责任。
+雨下起来了。
+语素可以是单音节的，也可以是双音节的。
+再给新士兵们演示一遍。
+在1990年秋季他去过德国。
+在1991年9月他去过德国。
+在我老家屋后的菜园里，有一口古老的小小的水井。
+在硬纸板上画了两三个长13厘米宽6厘米的长方形图样。
+张先生个子太矮了。
+这把剑可以象芦苇一样弯曲。
+这本书比那本书更有趣。
+这本书将在春天出版。
+这本书是我的。
+这本书已经翻译成了多种语言。
+这儿掉了一个标点符号。
+这份报告是假的。
+这个不如那个结实。
+这个孩子有半个苹果就够了。
+这个难题使我很头疼。
+这个问题可以问一下老师。
+这个消息是假的。
+这个月转走两个工程师。
+这工作一下子就干完了。
+这件衬衫是亚麻料的。
+这件红衣服洗一次，掉一次色。
+这就是一个奇迹。
+这两本小说我不是都喜欢。
+这是我第一次来到这里。
+这是我读过的书中最容易的一本。
+这是一个木篱笆。
+这是一根园柱。
+这是一所农业学校。
+这双手套丢了一只。
+这所学校不如那所学校好。
+这条路宽了两米。
+这条马路很宽。
+这条鱼重三斤。
+这位华侨为本村学校购置了400套新桌椅。
+这位旅游者买了几双筷子作为纪念品。
+这些外国人非常喜欢中国文化。
+这学期就要结束了。
+这种衣服他有两件。
+这座山是华山。
+整整七天，我没有喝过一口水。
+止咳糖浆是一种内服药。
+智慧的价值比红宝石更高。
+中秋的月亮圆得很！
+祝您一路平安！
+桌子上是我的稿子。
+昨天来了十几二十个人。
+昨天是中秋节。
+昨天晚会是不是特别热闹？
+昨天晚会特别热闹是不是？
+昨天我买了一把新剪刀。
+昨天我削了两个苹果吃。
+昨天下午他们正在学习英语。
+昨天这里来了几个学生。
+花生虽然不好看，但是很有用。
+旧亚洲不存在了，一个新的亚洲出现了。
+黄河是我国第二条大河。
+湖南省湘潭县有个美丽的韶山冲。
+孩子们都盼望着新年。
+关于铁的知识，你还知道哪些？
+桂林是我去过的最美丽的地方。
+工人们深深地挖了一个洞。
+风向是指风吹来的方向。
+凡是坚持真理的人总是无所畏惧的。
+二十五的平方根等于五。
+短跑主要是比速度。
+灯笼总高13米，直径达6米。
+地震测量仪器所测得的震级为里氏6.5级。
+从1996年12月1日至今，长途电话费多次进行了调整。
+第十六届世界杯足球赛将于今年6月10日至7月12日在法国举行，盛况空前，举世瞩目。
+1月26日被定为澳大利亚国庆节。
+石益洲，清华大学五六届毕业生。
+我们今天去逛街。
+你打桥牌吗？
+凡是看过这部小说的人，无不为主人公的悲惨命运所感动。
+给我来一盘白菜。
+国务院总理将于十一月十一日至十六日对日本国进行正式友好访问。
+会议刚刚结束。
+火箭也是利用反冲原理飞行的。
+火腿蛋是我最喜欢吃的早餐。
+即使我们不喜欢，也必须去做。
+江主席一行是在今天当地时间上午9时离开檀香山的。
+焦距对过了，你再对对光圈。
+教室里坐着三十个学生。
+她擦了一下汗，继续工作。
+她的脸红了。
+她每个周末都洗许多衣服。
+她扫院子扫得干净。
+她生了一个胖墩墩的男孩。
+她笑着表示她的谢意。
+她一看电影就睡觉。
+她愉快地笑了一笑。
+她走过来坐下。
+今年水果比去年好。
+今天，她穿了一双漂亮的鞋子。
+今天的中国已经不是五十年前的中国了。
+今天多云。
+今天国庆节。
+今天天气晴朗。
+今天我们学了第三课。
+今天下午我将同你一起喝茶。
+开始下雨了。
+考试不及格，妈妈打了我一顿。
+空气是看不见的。
+空气是流体，但不是液体。
+空气在我们身上的压力是每平方英寸15磅。
+空气中大部分是氮。
+孔雀羽毛很美。
+老虎比猫大得多。
+老人七十多岁了，只掉了一颗牙。
+老师给我一本物理书。
+老师们下课后散散步。
+里边有很多人。
+力的单位是“牛顿”，用“N”表示。
+两位客人都不受欢迎。
+两只羊丢失了。
+列宁诞生于1870年4月22日。
+马有四只蹄子。
+毛巾和香皂都掉在浴室里了。
+每个男孩和女孩都应该把头发梳理整洁。
+那儿有两个工人。
+那儿有两片帆。
+那儿有两只船。
+那个湖里有很多种鱼。
+那条河里有一群鱼。
+那条金鱼死了。
+奶奶是我们家中最老的。
+男的、女的都参加这个会。
+你把我的玻璃放到那里去了？
+你把我的眼镜放到那里去了？
+你把猪养得肥肥的。
+你不是不了解情况，就是作了一个错误的判断。
+你的收入是我的三倍。
+你弟弟有多大？
+你房间的电视是彩色的还是黑白的。
+你和妈妈多久没见面了？
+你会打网球吗？
+你家里有几口人？
+你看见了那辆自行车吗？
+你看见了一辆自行车吗？
+你来中国是学习汉语吗？
+你们班有多少人？
+你明天来北京。
+你破坏了我的计划。
+你是不是不知道这件事？
+你是不是经常加班？
+每周星期一至星期五7时到21时，按现行国家规定标准计费。
+你是不是可以把这个箱子拿一下？
+你是不是喜欢跟我一起来？
+你是不是在中国生的？
+你为什么不去？
+你希望我留下来吗？
+你喜欢不喜欢这个人？
+你喜欢吃芒果吗？
+你喜欢音乐，还是体育？
+你已经吃过早餐没有？
+你有没有钢笔？
+你有没有看过这部电影？
+你真的要知道我的想法吗？
+鸟被猫吃了。
+农民养羊取毛。
+苹果现在熟了。
+七比九少二。
+汽车在角落转弯转得太快。
+枪不是玩具。
+请把稿件抄一下。
+请把门锁上。
+请注意收听每周六828千赫新闻台19:40~20:00的节目。
+去年二月有二十九天。
+全世界都有人踢足球。
+热气球是人类最早的飞行器。
+热水重还是冷水重？
+人人有工作。
+容易传热的物体叫做热的良导体。
+如果我们乘火箭到月球上去，我们会发现它与地球大不相同。
+散会了。
+商店今晚7点关门吗？
+上个月来了一个新程序员。
+生活水平越来越高了。
+狮子是野兽之王。
+首先仔细地洗了又洗，然后慢慢地切成小块。
+书架上摆放的各种书籍要整整齐齐。
+书在书架上。
+数学作业是15页的练习3。
+四是二的两倍。
+虽然很累，他仍决定参加会议。
+他把牛杀死了。
+他把院子扫干净。
+他半个小时之前还在。
+他背叛了他的祖国。
+他被判了五年徒刑。
+他比我还要聪明。
+他不但有知识，而且有经验。
+他不想让任何人知道他走了。
+他抄起一把锄头就干活。
+他承认他失败了。
+他吃得多睡得多。
+他穿了一套旧的蓝色西服。
+他从哪里来？
+他打了将近五年排球。
+他的护照已经过期。
+他的头发灰白。
+他读书，我看报。
+他二十来岁。
+他高多了。
+他给了我一块两寸长的萝卜。
+他给我一本书。
+他和我一样高。
+他回答得和他妹妹一样快。
+他将离开北京去上海。
+他今年二十一岁。
+他就是我昨天在公园里遇到的那个男孩。
+他看见红彤彤的火苗。
+他咳嗽。
+他脸儿晒得红通通的。
+他买了两棵白菜。
+他没完全了解这个计划。
+他没有逻辑性。
+他们浪费了很多粉笔。
+他们俩好了。
+他们天天上饭馆。
+他们希望我们别迟到。
+他们喜欢这部影片吗？
+他们一口气干了两班。
+他们坐轮船去日本。
+他拿一本书出去。
+他跑了过去，打开门，冲了出去。
+他悄悄地拿出去两本书。
+他去美国了。
+他让学生们明白他的理论。
+他身体非常健康。
+他深深地对老师鞠了一个躬。
+他生于1973年11月9日。
+他什么时候拿了你的书？
+他是不是学生？
+他是乘地铁来这里的。
+他是瘦多了。
+他是我的一个熟人。
+他是一个普通工人。
+他是一个摄影迷。
+他是一个作曲家，她是一个歌唱家。
+他是在中国生的吧？
+他是著名的历史学家。
+他说得多好啊！
+他说英语比我说得好。
+他送给我一束花。
+他完全不了解这个计划。
+他象他老师那么聪明。
+他烟抽得太多了。
+他要求我们把这些句子翻译成英语。
+他一边读书，一边看报。
+他一点也不糊涂。
+他有固定的收入。
+他有两颗假牙。
+他有一件皮大衣。
+他又读书，又看报。
+他院子扫得不干净。
+他在国外有不少朋友。
+他在国外有房地产。
+他在国外住了十多年。
+他在合同上签字了吗？
+他曾经是一位英语教师。
+他曾经是一位英语教师。
+他正用一把斧头劈木头。
+他指着桌子和柜子。
+他住在哪里，你知道不知道？
+他字写得很好。
+他做了一个很怪的梦。
+太阳把所有的东西都染成了金色。
+太阳距离地球有1.5亿公里。
+踢毽儿是一项有益的体育活动。
+铁桥被大水冲垮了。
+铁是我们制造生产工具和国防武器的重要原料。
+万物是由原子构成的。
+王光祖是工程师。
+王先生高，张先生矮。
+王先生每天晚饭后散步。
+王先生认出你没有？
+王先生喜欢旅行。
+我把大萝卜一个个冲洗得干干净净。
+我把馒头吃了。
+我帮助妈妈洗碗。
+我并不完全同意。
+我不懂，请他解释解释。
+我不觉得冷。
+我长了两厘米。
+我从来没有想到会在这里遇见你。
+我大他一岁。
+我倒一杯茶喝。
+我的钢笔在抽屉里。
+我的朋友并不是个个都抽烟。
+我的苹果大，你的小。
+我的收入是你的三分之一。
+我的数学不如你的好。
+我更喜欢它。
+我和他都是学生。
+我家门前有一条小河。
+我今天早晨差10分7点起床的。
+我今晚将要读报。
+我看见了两个小孩。
+我看见了三个学生。
+我看见了三条牛。
+我看见他来了。
+我来试试。
+-------------------------------
+I am a Chinese
+I went to the Zhangjiang Hi-class
+1997 Li Suli most memorable year.
+Many a big problem between China and Russia are resolved when President Putin during the access to
+I did not know algebra or geometry, let alone calculus.
+I bought a pair of shoes.
+I bought five bread.
+I bought a pound cake.
+I do not have you so smart.
+We see it as an honor.
+Our class more than fifty people.
+Our class has half of the students are members.
+We copied the lair of the bandits.
+We flew to London.
+Our factory production this year than last year doubled.
+Our factory production this year is double that of last year.
+We can go for a walk or go watch TV.
+We believe that this is a mistake.
+Our work time is from 9:00 am to 4:30 pm.
+We want to climb Mount Tai.
+We have five senses: sight, hearing, smell, taste and touch.
+We have to declare a new topic.
+We are preparing for the upcoming seminar.
+My mother is fond of music.
+I tired my eyes open.
+I went to the library to borrow.
+I have a small two apples.
+I'm in accounting.
+I hope you give me to send some books.
+I like physics.
+I like English.
+I would like to introduce you to introduce its characteristics.
+I eat apples.
+I have a reading to get a headache.
+I see you will know that you have come.
+I've never heard such a strange thing.
+I have a friend who went to Paris.
+I have three brothers.
+I see the sun went down inch by inch in the yard.
+I live in Haizhu Road, No. 129.
+Yesterday, 12:11 back.
+Last night, I took a hot bath.
+I wrote a letter last night.
+Room to pack quite clean.
+Wuhan, the hot climate.
+Objects conduction heat capacity.
+West Lake is a beautiful place.
+Systematic logic is one of the main features of mathematics.
+After class, play basketball.
+Afternoon, the teachers come to school.
+Summer, the well water was cold.
+Now twelve.
+Child to join us played to date.
+A violin string good.
+The small village every day to take the 11 bus to school.
+Can be placed on the desk pen, desk lamp and alarm clock.
+The heart has four ventricles.
+Students to take a rest and then work.
+School Award silk banner.
+Duck staggered into the pond.
+The platypus is a mammal.
+The show began.
+If Columbus had not discovered America, others will find.
+If you listen to her suggestions, you will succeed.
+If sunny, I went to travel.
+If I fear death, I was not a communist.
+Another cup of coffee?
+To be a good boy.
+A pound there are 10 2.
+The satellite was launched yesterday.
+A license plate number is 1789 302 bus vehicle is parked in side roads.
+A space rocket launch yesterday.
+Twelve months a year.
+A spider is net.
+Parliament will meet next Monday.
+The specific structure of the application problems are not static.
+Known conditions in the application questions to answer application questions the starting point and basis.
+With a thermometer to measure the temperature of a measuring cylinder.
+Oil than water slide.
+Sometimes he came to, and sometimes I go.
+There are five hundred yuan is enough life in January.
+Not so much carelessness, as it is irresponsible.
+It begins to rain.
+Morpheme can be monosyllabic, it can be two syllables.
+Give the new soldiers to demonstrate again.
+In the fall of 1990 he went to Germany.
+In September 1991 he went to Germany.
+In the garden of my home behind the house, an old small wells.
+Cardboard and drew two or three 13 cm long, 6 cm wide, rectangular pattern.
+Mr. Zhang is so short.
+The sword like a reed bending.
+This book is more interesting than the book.
+This book will be published in the spring.
+This book is mine.
+This book has been translated into several languages.
+Out here for a punctuation mark.
+This report is false.
+This is better that strong.
+This child for half an apple is enough.
+This problem makes me a headache.
+This problem can ask the teacher.
+This news is false.
+This month transferred out of the two engineers.
+This once was done.
+This shirt is linen material.
+Red clothes washing out the first color.
+This is a miracle.
+I am not like these two novel
+This is the first time I came here.
+This is the easiest book I've read one.
+This is a wooden fence.
+This is a garden column.
+This is an agricultural school.
+Pairs of gloves lost one.
+This school is not as good as that school.
+This road width of two meters.
+This road is very wide.
+Fish weight samgun.
+The overseas Chinese village school purchased 400 sets of tables and chairs.
+The tourists bought a few pairs of chopsticks as a souvenir.
+These foreigners are very interested in Chinese culture.
+This semester is coming to an end.
+The clothes he has two.
+The mountain Huashan.
+Seven days, I did not drink saliva.
+The cough syrup is one kind of medication.
+The value of wisdom than rubies.
+Mid-Autumn Festival moon very
+I wish you a safe journey home!
+On the table is my manuscript.
+To ten to twenty individuals.
+Yesterday was Mid-Autumn Festival.
+Yesterday evening was not particularly busy?
+Yesterday evening is particularly lively is not?
+Yesterday I bought a new pair of scissors.
+Yesterday, I cut two apples.
+Yesterday afternoon, they are learning English.
+Yesterday, here a few students.
+Peanut ugly, but useful.
+Old Asia does not exist, a new Asia.
+The Yellow River is China's rivers.
+Xiangtan County, Hunan Province, a beautiful village of Shaoshan.
+The kids are looking forward to the New Year.
+Knowledge about the iron, you know what?
+Guilin is one of the most beautiful places I have been.
+The workers are deeply dug a hole.
+Wind direction means the direction of the wind.
+Those who uphold the truth, always fearless.
+25 of the square root is equal to five.
+Sprint than speed.
+Lantern total height of 13 meters, diameter of 6 meters.
+Earthquake measuring instruments measured a magnitude of 6.5 on the Richter.
+From December 1, 1996 to the present, long-distance telephone charges repeatedly adjusted.
+The 16th World Cup will be held in France from June 10 to July 12 Day festival, has attracted worldwide attention.
+January 26 was designated as a National Day of Australia.
+Shiyi Zhou, Tsinghua University, 156th graduate.
+We go shopping today.
+Do you play bridge?
+The people who read the book, all touched by the tragic fate of the hero.
+To give me a cabbage.
+The Premier will be an official goodwill visit on Japan from November 11 to 16.
+The meeting has just ended.
+Rocket makes use of flight of recoil principle.
+Ham and eggs is my favorite to eat breakfast.
+Even if we do not like it, must also do.
+President Jiang and his party left Honolulu in today's 9:00 local time.
+Focal length right, right right aperture.
+30 students sitting in the classroom.
+She rub a little sweat to continue working.
+She blushed.
+Every weekend to wash a lot of clothes.
+She swept the yard clean sweep.
+She gave birth to a plump boy.
+She smiled and expressed her gratitude.
+Her movies to sleep.
+She smiled happily.
+She came to sit down.
+This year's fruit is better than last year.
+Today, she wore a nice pair of shoes.
+China today is not 50 years ago, China.
+It's cloudy.
+Today's National Day.
+The weather was fine today.
+Today we learned a third lesson.
+This afternoon I will be with you tea.
+Began to rain.
+Failed the exam, my mother hit me out.
+The air is invisible.
+Air is a fluid, but not liquid.
+The air pressure in our body is 15 pounds per square inch.
+Most of the air is nitrogen.
+Beautiful peacock feathers.
+The tiger is much bigger than a cat.
+Elderly 70 years old, and only lost a tooth.
+The teacher gave me a physical book.
+Teachers after school for a walk.
+Inside there are a lot of people.
+The unit of force is "Newton", use the "N" indicates.
+The two guests are not welcome.
+The two lost sheep.
+Lenin was born on April 22, 1870.
+The horse has four hooves.
+Towels and soap are out in the bathroom.
+Every boy and girl should have her hair combed neat.
+There are two workers.
+There are two single sail.
+There are two boats.
+That the lake there are many fish.
+The river with a group of fish.
+Piece of goldfish died.
+The grandmother is the oldest of our family.
+Male, female to participate in the Council.
+You to my glass on the go?
+You are my glasses on where to go?
+Pig raising fertilizer.
+You are not uninformed, is made a wrong judgment.
+Your income is three times.
+How is your brother?
+Your room color or black and white TV.
+Mother and how long did you meet?
+Do you play tennis?
+Many people are there in your house?
+Did you see that bike?
+Have you seen a bike?
+You come to China to learn Chinese?
+How many people are there in your class?
+You come to Beijing tomorrow.
+You ruined my plan.
+You do not know about this?
+You are not a lot of overtime?
+Monday to Friday, 7:00 to 21:00 the required standards, according to the current national accounting.
+You can put the box hold?
+Do you like to come with me?
+You are not born in China?
+Why do not you?
+Do you want me to stay?
+You like it or not this person?
+You like to eat a mango?
+Do you like music or sports?
+You have already eaten breakfast yet?
+Do you have a pen?
+Have you ever seen the movie?
+You really want to know what I think?
+Birds cats eat.
+Farmers sheep take the hair.
+Apple is now cooked.
+Seven to nine less two.
+Car turn the corner turn too fast.
+Guns are not toys.
+Manuscript copy, please.
+Please lock the door.
+Please note that listen every Saturday 828 kHz news program in Taiwan 19:40 ~ 20:00.
+29 days in February last year.
+There are people all over the world play football.
+The hot-air balloon is the earliest human aircraft.
+Water weight or cold water heavier?
+Everyone has a job.
+Easy to heat transfer objects called a good conductor of heat.
+If we take the rocket to the moon, we will find it to differ materially from those with the Earth.
+Following the adjournment of the
+Store closed 7:00 tonight?
+Last month to a new programmer.
+Standard of living is getting higher and higher.
+The lion is the king of the Beast.
+First carefully wash and wash, then slowly cut into small pieces.
+A variety of books on the shelf to be neat.
+Book on the shelf.
+The math homework is 15 Exercise 3.
+Fourth, the two twice.
+Although tired, he decided to attend the meeting.
+His cattle killed.
+Yard clean sweep.
+He was still half an hour before.
+He betrayed his country.
+He was sentenced to five years in prison.
+He is smarter than I do.
+He not only knowledge but also experience.
+He did not want anyone to know he was gone.
+He took a hoe to work.
+He admitted that he failed.
+He eat more and sleep more.
+He wore an old blue suit.
+He come from?
+He played nearly five years in volleyball.
+His passport has expired.
+His hair was gray.
+Reading, I read newspapers.
+He was twenty years old.
+He is much higher.
+He gave me one two inches long radish.
+He gave me a book.
+He is like me.
+He answered and his sister fast.
+He will leave Beijing to Shanghai.
+He is twenty-one.
+He is the boy that I encountered in the park yesterday.
+He saw bright red flames.
+He coughed.
+His face up against the sun glowing.
+He bought two cabbage.
+He did not fully understand the plan.
+He has no logic.
+They wasted a lot of chalk.
+Two of them.
+Every day they are on the restaurant.
+They want us to not be late.
+They like the film?
+They breath worked two shifts.
+They take the ship to go to Japan.
+He took a book out.
+He ran, opened the door, and rushed out.
+He quietly went out of two books.
+He went to the United States.
+He let the students understand his theory.
+His body is very healthy.
+He was deeply bowed to the teacher.
+He was born November 9, 1973.
+When he took your book?
+He is not a student?
+He is to take the subway to come here.
+He is much thinner.
+He is one of my acquaintances.
+He is an ordinary worker.
+He is a fan of photography.
+He is a composer, she is a singer.
+He was born in China, right?
+He is a famous historian.
+He said that much good!
+He said that English is better than well said.
+He gave me a bouquet of flowers.
+He did not understand the plan.
+He is so clever as his teacher.
+Smoke pits too much.
+He asked us to translate these sentences into English.
+His side reading, while reading the newspaper.
+He was not confused.
+He has a fixed income.
+He has two dentures.
+He has a fur coat.
+He was reading, and reading the newspaper.
+His yard sweep the Debu clean.
+His many friends in foreign countries.
+In foreign real estate.
+He lived abroad for more than a decade.
+Did he sign the contract?
+He was once an English teacher.
+He was once an English teacher.
+He is an ax to chop wood.
+He pointed to the tables and cabinets.
+Where he lives, you know do not know?
+His character was very well written.
+He made a very strange dream.
+The sun everything blonde.
+The Sun 150 million km from Earth.
+The Shuttlecock children is a useful sports activities.
+The iron bridge was washed away by the flood.
+Iron is an important raw material for manufacturing tools and defense weapons.
+All things are made up of atoms.
+Wang Guangzu is the engineer.
+Mr. Wang, Mr. Zhang dwarf.
+Mr. Wang, a day after dinner walk.
+Mr. Wang to recognize you not?
+Mr. Wang, like travel.
+I put a large radish rinse clean.
+I ate the bread.
+I helped my mother wash the dishes.
+I do not agree.
+I do not know, ask him to explain it.
+I do not feel cold.
+I have two centimeters long.
+I never thought would be here to meet you.
+I large one-year-old.
+I pour a cup of tea.
+My pen in the drawer.
+My friend is not all smoke.
+My apple, your little.
+My income is your third.
+My math is not as good as you.
+I prefer it.
+He and I are students.
+In front of my house there is a small river.
+Today morning I get up 6:50.
+Tonight I will be the newspaper.
+I saw two children.
+I saw three students.
+I saw three cow.
+I saw him coming.
+I'll try.

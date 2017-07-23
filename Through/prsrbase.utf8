@@ -1,0 +1,2795 @@
+
+/* ----- 直接上升规则 ----- **
+
+** 体词性短语 */
+
+&& {np00}  np->!n :: $.内部结构=单词
+        => NP(!N/n)
+        => DP(!D/n)
+        => AP(!A/n)                          /*人工*/
+        => NP(!R/n) %R.RSUBC=RPERS|RCOMP|RREFL|RINDF,$.NPER=%R.RPER,$.NNUM=%R.RNUM  /*天*/
+&& {np01}  np->!r :: $.内部结构=单词,/*%r.代词子类=~rb,*/
+        IF %r.汉字=们 THEN $!=%r @复数,$.复数=Yes ENDIF
+        || %r.代词子类=~rc
+        => AP(!A/r)                          /*自己*/
+        => NP(!N/r)                          /*人们*/
+        => PP(!PP/r)                      
+        => NP(!R/r) %R.RSUBC=RPERS|RCOMP|RREFL|RINDF,$.NPER=%R.RPER,$.NNUM=%R.RNUM 
+        => T(!T/r) %T.TSUBC=TPOSS
+	=> NP(!T/r) 
+        || %r.代词子类=rc,$.语气=陈述
+        => T(!T/r) %T.TSUBC=TPOSS
+        => NP(!N/r)                            /*什么*/
+        => NP(!R/r) %R.RSUBC=RPERS|RCOMP|RREFL|RINDF,$.NPER=%R.RPER,$.NNUM=%R.RNUM 
+        || %r.代词子类=rc,$.语气=疑问
+        => T(!T/r) %T.TSUBC=TPOSS         /*谁的*/
+        => NP(!R/r) %R.RSUBC=RQUER        /*谁*/ 
+&& {sp00}  sp->!s :: $.内部结构=单词
+        => NP(!N/s)                          /*风景区*/
+        => DP(!D/s)                          /*国内*/
+        => AP(!A/s)                           /*全球*/
+        => PP(!P/s)                           /*边上*/
+        => PP(!PP/s)                         /*天上*/
+&& {sp01}  sp->!r :: $.内部结构=单词,%r.指代处所=是
+        => DP(!D/r)                              /*这里*/
+        => NP(!R/r)                              /*这儿*/
+&& {sp02}  sp->!f :: $.内部结构=单词 /*,%f.音节=2*/
+        => DP(!D/f)			/*附近*/
+	=> PP(!P/f)                     /*之间*/
+	=> AP(!A/f)         
+&& {tp00}  tp->!t :: $.内部结构=单词
+        => NP(!N/t)
+        => AP(!A/t) 
+        => DP(!D/t)  $.FUTR=%D.DFUTR,$.PAST=%D.DPAST,$.CONT=%D.DCONT,$.PERF=%D.DPERF /*现在*/
+        => PP(!PP/t)                          /*从前*/
+&& {tp01}  tp->!r :: $.内部结构=单词,%r.指代时间=Yes
+        => NP(!N/r)
+        => DP(!D/r)  $.FUTR=%D.DFUTR,$.PAST=%D.DPAST,$.CONT=%D.DCONT,$.PERF=%D.DPERF /*那时*/
+        => PP(!PP/r)
+&& {mp00} mp->!m :: $.内部结构=单词,%m.数词子类=数量
+        => M(!M/m)
+        => T(!T/m)                             /*许多*/
+        => NP(!N/m)
+        => AP(!A/m)                          /*一切*/
+&& {mcp00} mcp->!m :: $.内部结构=单词,$.数词结构=单词
+        || %m.yx=一
+        => M(!M/m) $.NNUM=SNGL
+        || %m.数词子类=系数|位数|符号,%m.yx=~一
+        => M(!M/m) $!=%M @NNUM,$.NNUM=PLUR
+        => A(!A/m) 
+        || %m.数词子类=助数,%m.yx=~第~分之~来~左右
+        => T(!T/m)                            /*几个人*/
+        || %m.数词子类=小数|数量
+        => N(!N/m)
+        => M(!M/m) $.NNUM=SNGL
+
+/* 谓词性短语 */
+
+&& {ap00}  ap->!a :: $.内部结构=单词
+        => AP(!A/a)
+        => DP(!D/a)                           /*波浪式*/
+        => VP(!V/a)        /*不行*/
+        => NP(!N/a)        /*幸福*/
+        => PP(!PP/a)    /*及时*/
+&& {ap01}  ap->!b :: $.内部结构=单词
+        => AP(!A/b)
+        => AP(!N/b)        /*航天机器人*/
+&& {ap02}  ap->!z :: $.内部结构=单词
+        => DP(!D/z)
+        => AP(!A/z)
+&& {vp00}  vp->!v :: $.中心语=%v,$.被动=否,
+        IF %v.yx=了|着 FALSE,
+        IF %v.重叠形式=VV|V一V|V了V THEN $.内部结构=单词 ENDIF,
+        IF %v.重叠形式=否 THEN $.内部结构=单词 ENDIF,
+        IF %v.重叠形式=V不了N|V了N|V过N|V了一N|V过一N THEN $.内部结构=述宾 ENDIF
+        || {vp00.1} IF %v.重叠形式=V了N|V过N|V了一N|V过一N|V了V|V不了N FALSE
+        => {vp00.1.2} VP(!U/v)
+        => {vp00.1.3} NP(!N/v)
+        => {vp00.1.4} AP(!A/v)   /*满意*/
+        => {vp00.1.5} PP(!P/v)
+        => {vp00.1.6} DP(!D/v)
+        => {vp00.1.7} VP(!V/v)
+        || {vp00.2} %v.重叠形式=V了N|V过N|V了一N|V过一N|V了V
+        => VP(!V/v)   %V.PERF=Yes
+        || {vp00.3} %v.重叠形式=V不了N
+        => VP(U<can> D<not> !V/v) %V.FORM=RT
+
+/* 虚词短语 */
+
+&& {dp00}  dp->!d :: $.内部结构=单词
+        => DP(!D/d) $.PAST=%D.DPAST,$.FUTR=%D.DFUTR,$.PERF=%D.DPERF,$.CONT=%D.DCONT
+        => AP(!A/d)
+        => VP(!U/d)        /*必须*/
+        => PP(!PP/d)    /*长期 同期*/
+        => R(!R/d)        /*互相*/
+        => C(!C/d)      /*万一*/
+
+/* ----- 组合上升规则 ----- **
+
+** mcp.数词组合规则 */
+
+&& {mcp1} mcp->m !m :: $.数词结构=系位,%m.数词子类=系数,%%m.数词子类=位数,%%m.yx=~十
+        => M(M/m !M//m) %M.MSUBC=MNUM,$!=%%M @NNUM,$.NNUM=PLUR
+&& {mcp2} mcp->mcp !mcp ::$.数词结构=多位,%mcp.数词结构=系位,%%mcp.数词结构=~数助
+        || %mcp.yx=~百
+        => M(M/mcp !M//mcp) %M.MSUBC=MNUM,$!=%%M @NNUM,$.NNUM=PLUR
+        || %mcp.yx=百
+        => M(M/mcp C<and> !M//mcp) %M.MSUBC=MNUM,$!=%%M @NNUM,$.NNUM=PLUR
+&& {mcp3} mcp->mcp m<零> !mcp ::$.数词结构=多位,%mcp.数词结构=系位
+        => M(M/mcp C<and> !M//mcp) %M.MSUBC=MNUM,$!=%%M @NNUM,$.NNUM=PLUR
+&& {mcp4} mcp->mcp !m :: $.数词结构=多系,%mcp.数词结构=多系|单词,%mcp.yx=~十,%m.数词子类=系数|小数,%m.yx=~两~十~半~双
+        => M(M/mcp !M/m) %M.MSUBC=MNUM,%%M.MSUBC=MNUM,$!=%%M @NNUM,$.NNUM=PLUR
+&& {mcp5} mcp->m m !m :: $.数词结构=系位,%m.数词子类=系数,%%m.数词子类=系数,%%%m.数词子类=位数,%m.yx=~十,%%m.yx=~十
+        => M(M/m C<or> M//m M///m)  %M.MSUBC=MNUM,%%M.MSUBC=MNUM,$!=%%%M @NNUM,$.NNUM=PLUR /*六七百*/
+
+
+/* mp.数量短语规则 */
+
+&& {mp1} mp->mcp !q :: $.内部结构=数量,IF %mcp.数词子类=~助数 THEN %mcp.数词结构=~单词 ENDIF,$.定语=%mcp,$.中心语=%q,%q.yx=~日               /* 很多种鱼 */
+        || %mcp.数词结构=~序数,%q.量词子类=~集体~种类~成形~容量~时量~度量~动量
+        => M(!M/mcp)        %M.MSUBC=MNUM,$!=%M @NNUM,$.NNUM=PLUR 
+        => NP(M/mcp !N/q)    %M.MSUBC=MNUM,$.NNUM=PLUR  /*两百张*/  
+	=> M(!T/mcp)        %T.TSUBC=TINDF,$!=%T @NNUM,$.NNUM=PLUR 
+        => NP(T/mcp !N/q)    %T.TSUBC=TINDF,$.NNUM=PLUR /* 很多种鱼 */
+         || %mcp.数词结构=~序数,%q.量词子类=集体|种类|成形|容量|时量|动量|度量
+        => NP(M/mcp !N/q)   %M.MSUBC=MNUM,$.NNUM=PLUR   /*几百年*/  
+	 => NP(T/mcp !N/q)   %T.TSUBC=TINDF,$.NNUM=PLUR   
+        || %mcp.数词结构=~序数,%q.yx=岁
+        => M(!M/mcp)        %M.MSUBC=MNUM,$!=%M @NNUM,$.NNUM=SNGL  /*三十岁*/
+        || %mcp.数词结构=序数
+        => M(M/mcp) %M.MSUBC=MORD
+        => NP(M/mcp !N/q) %M.MSUBC=MORD,$.NNUM=SNGL
+&& {mp2} mp->!mp m :: $.内部结构=数量,%mp.内部结构=~定中,%mp.量词子类=度量,%m.数词子类=~助数,$.定语=%mp
+        => NP(!NP/mp M/m) %M.MSUBC=MNUM
+&& {mp3} mp->m !q :: $.内部结构=数量,%m.数词子类=~助数,$.定语=%m,$.中心语=%q,
+        IF %m.yx=多少|几 THEN $!=%q @语气,$==%m @语气 ENDIF
+        || {mp3.1} %q.量词子类=~集体~种类~成形~容量~时量~度量~动量,%q.yx=~些
+        => {mp3.1.1} M(!M/m) %M.MSUBC=MNUM,%M.YX=~one,$!=%M @NNUM,$.NNUM=PLUR 
+        => {mp3.1.2} M(!M/m) %M.MSUBC=MNUM,%M.YX=one
+        => {mp3.1.3} T(!T/m)                                                     /*几个*/
+        => {mp3.1.4} AP(!A/m)                                                    /*好几/m座*/
+        => {mp3.1.5} NP(!N/m)                                                    /*半个*/
+        => {mp3.1.6} NP(T/m !N/q) %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM        
+        => {mp3.1.7} NP(M/m !N/q)    %M.MSUBC=MNUM,%M.YX=~one,$.NNUM=PLUR       /*两张*/
+        || {mp3.2} %q.yx=些
+        => T(!T/q)                                                     /*一些*/
+        || {mp3.3} %q.量词子类=集体|种类|成形|容量|时量
+        => {mp3.3.1} NP(T/m !N/q) %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM             /*几年*/  
+        => {mp3.3.2} NP(M/m !N/q) %M.MSUBC=MNUM,%M.YX=~one,$.NNUM=PLUR
+        => {mp3.3.3} NP(N/m !N/q) 
+        || {mp3.4} %m.yx=一,%q.量词子类=动量
+        => {mp3.4.1} NP(M/m !N/q)   /*一周*/
+        => {mp3.4.2} T(!T/m)             /*一场大雪*/
+        || {mp3.5} %m.yx=~一,%q.量词子类=动量
+        => M(!M/m) %M.MSUBC=MNUM,%M.YX=~one,$!=%M @NNUM,$.NNUM=PLUR         /*三场*/
+        || {mp3.6} %q.量词子类=度量
+        => {mp3.6.1} NP(M/m !N/q) %M.MSUBC=MNUM,%M.YX=one
+        => {mp3.6.2} NP(M/m !N/q) %M.MSUBC=MNUM,%M.YX=~one,$.NNUM=PLUR
+        => {mp3.6.3} NP(N/m !N/q) 
+        => {mp3.6.4} NP(T/m !N/q) %T.TSUBC=TPOSS
+        => {mp3.6.5} NP(T/m !N/q) %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM        
+&& {mp4} mp->m !n :: $.内部结构=数量,%m.数词子类=~助数,$.定语=%m,$.中心语=%n,%n.临时量词=Yes
+        => NP(T/m !N/n) %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM                       /* 两碗 */
+        => NP(M/m !N/n) %M.MSUBC=MNUM,%M.YX=~one,$.NNUM=PLUR
+&& {mp41} mp->mcp !n :: $.内部结构=数量,%mcp.数词结构=~单词,%n.临时量词=Yes,$.定语=%mcp,$.中心语=%n
+        => NP(M/mcp !N/n) %M.MSUBC=MNUM,$.NNUM=%M.NNUM                           /*两百碗*/
+&& {mp5} mp->r !q :: $.内部结构=定中,%r.代词子类=rb|rc,%r.后量名=是,%q.量词子类=~度量,$.定语=%r,$.中心语=%q,
+        IF %r.代词子类=rc THEN $!=%q @语气,$==%r @语气,$.主题成分=%r ENDIF
+        || %q.量词子类=~种类~时量
+        => T(!T/r)    %T.TNNUM=SNGL                                       /*此项*/
+        => NP(!R/r)    %R.RNUM=SNGL
+        => NP(T/r !N/q)    %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM,%T.TNNUM=SNGL    /*每天 每个人*/
+        || %q.量词子类=种类|时量
+        => NP(T/r !N/q)    %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM,%T.TNNUM=SNGL    
+&& {mp6} mp->r !n :: $.内部结构=定中,%r.代词子类=rb,%r.后量名=是,$.定语=%r,$.中心语=%n,%n.临时量词=Yes
+        => NP(T/r !N/n)    %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM,%T.TNNUM=SNGL    
+&& {mp7} mp->r !mp :: $.内部结构=组合定中,%r.yx=~这样~那么~这么~那样,%r.代词子类=rb|rc,%r.后数量名=是,$.定语=%r,$.中心语=%mp,%mp.内部结构!=单词,
+        IF %r.代词子类=rc THEN $!=%mp @语气,$==%r @语气 ENDIF
+        || {mp7.1} %mp.定语.内部结构=单词,%mp.定语.yx=一,%mp.量词子类=集体|种类|容量|时量|度量|成形
+        => NP(T/r !NP/mp) %T.TNNUM=%NP.NNUM /*这一年*/
+        || {mp7.2} %mp.定语.内部结构=单词,%mp.定语.yx=一,%mp.量词子类=个体
+        => T(T/r M<one>)                                           /*这一个 哪一个*/
+        || {mp7.3} %r.yx=这|那,IF %mp.定语.内部结构=单词,%mp.定语.yx=一 FALSE
+        => {mp7.3.1} NP(T/r !M/mp) %T.TNNUM=PLUR,$.NNUM=PLUR                        /*这两张*/
+        => {mp7.3.2} NP(T/r !NP/mp) %T.TNNUM=PLUR,$.NNUM=PLUR
+        || {mp7.4} %r.yx=~这~那,IF %mp.定语.内部结构=单词,%mp.定语.yx=一 FALSE
+        => {mp7.4.1} NP(T/r !M/mp) $.NNUM=%M.NNUM
+        => {mp7.4.2} NP(T/r !NP/mp) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM     
+&& {mp8} mp->m m !q ::  $.内部结构=数量,$.定语=%m,$.中心语=%q,
+        %m.数词子类=系数,%%m.数词子类=系数,%q.量词子类=时量|动量,%m.yx=~十,%%m.yx=~十 
+        || %q.量词子类=时量
+         => NP(M/m C<or> M//m !N/q) %M.MSUBC=MNUM,%%M.MSUBC=MNUM,$.NNUM=PLUR
+        || %q.量词子类=动量
+         => M(M/m C<or> M//m) %M.MSUBC=MNUM,%%M.MSUBC=MNUM
+         => NP(M/m C<or> M//m !N/q) %M.MSUBC=MNUM,%%M.MSUBC=MNUM,$.NNUM=PLUR
+&& {mp9} mp->!mp mp :: $.内部结构=联合,%mp==%%mp @内部结构 @量词子类,
+        IF %mp.yx=点,%%mp.yx=~点 FALSE
+        => NP(!NP/mp M//mp)
+        => NP(!NP/mp NP//mp)
+&& {mpa} mp->!mp c mp :: $.内部结构=联合,%mp==%%mp @内部结构 @量词子类 ,%c.连体=是
+        => NP(!NP/mp C/c  NP//mp)                                 /*三十天或三十一天*/
+
+
+/* sp.处所词短语 */
+
+&& {sp1} sp->np !f :: $.内部结构=定中,$.定语=%np,$.中心语=%f,%f.主体=%np,
+        %np.语义类=~时间,%f.语义类=~时间,%f.前名=是,%np.名词子类!=ng,
+        IF %np.内部结构=单词,%f.yx=~上~中 THEN %np.兼类=~v ENDIF            /*报上 工作上*/
+        || {sp1.1} %f.yx=~之间~下面,
+           IF %np.sem=具体事物 FALSE,
+           IF %np.内部结构=单词,%np.ccat=r FALSE                            /*我前面*/
+        => NP(NP/np)                                                        /*工业上*/
+        || {sp1.2} IF %np.语义类=人,%f.音节=1,%f.yx=~中 FALSE,%f.yx=~之间~下面
+        => NP(NP/np)                                                       /*从<收音机里>*/
+        || {sp1.3} IF %np.语义类=人,%f.音节=1,%f.yx=~中 FALSE
+        => PP(!P/f NP/np) %NP.RCASE=OBJ                                        /*桌子上 我们班里 姑娘们中*/ 
+        || {sp1.4} %f.yx=之间,%np.内部结构=联合
+        => PP(!P/f NP/np) %NP.RCASE=OBJ                                        /*上海和天津之间*/ 
+&& {sp2} sp->sp !f :: $.内部结构=定中,$.定语=%sp,$.中心语=%f,%f.主体=%sp,%sp.内部结构=单词
+        => PP(!P/f NP/sp) %NP.RCASE=OBJ                                         /*山脚边*/ 
+&& {sp3} sp->ap !f :: $.内部结构=定中,$.定语=%ap,$.中心语=%f,%f.主体=%ap,
+        %ap.内部结构=的字,%ap.中心语.cpcat=np,%f.前名的=是
+        => PP(!P/f NP/ap) %NP.RSUBC=~RPOSS,%NP.NCASE=COMM                        /*河的南面 商店的后面 她的后面*/ 
+&& {sp4} sp->np !sp :: $.内部结构=定中,$.定语=%np,$.中心语=%sp,%np.语义类=~相对时间,%np.名词子类!=ng,
+        IF %sp.内部结构=定中 THEN %sp.定语.ccat=~n ENDIF,
+        IF %sp.内部结构=定中,%sp.定语.ccat=g FALSE /*~书<房中>*/
+        || {sp4.1} %sp.ccat=~r,%sp.前名=是
+        => {sp4.1.1} PP(!PP/sp NP/np) %NP.RCASE=OBJ                          /*小河边上*/
+        => {sp4.1.2} NP(!NP/sp PP(P<in> NP/np))                              /*哈尔滨著名的风景区*/
+        || {sp4.2} %sp.ccat=r,%np.内部结构=单词,%np.ccat=r,%np.代词子类=ra,%sp.代词子类=rb
+        => DP(!DP/sp)                                                        /*我这里 她那儿*/
+        || {sp4.3} %sp.ccat=r,%sp.代词子类=rb,IF %np.内部结构=单词,%np.ccat=r,%np.代词子类=ra FALSE
+        => NP(!NP/np)                                                        /*她朋友那里 理发馆那儿*/
+&& {sp5} sp->ap !sp :: $.内部结构=定中,%ap.内部结构=的字,%sp.内部结构=单词
+        => NP(AP/ap !NP/sp)                                                  /*著名的风景区*/
+        => NP(!NP/sp PP(P<of> NP/ap))
+&& {sp6} sp->!sp c sp :: $.内部结构=联合
+        => PP(!PP/sp C<and> PP//sp) 
+&& {sp7} sp->!sp w<"、"> sp :: $.内部结构=联合,%%sp.内部结构=~联合
+        => PP(!PP/sp C<and> PP//sp) 
+
+/* tp.时间词短语 */
+
+&& {tp1} tp->f !t :: $.内部结构=定中,%f.yx=下|上,$.定语=%f,$.中心语=%t
+        => NP(A/f !N/t)        /*下星期二*/
+&& {tp11}tp->f !mp :: $.内部结构=定中,%f.yx=下|上|前,%mp.定语.yx=~一,$.定语=%f,$.中心语=%mp
+        => NP(A/f !NP/mp)  /*上两次*/
+&& {tp12}tp->f q<个> !t :: $.内部结构=定中,%f.yx=下|上,$.定语=%f,$.中心语=%t
+        => NP(A/f !N/t)  /*下个星期*/
+&& {tp2} tp->r !t :: $.内部结构=定中,%r.代词子类=~ra,$.定语=%r,$.中心语=%t
+        => NP(T/r !N/t) %T.TNSUB=%N.NSUBC,%T.TNNUM=%N.NNUM            /*每星期三*/
+&& {tp3} tp->np !f :: $.内部结构=定中,%np.语义类=时间,%f.前时=是,$.定语=%np,$.中心语=%f,$!=%f @语气,$==%np @语气,$.主题成分=%np
+        || %f.yx=前|以前
+        => DP(NP/np !D/f) %D.DNEND=Yes    /*两个月前*/
+        || %f.yx=~前~以前
+        => PP(!P/f NP/np)
+&& {tp4} tp->tp !f ::$.内部结构=定中,%f.前时=是,$!=%f @语气,$.定语=%tp,$.中心语=%f,$==%tp @语气,$.主题成分=%tp
+        => PP(!P/f NP/tp)    /*冬天里 下午前*/
+&& {tp5} tp->mp !f :: $.内部结构=定中,%mp.量词子类=时量,%f.前时=是,%f.语义类=时间,$.定语=%mp,$.中心语=%f,$!=%f @语气,$==%mp @语气,$.主题成分=%mp
+        || %f.yx=前|以前
+        => DP(NP/mp !D/f) %D.DNEND=Yes    /*十年前*/
+        || %f.yx=~前~以前
+        => PP(!P/f NP/mp)    /*两年内 几年内*/
+&& {tp6} tp->ap !tp :: $.内部结构=定中,%ap.内部结构=的字,$.定语=%ap,$.中心语=%tp,
+        IF %ap.中心语.cpcat=tp,%ap.中心语.内部结构=~单词,%ap.中心语.定语.cpcat=mp FALSE    /* ~一个秋天的早晨*/
+        => NP(!NP/tp PP/ap)
+        => NP(!NP/tp P<of> NP/ap)        /*哈尔滨的夏天 科学的春天*/
+&& {tp7} tp->vp !f :: $.内部结构=附加,%vp.音节=~1,%f.前时=是,%vp.yx=~在~看见,
+        IF %vp.被动=Yes FALSE,
+        IF %vp.yx=喜欢|准备,%f.yx=里 FALSE                /*你~<准备在花园里>干什么*/
+        => VP(VP/vp) %VP.FORM=VG                         /*发展中  ~把信息输入到计算机中*/
+        => PP(!P/f VP/vp) %VP.FORM=VG                    /*工作中 在美国生活五年后 想了想之后*/ 
+        => PP(!P/f NP/vp)                                 /*解放前*/ 
+&& {tp8} tp->dj !f :: $.内部结构=定中,%f.前时=是,$.定语=%dj,$.中心语=%f,%f.yx=~里,
+        IF %dj.谓语.yx=在,%f.yx=内|里面 FALSE,                                                  /*~<人口在最近几年>内*/
+        IF %dj.谓语.内部结构=状中,%dj.谓语.状语.cpcat=pp,%f.前介=%dj.谓语.状语.yx FALSE    /* ~计算机在企业管理中 */
+        /*=> PP(!P/f CS/dj)*/    /*他想了想之后*/
+	=> DP(!C/f CS/dj)
+&& {tp9} tp->mp !tp :: $.内部结构=定中,%mp.量词子类=时量|个体,$.定语=%mp,$.中心语=%tp
+        => PP(!PP/tp NP/mp)
+        => NP(T/mp !NP/tp) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM    
+        || %mp.量词子类=时量
+        => NP(!NP/tp M/mp)        
+        => NP(NP/mp !NP/tp)        /*每天早晨 1992年11月*/
+        || %mp.量词子类=个体
+        => NP(M/mp !NP/tp) %M.NNUM=%NP.NNUM    /*一个秋天的早晨*/
+&& {tpa} tp->np !tp :: $.内部结构=定中,%tp.前名=是,%np.ccat=~r,%np.语义类=时间,$.定语=%np,$.中心语=%tp
+        => PP(!PP/tp P<of> NP/np)
+	=> NP(!NP/tp P<of> NP/np)
+&& {tpb} tp->tp !tp :: $.内部结构=定中,%%tp.内部结构=~定中,$.定语=%tp ,$.中心语=%%tp,%tp.后时=是,%%tp.前时=是
+        || %tp.内部结构=定中,IF %tp.yx=日|号,%%tp.ccat=t FALSE
+        => NP(!NP//tp NP/tp)    /*明天上午八时 明天上午八点半*/
+        => NP(!NP//tp DP/tp)    
+        || %tp.内部结构=定中,%tp.yx=日|号,%%tp.ccat=t
+        => NP(!NP//tp P<of> NP/tp)    /*一九八零年九月八日凌晨*/
+        || %tp.内部结构=单词,%%tp.内部结构=单词,%%tp.yx=~点
+        => NP(NP/tp !NP//tp)    /*明天上午 去年二月*/
+        || %tp.内部结构=单词,%%tp.内部结构=单词,%%tp.yx=点
+        => NP(NP//tp !NP/tp)    /* 早晨7点 */
+        => NP(!NP//tp DP/tp)    /* 今晚7点 */
+&& {tpc} tp->tp !np :: $.内部结构=定中,%tp.后名=是,%np.定语.cpcat=mp|mcp,%np.语义类=时间,%np.ccat=~r,$.定语=%tp,$.中心语=%np
+        => NP(AP/tp !NP/np)        /*最近一个星期*/
+        => PP(P<at> A/tp !NP/np)
+&& {tpd} tp->tp !mp :: $.内部结构=定中,%mp.量词子类=动量|时量,$.定语=%tp,$.中心语=%mp
+        || %tp.yx=~最后
+        => NP(AP/tp !NP/mp)                             /*最近几年*/
+        => NP(NP/tp !NP/mp)                             /*十月一日*/
+        => NP(NP/tp !M/mp) %M.MSUBC=MORD             /*八月十五日*/
+        || %tp.yx=最后
+        => PP(P<for> T<the> AP/tp !NP/mp)             /*最后一次*/
+&& {tpe} tp->!t mcp   ::$.内部结构=定中,%t.语义类=相对时间,%mcp.数词结构=多位|系位|单词,%mcp.音节=2|3
+        =>NP(!N/t M/mcp ) %M.MSUBC=MORD              /*八月十五*/
+&& {tpf} tp->!tp c tp :: $.内部结构=联合,%c.连体=是
+        => NP(!PP/tp C<and> PP//tp)
+&& {tpg} tp->!tp w<"，"> tp :: $.内部结构=联合,%tp==%%tp @时间单位
+        => NP(!NP/tp W<","> NP//tp)              /*农历八月十五,中秋节*/
+
+
+/* pp.介词短语 */
+
+&& {pp1} pp->!p f :: $.内部结构=介宾,%p.格标=处所|来源|目的,%f.前介=%p.yx,$.宾语=%f
+        => DP(!D/f)                      /*在后面*/    
+        => PP(!P/p N/f)                  /*向东 从西 向前*/
+&& {pp2} pp->!p r :: $.内部结构=介宾,%p.格标=对象|目的,%r.代词子类=rb,$.宾语=%r
+        || IF %p.格标=对象|目的 TRUE 
+            => PP(!P/p R/r)        /*比这*/
+            => PP(!P/p N/r)        /*比这里 到那里*/
+        || IF %p.格标=处所,%r.指代处所=是 TRUE 
+            => DP(D/r) %D.DVEND=Yes /*在那里*/ 
+&& {pp3} pp->!p np :: $.内部结构=介宾,%p.体谓=体,$.宾语=%np,$!=%p @语气,$==%np @语气,
+        IF %np.语气=疑问|感叹 THEN $.主题成分=%np ENDIF,
+        IF %p.yx=在,%np.内部结构=单词,%np.yx=山 FALSE,                        /*~<在山><上一个小屋里度假*/
+        IF %p.yx=给,%p.格标=与事 THEN %np.语义类=人类|动物|植物 ENDIF,               /* ~给刀割破 */
+        IF %p.yx=对,%np.内部结构=组合定中,%np.中心语.ccat=v,%np.中心语.配价数=2,%np.中心语.客体=%np.定语.中心语 FALSE, /* ~ 计算机<对><汉语的分析>*/
+        IF %p.格标=时间 THEN %np.ccat=n,%np.语义类=时间|事情 ENDIF
+        || /*%p.格标=~受事*/
+        => PP(!P/p NP/np) %NP.RCASE=OBJ, %NP.YX=~here~there~where    /*在山区 和大家 比我们几个*/
+	/*
+        || %p.格标=受事|对象,%p.yx=~与
+        => NP(NP/np) %NP.RCASE=OBJ
+	*/
+&& {pp4} pp->!p sp :: $.内部结构=介宾,%p.体谓=体,$.宾语=%sp,$!=%p @语气,$==%sp @语气,$.主题成分=%sp
+        || %p.格标=处所|对象,%sp.ccat=f|s|r,%p.yx=~到     /*~到这所学校里=> in */
+        => DP(!DP/sp) 
+        => PP(!PP/sp)             /*向村东 在灯下 在国外 在海边*/
+        || %p.格标=处所|对象,%sp.ccat=s|r,%p.yx=~离~到
+        => PP(P<in> NP/sp)        %NP.YX=~here~there~where /*在外国 在理发馆那儿  */
+        || %p.格标=处所|对象,%sp.ccat=s|r|f,%p.yx=离
+        => PP(P/p NP/sp)         /*离外国 离海边*/
+        || %p.格标=来源|目的 
+        => PP(!P/p NP/sp)     /*从船上 发源于中国的西北部*/
+        => PP(!P/p DP/sp)        /*从国外*/
+        || %p.格标=来源|目的,IF %sp.中心语.内部结构=单词 THEN %sp.中心语.yx=~里~上 ENDIF
+        => PP(!PP/sp)            /*从我们家的前面*/
+&& {pp5} pp->!p tp :: $.内部结构=介宾,%p.格标=时间|对象,$.宾语=%tp,$!=%p @语气,$==%tp @语气,$.主题成分=%tp,
+         IF %p.yx=在,%tp.yx=次 FALSE
+	|| {pp5.1} 
+        => PP(!P/p NP/tp)
+        || {pp5.2} %p.yx=象|像|跟|比
+        => PP(!P/p DP/tp)        /*象从前*/
+        || {pp5.3} %p.yx=~象~像~跟~比~到  /*~到明天*/
+        => PP(DP/tp)           /*从现在 在明天下午 在今天晚上*/
+        => PP(PP/tp)            /*在最近几年内*/
+&& {pp6} pp->!p mp :: $.内部结构=介宾,%p.格标=~施事,$.宾语=%mp,IF %mp.yx=个 THEN %mp.定语.ccat=r ENDIF,%p.宾语=%mp,$!=%p @语气,$==%mp @语气,$.主题成分=%mp,
+        IF %p.yx=在|于,%mp.yx=年|月|日|号 FALSE    /*~于1975年*/
+        => PP(!P/p M/mp)    /*放<在第一位>*/
+        => PP(!P/p NP/mp)    /*连一天*/
+        => PP(!P/p T/mp)    /*比那间大*/
+&& {pp8} pp->!p ap :: $.内部结构=介宾,%p.体谓=体,%ap.内部结构=的字,$.宾语=%ap,$!=%p @语气,$==%ap @语气,$.主题成分=%ap
+        => PP(!P/p NP/ap) %NP.RSUBC=RPOSS          /*比我的新 根据他所说的*/
+       => PP(!P/p VP/ap) %VP.FORM=VG  /*根据听到的*/
+&& {pp9} pp->!pp pp :: $.内部结构=联合,%pp.yx=从|自,%%pp.yx=向|到|至
+        =>PP(!PP/pp PP//pp)    /*从北京到那里*/
+
+/* dp.副词短语 */
+
+&& {dp1} dp->!d u<的> :: $.内部结构=附加,%d.副的=是,$.中心语=%d,$.附加语=%u
+        => DP(!D/d)                                                                /*渐渐的 非常的 何等的*/
+&& {dp2} dp->!d u<地> :: $.内部结构=附加,$.中心语=%d,$.附加语=%u,IF %d.音节=1 FALSE    /*~尽可能<dp快地>逃跑*/
+        => DP(!D/d) 
+&& {dp3} dp->!np u<地> :: $.内部结构=附加,%np.内部结构=单词,$.中心语=%np,$.附加语=%u,IF %np.ccat=n THEN %np.名状语=是 ENDIF
+        => DP(!DP/np)            /*天才地  历史地 创造性地*/
+&& {dp4} dp->!ap u<地> :: $.内部结构=附加,$.中心语=%ap,$.附加语=%u,
+        IF %ap.内部结构=状中,%ap.状语.yx=正 FALSE,                                  /*~<正兴奋地><演奏一首乐曲>*/
+        IF %ap.内部结构=单词,%ap.音节=1 FALSE,                                      /*~尽可能<快地逃跑>*/
+        IF %ap.内部结构=单词,%ap.重叠形式=No THEN %ap.形状语=可 ENDIF,
+        IF %ap.内部结构=单词,%ap.重叠形式=AA|AABB THEN %ap.重叠词性=d ENDIF
+        || IF %ap.内部结构=单词,%ap.汉字=式 FALSE
+        => DP(!DP/ap)                                                                /*积极地 合理地 快快地*/
+        || %ap.内部结构=单词,%ap.汉字=式
+        => PP(!P<like> DP/ap)                                                                  /*波浪式地*/ 
+&& {dp5} dp->!vp u<地> :: $.内部结构=附加,$.中心语=%vp,$.附加语=%u,
+        IF %vp.内部结构=单词 THEN %vp.单作状语=地 ENDIF,
+        IF %vp.内部结构=述宾 THEN %vp.yx=有 ENDIF
+        => DP(!DP/vp) 
+&& {dp6} dp->!dp dp :: $.内部结构=联合,%dp.副的=是,%%dp.副的=是,%dp==%%dp @内部结构
+        => DP(!DP/dp C<and> DP//dp)     /*积极地稳妥地*/
+&& {dp7} dp->!dp c dp :: $.内部结构=联合,%c.连谓=是
+        => DP(!DP/dp C<and> DP//dp)         /*积极地稳妥地并且合理地*/
+
+
+/* ap.形容词短语 */
+
+/* ap.apbar部分 */
+
+&& {ap1} ap->!ap u<了> :: $.内部结构=附加,%ap.内部结构=单词|粘合述补|状中,$!=%ap @附加语,$.附加语=%u,$.中心语=%ap
+        => AP(!AP/ap)
+        => VP(!VP/ap)   %VP.PERF=Yes  /* 老师的病已经好了 */
+&& {ap2} ap->!a u<着> :: $.内部结构=附加,$!=%a @附加语,$.附加语=%u,$.中心语=%a
+        => AP(!A/a)
+&& {ap3} ap->!a u<过> :: $.内部结构=附加,$!=%a @附加语,$.附加语=%u,$.中心语=%a
+        => AP(!A/a)
+
+/* ap.联合结构 */
+
+&& {aplh1} ap->!a d<不> a :: $.内部结构=联合,$!=%a @语气,$.语气=疑问,%a.yx=%%a.yx
+        => AP(!A/a)
+        => NP(!N/a)  /*疼不疼*/
+&& {aplh2} ap->!ap ap :: $.内部结构=联合,%ap.内部结构=~联合,%ap.形状语=否,%ap.状状语=否,%ap==%%ap @内部结构 @语义类 @主体,
+        IF %%ap.yx=死 FALSE,
+        IF %ap.yx=%%ap.yx FALSE, 
+        IF %ap.ccat=b THEN %%ap.ccat=b ENDIF,
+        IF %ap.内部结构=单词,%%ap.内部结构=单词,%ap.yx=多 FALSE                    /*~到纽约有多远*/
+        => AP(!AP/ap C<and> AP//ap)
+&& {aplh3} ap->!ap c ap :: $.内部结构=联合,%c.仅主前后=~前,%ap.内部结构=~联合,%ap==%%ap @内部结构 @主体,
+        IF %c.yx=虽|虽然 THEN $.连接成分=%c ENDIF    
+        || %c.yx=~虽~虽然,%ap==%%ap @内部结构
+        => AP(!AP/ap C<and> AP//ap)        /*这是一首轻松而愉快的歌曲*/
+        || %c.yx=虽|虽然,%ap.yx=%%ap.yx
+        => AP(C/c AP//ap)               /*房子旧虽旧*/
+&& {aplh4} ap->!ap c vp :: $.内部结构=联合,%c.仅主前后=~前,%ap.内部结构=~联合,%ap==%vp @内部结构 @主体,
+         %c.yx=~虽~虽然
+        => NP(!NP/ap C<and> NP/vp)        /*无知与疏忽是这错误的原因*/
+&& {aplh5} ap->c<既|又> !ap c<又> ap :: $.内部结构=联合,%ap==%%ap @内部结构 @主体
+        => AP(!AP/ap C<and> AP//ap)
+&& {aplh6} ap->c<又> !ap c<又> vp :: $.内部结构=联合,%ap==%vp @内部结构 @主体
+        => AP(!AP/ap C<and> AP/vp)     /*又冷又刮风*/
+&& {aplh7} ap->!ap w<"，"|"、"> ap :: $.内部结构=联合,
+IF %ap.内部结构=联合 THEN %ap==%%ap @主体 ELSE %ap==%%ap @内部结构 @主体 ENDIF,
+        IF %ap.内部结构=状中 THEN %ap.状语.yx=%%ap.状语.yx ENDIF  
+        => AP(!AP/ap C<and> AP//ap)   /*干脆、快*/
+     
+/* ap.的字结构 */
+
+&& {apdez1} ap->!sp u<的> :: $.内部结构=的字,$.中心语=%sp
+        => PP(!PP/sp)    /*人造卫星中的*/
+        => AP(!AP/sp)
+&& {apdez2} ap->!pp u<的> :: $.内部结构=的字,%pp.带的定=定,%pp.兼类=~c,$.中心语=%pp
+        => PP(!PP/pp)    /*~ap(和商品经济的)发展 */
+&& {apdez3} ap->!tp u<的> :: $.内部结构=的字,$.中心语=%tp
+        => NP(!NP/tp)                /*当代的技术 <昨晚的>电视节目*/
+        => NP(T<the> !AP/tp)        /*先前的*/
+        => AP(!AP/tp)                /*现在的*/
+        => VP(!VP/tp)                 /*发展中的*/ 
+        => PP(!PP/tp)                 /*修改后的*/
+&& {apdez4} ap->!np u<的> :: $.内部结构=的字,$.中心语=%np,%np.连接成分.ccat=~c
+        || IF %np.ccat=r,%np.代词子类=~rc THEN $.语气=陈述 ENDIF
+        => T(!T/np) %T.TSUBC=TPOSS
+        => AP(!AP/np)
+        => NP(!NP/np) %NP.RSUBC=~RPERS    /*他们厂的 <河的>南面*/
+	=> PP(P<of> NP/np)
+        || IF %np.ccat=r,%np.代词子类=rc THEN $.语气=疑问 ENDIF
+        => T(!T/np) %T.TSUBC=TPOSS   /*谁的*/
+&& {apdez5} ap->!vp u<的> :: $.内部结构=的字,$.中心语=%vp,%vp.连接成分.ccat=~c,
+        IF %vp.内部结构=状中 THEN %vp.状语.yx=~并~总是 ENDIF,
+        IF %vp.内部结构=述宾,%vp.述语.yx=是,%vp.宾语.ccat=r FALSE,
+        IF %vp.内部结构=单词 THEN %vp.兼类=~n ENDIF
+        || {apdez5.1} %vp.配价数=0,%vp.内部结构=述宾|状中|联合|单词,%vp.助动词=否,%vp.兼类=~p,%vp.yx=~是
+        => {apdez5.1.1} VP(!VP/vp)     /*有优良品质的人 正在进行的 最有才华最有能力的 失败的*/
+        => {apdez5.1.2} AP(!AP/vp)    /*有价值的*/
+        || {apdez5.2} %vp.配价数=0,%vp.助动词=是 
+        => {apdez5.2.1} AP(!AP/vp)    /*可能的*/
+        => {apdez5.2.2} VP(!VP/vp) %VP.USUBC=~UMOD
+        || {apdez5.3} %vp.配价数=1|2|3
+        => {apdez5.3.1} AP(!AP/vp)    /*公开的*/
+        => {apdez5.3.2} NP(!NP/vp)  /*<生产的>发展*/
+        => {apdez5.3.3} VP(!VP/vp) $=[FORM:VG]   /*教英语的 <在邮局工作的>人 ~<给我>的印象*/
+&& {apdez6} ap->!ap u<的> :: $.内部结构=的字,$.中心语=%ap,%ap.连接成分.ccat=~c,
+        IF %ap.内部结构=状中,%ap.状语.yx=就是 FALSE
+        => AP(!AP/ap) 
+&& {apdez7} ap->!mp u<的> :: $.内部结构=的字,$.中心语=%mp
+        => NP(!NP/mp)
+&& {apdez8} ap->!r  u<的> :: $.内部结构=的字,$.中心语=%r
+        || %r.代词子类=rb
+        => D(!D/r)
+        => AP(!A/r)                                        /*<这样的>天气*/
+        || %r.代词子类=ra
+        => NP(!R/r) %R.RSUBC=RPOSS                      /*我的*/
+        => NP(!R/r) %R.RSUBC=RPERS,%R.RCASE=OBJ            /*她的前面*/
+        => NP(!N/r) %N.NCASE=POSS
+        => T(!T/r) %T.TSUBC=TPOSS
+&& {apdez9} ap->!dj u<的> :: $.内部结构=的字,$.中心语=%dj,
+        %dj.内部结构=主谓,%dj.谓语.cpcat=~np~dj,%dj.标点成分=No,     /*<计算机在国外应用的>现状 */
+        IF %dj.ccat=a,%dj.主语.ccat=a FALSE,                         /* ~(三位年轻的漂亮)(的) */
+        IF %dj.yx=是,%dj.主语.ccat=r,%dj.主语.代词子类=rb FALSE,     /*~<那是汤姆的>错*/
+        IF %dj.主语.内部结构=的字,%dj.谓语.cpcat=ap FALSE            /*~<我见到的最勇敢>的警察*/
+        => CS(!CS/dj )                                               /*~<我们班里最快乐的>男孩 ~<我在公司>的地位*/ 
+        => NP(R<what> !CS/dj ) $!=%CS @NNUM @NPER,$.NNUM=SNGL,$.NPER=3 /*我昨天使用的*/ 
+
+
+/* ap.述补结构 */
+
+&& {apsbu2} ap->!a u<极了> :: $.内部结构=组合述补,%a.带补=粘,$.述语=%a,$.补语=%u
+        => AP(D/u !A/a) %D.DADJV=Yes
+&& {apsbu3} ap->!a u<得> d<很> :: $.内部结构=组合述补,$.述语=%a,$.补语=%d
+        => AP(D/d !A/a) %D.DADJV=Yes
+&& {apsbu4} ap->!a u<得> vp :: $.内部结构=组合述补,%a.带补=得,$.述语=%a,$.补语=%vp
+        || %vp.内部结构=单词,%vp.单作补语=是
+        => AP(D<too> !A/a)     /*热得要命 疼得钻心*/
+        || %vp.内部结构=~单词
+        => AP(D<so> !A/a C<that> VP/vp)        /*累得躺在床上不起来*/ 
+&& {apsbu5} ap->!a d<不> u<了> :: $.内部结构=组合述补,$.述语=%a,$.补语=%u,$.否定=是
+        => AP(D<not> !A/a)                  /*干净不了*/
+&& {apsbu6} ap->!a u<得> dj :: $.内部结构=组合述补,%a.带补=得,%dj.谓语.cpcat=vp|ap,$.述语=%a,$.补语=%dj
+        => AP(D<too> !A/a P<to> VP/dj) %VP.FORM=RT        /*他<激动得一句话也说不出来>*/
+        => AP(D<so> !A/a C<that> CS/dj) %CS.VOICE=ACTI
+&& {apsbu7} ap->!a u<得> a :: $.内部结构=组合述补,%a.带补=得,%%a.形补语=组,$.述语=%a,$.补语=%a
+        || %%a.yx=多
+        => AP(D<much> !A/a)   %A.DEGR=COMP   /*多得多*/
+        || %%a.yx=~多
+        => AP(D<very> !A/a)        /*大桃红得鲜艳*/
+&& {apsbu8} ap->!ap mp :: $.内部结构=组合述补,$.述语=%ap,$.补语=%mp,%ap.内部结构!=的字,
+        IF %ap.内部结构=附加 THEN %ap.附加语.yx=了 ENDIF
+        || {apsbu8.1} %ap.内部结构=单词|附加,%mp.内部结构=数量,%mp.量词子类=动量,%ap.yx=~暖和
+        => AP(!AP/ap)                                                    /*亮了几下*/
+        || {apsbu8.2} %ap.内部结构=单词|附加,%mp.内部结构=数量,%mp.量词子类=动量,%ap.yx=暖和
+        => VP(!V<have> T<a> AP/ap)                                        /*暖和一下*/
+        || {apsbu8.3} %ap.内部结构=单词|附加,%mp.内部结构=数量|单词,
+           IF %mp.内部结构=数量 THEN %mp.量词子类=不定 ENDIF
+        => AP(T<a> A<little> !AP/ap) %AP.DEGR=COMP                        /*慢了一点 开明一些*/
+        || {apsbu8.4} %ap.内部结构=附加|述补,%mp.量词子类=~不定~动量,
+           IF %ap.内部结构=附加 THEN %ap.附加语.yx=了 ENDIF,
+           IF %ap.内部结构=述补,%ap.补语.内部结构=~单词 THEN %ap.补语.cpcat=~mp ENDIF
+        => AP(!AP/ap P<for> NP/mp)                                        /*干净不了三天*/
+        || {apsbu8.5} %ap.内部结构=单词/*|附加*/,%ap.语义类=性能|境况|性质|外形,%mp.量词子类=度量
+        => AP(NP/mp !AP/ap)                                                /*这条鱼重五斤*/
+        || {apsbu8.6} %ap.内部结构=单词|附加,%ap.语义类=性能|境况|性质|外形,%mp.量词子类=时量,%mp.yx=~岁,$!=%ap @主体,$.主体.sem=时间  
+        => AP(AP/ap P<for> NP/mp)                                       /*慢三分钟*/
+        || {apsbu8.7} %ap.内部结构=单词|附加,%ap.语义类=性能|境况|性质|外形,%mp.量词子类=时量,%mp.yx=岁
+        => AP(NP/mp !AP/ap) %AP.DEGR=COMP                               /*小两岁*/
+&& {apsbu9} ap->!ap q :: $.内部结构=组合述补,$.述语=%ap,$!=%ap @补语,$.补语=%q,%ap.内部结构=单词|附加,%q.量词子类=不定,
+        IF %ap.内部结构=附加 THEN %ap.附加语.yx=了 ENDIF
+        => AP(!AP/ap)            /*慢了点 开明些*/
+        => DP(!DP/ap)
+  
+/* ap.状中结构 */
+
+&& {apzz1} ap->r !ap :: $.内部结构=状中,%r.代词子类=rb|rc,%r.代状语=是,%ap.内部结构=单词|联合,$.状语=%r,$.中心语=%ap,
+        IF %r.代词子类=rc THEN %r.代状语=是,$!=%ap @语气,$==%r @语气 ,$.语气=疑问 ENDIF
+        => AP(D/r !AP/ap)  %D.DADJV=Yes         /*那样有名 这么晚*/
+        => DP(D/r !DP/ap)  %D.DADJV=Yes         /*工作进展得<那样顺利>*/
+&& {apzz2} ap->a !a :: $.内部结构=状中,%a.形状语=是,IF %a.yx=%%a.yx FALSE,$.状语=%a,$.中心语=%a
+        => AP(D/a !A//a)   %D.DADJV=Yes    /*完全正确 ~<快快>*/
+        => DP(D/a !D//a)   %D.DADJV=Yes    /*不<够快>*/
+        => AP(P/a !A//a)                 /*跟你<一样勇敢> 一样快*/
+        => DP(P/a !D//a)                 /*说得和英国人<一样流利>*/
+&& {apzz3} ap->dp !ap :: $.内部结构=状中,$.状语=%dp,$.中心语=%ap,
+        %ap.ccat=~b,%ap.内部结构=~的字,%ap.状语.yx=~没~没有,%dp.yx=~在,
+        IF %dp.连接=Yes THEN $!=%ap @作照应 @作连接 @连接成分,$.连接成分=%dp,$==%dp @作照应 @作连接 ENDIF,
+        IF %dp.yx=多么|真|太|好 THEN $!=%ap @语气,$.语气=感叹  ENDIF,
+        IF %dp.yx=多 THEN $!=%ap @语气,$==%dp @语气, $.语气=疑问|感叹  ENDIF,
+        IF %dp.yx=一般,%ap.内部结构=单词 FALSE,                    /*~他和我一般高=>generally tall*/
+        IF %dp.yx=不|没|没有 THEN $.否定=是 ELSE $==%ap @否定 ENDIF
+        || {apzz3.1} $.作连接=否,%dp.yx=~再~越~最~更~都~较~就~越来越~并
+        => {apzz3.1.1} AP(DP/dp !AP/ap) %DP.DADJV=Yes
+        => {apzz3.1.2} DP(DP/dp !DP/ap) %DP.DADJV=Yes
+        => {apzz3.1.3} VP(DP/dp !VP/ap)    %DP.DVPRE=Yes,%DP==%VP @PAST @FUTR @PERF @CONT /*八个人也不行*/
+        || {apzz3.2} $.作连接=否,%dp.yx=再|越|更|较
+        => {apzz3.2.1} AP(!AP/ap) %AP.DEGR=COMP
+        => {apzz3.2.2} DP(!DP/ap) %DP.DEGR=COMP
+        || {apzz3.3} $.作连接=否,%dp.yx=最
+        => {apzz3.3.1} AP(T<the> !AP/ap) %AP.DEGR=SUPE
+        => {apzz3.3.2} DP(!DP/ap) %DP.DEGR=SUPE                                     /*最新出版*/
+        || {apzz3.4} $.作连接=否,%dp.yx=都
+        => {apzz3.4.1} AP(DP/dp !AP/ap) %DP.DADJV=Yes,%AP.NNUM=PLUR              /*都很聪明*/
+        => {apzz3.4.2} DP(DP/dp !DP/ap)                /* ??? */
+        => {apzz3.4.3} VP(DP/dp !VP/ap)    %DP.DVPRE=Yes,%DP==%VP @PAST @FUTR @PERF @CONT,%VP.NNUM=PLUR /*八个人也不行*/
+        || {apzz3.5} $.作连接=否,%dp.yx=就
+        => AP(!AP/ap)                   
+        || {apzz3.6} $.作连接=否,%dp.yx=并
+        => AP(!AP/ap)                                       /*志气并不小*/
+        || {apzz3.7} $.作连接=是
+        => {apzz3.7.1} AP(C/dp !AP/ap)
+        => {apzz3.7.2} AP(DP/dp !AP/ap) %DP.DADJV=Yes
+        || {apzz3.8} %dp.内部结构=单词,%dp.yx=越来越,%ap.内部结构=单词|附加
+        => {apzz3.8.1} AP( D<"more and more"> !AP/ap ) %AP.AMORF=PREF
+        => {apzz8.8.2} AP( !AP/ap C<and> A ) %AP.AMORF=SUFF|IREG,%AP.DEGR=COMP,%A==%AP @AMORF @DEGR @YX @COMP
+&& {apzz4} ap->tp !ap:: $.内部结构=状中,%ap.内部结构=~的字,$.状语=%tp,$==%ap @否定,$.中心语=%ap
+        => AP(!AP/ap DP/tp)    %AP.ASUBC=~AFORE ,%DP.DADJV=Yes                   /*他<今天很忙>*/
+&& {apzz5} ap->pp !ap:: $.内部结构=状中,$.状语=%pp,$==%ap @否定,$.中心语=%ap,
+        %pp.格标=对象|处所,%ap.内部结构=~的字~附加,
+        IF %ap.内部结构=状中,%ap.状语.内部结构=~单词 THEN %ap.状语.cpcat=~pp ENDIF
+        || %pp.yx=~比
+        => AP(!AP/ap PP/pp)                                /*他<对她很生气> 跟我一样 跟你一样勇敢 他<象父亲一样高大>*/
+        => VP(!VP/ap PP/pp)                                /*<在工作上>已经落后了*/
+        => DP(!DP/ap PP/pp)
+        || %pp.yx=比
+        => AP(!AP/ap PP/pp) %AP.DEGR=COMP                /*船比火车慢*/
+        => DP(!DP/ap PP/pp) %DP.DMORF=~NONE,%DP.DEGR=COMP                /*你演得<比我们想象的更成功>*/
+&& {apzz6} ap->c !ap :: $.内部结构=状中,$.状语=%c,$.连接成分=%c,$.中心语=%ap,$==%ap @否定,$==%c @作照应,
+        %c.连主谓=是,%ap.内部结构=~的字~附加
+        =>AP(C/c !AP/ap) 
+        =>AP(U/c !AP/ap)     /*宁可饿死*/
+&& {apzz7} ap->mp !ap :: $.内部结构=状中,$.状语=%mp,$.中心语=%ap,%mp.量词子类=度量,%ap.内部结构=单词
+        =>AP(NP/mp !AP/ap)  /*二十英里长*/
+
+
+/* np.名词短语 */
+
+/* np.npbar */
+
+&& {np1} np->!n g<们> :: $.内部结构=单词,%n.语义类=人,$!=%n @复数,$.复数=Yes
+        => NP(!N/n) %N.NNUM=PLUR
+&& {np2} np->!n g<者> :: $.内部结构=单词
+        => NP(!N/n)    /*乐观主义者*/
+&& {np3} np->!v g<性> :: $.内部结构=单词 
+        => NP(!N/v) 
+        => DP(!D/v)     /*创造性*/
+        => AP(!A/v)
+&& {np4} np->!g g<老> :: $.内部结构=单词,%g.语义类=人
+        => NP(!N/g N<Lao>)  /*张老*/
+&& {np5} np->g !g  :: $.内部结构=单词,%g.yx=小|老|大,%%g.语义类=人
+        => NP(N/g !N//g)    /*大张*/
+&& {np6} np->g !n  :: $.内部结构=单词,$.定语=%g,$.中心语=%n,%g.语义类=人,%g.yx=~小~老~大,%n.语义类=人,IF %n.yx=人 FALSE
+        => NP(!N/n N/g) %N.NRFLX=RT,$==%%N @NCASE    /*张老师*/
+
+/* np.所字结构 */
+
+&& {npsz1} np->u<所> !vp :: $.内部结构=所字,%vp.内部结构=单词
+        => NP(T<the> !VP/vp) %VP.FORM=VG        /*所说*/
+&& {npsz2} np->np u<所> !vp :: $.内部结构=所字,%vp.配价数=2|3,%vp.主体=%np,%vp.内部结构=单词|述补|状中|附加
+        => NP(R<what> NP/np !VP/vp) %NP.RCASE=SUB,%NP.RSUBC=~RPOSS,%VP.VOICE=ACTI,%NP==%VP @NNUM @NPER /*他所说的*/
+
+/* np.联合结构 */
+
+&& {nplh1} np->!np c np :: $.内部结构=联合,$.连接成分=%c,%c.连体=是,%%np.内部结构=~联合,
+        IF %c.yx=~还是~或者~或 THEN $!=%np @复数,$.复数=Yes ELSE $!=%np @复数,$==%%np @复数 ENDIF,
+        %c.yx=~就是~兼,
+        IF %%np.内部结构=单词 THEN %np.内部结构=单词|联合|定中 ENDIF, /*热能、光能和化学能*/
+        IF %np.内部结构=定中,%%np.内部结构=定中 THEN %np.定语.cpcat=%%np.定语.cpcat ENDIF
+        || %c.yx=~还是~或者~或,%np.yx=~我
+        => NP(!NP/np C<and> NP//np) %NP==%%NP @NCASE @RCASE @RSUBC,$!=%NP @NNUM,$.NNUM=PLUR
+        || %c.yx=~还是~或者~或,%np.yx=我
+        => NP(NP//np C<and> !NP/np) %NP==%%NP @NCASE @RCASE @RSUBC,$!=%%NP @NNUM,$.NNUM=PLUR
+        || %c.yx=还是|或者|或
+        => NP(!NP/np C<or> NP//np) %NP==%%NP @NCASE @RCASE @RSUBC
+&& {nplh2} np->!np np :: $.内部结构=联合,%%np.内部结构=~联合,%np==%%np @语义类 @内部结构 @名词子类 @代词子类 @ccat @处所单位,$!=%np @复数,$.复数=Yes,
+IF %np.内部结构=单词 THEN %np.yx=~学 ENDIF, /*~<n学><英文>*/
+IF %np.内部结构=单词,%np.yx=王,%%np.语义类=身份 FALSE, /*~王小姐*/        
+IF %np.内部结构=单词,%%np.内部结构=单词,%%np.ccat=n,%%np.个体量词=%np.yx FALSE,    /*~这<家工厂>*/
+        IF %np.ccat=r,%%np.ccat=r,%np.代词子类=ra,%%np.代词子类=ra FALSE,
+        IF %np.连接成分=Yes,%%np.连接成分=Yes THEN %np.作照应=前,%%np.作照应=后 ENDIF,
+        IF %np.连接成分=Yes,%%np.连接成分=Yes THEN %np.连接成分.后照应=%%np.连接成分.yx,%%np.连接成分.前照应=%np.连接成分.yx ENDIF
+        || IF %np.连接成分=Yes,%%np.连接成分=Yes FALSE
+        => NP(!NP/np C<and> NP//np) %NP==%%NP @NCASE @RCASE @RSUBC,$!=%NP @NNUM,$.NNUM=PLUR
+        || %np.连接成分=Yes,%%np.连接成分=Yes
+        => NP(!NP/np NP//np) %NP==%%NP @NCASE @RCASE @RSUBC
+&& {nplh3} np->!np w<"、"|"，"> np :: $.内部结构=联合, %%np.内部结构=~联合,%np==%%np @语义类 @名词子类,$!=%np @复数,$.复数=Yes,
+        IF %np.内部结构=单词,%np.yx=%%np.yx FALSE,
+        IF %np.内部结构=定中,%%np.内部结构=定中 THEN %np.定语.cpcat=%%np.定语.cpcat ENDIF,
+        IF %np.连接成分=Yes,%%np.连接成分=Yes THEN %np.作照应=前,%%np.作照应=后 ENDIF,
+        IF %np.连接成分=Yes,%%np.连接成分=Yes THEN %np.连接成分.后照应=%%np.连接成分.yx,%%np.连接成分.前照应=%np.连接成分.yx ENDIF,
+        IF %np.内部结构=单词 THEN %%np.内部结构=单词 ENDIF
+        || IF %np.连接成分=Yes,%%np.连接成分=Yes FALSE
+        => NP(!NP/np W<","> NP//np) %NP==%%NP @NCASE @RCASE @RSUBC,$!=%NP @NNUM,$.NNUM=PLUR
+        || %np.连接成分=Yes,%%np.连接成分=Yes
+        => NP(!NP/np W<","> NP//np) %NP==%%NP @NCASE @RCASE @RSUBC    /*不用说这么点困难,就是比这再大的困难*/
+
+/* np.同位结构 */
+
+&& {nptw1} np->!n r :: $.内部结构=同位,%n.名词子类=ng,%n.语义类=人,%r.代词子类=ra
+       ||  %r.yx=~本人
+        => NP(!N/n R/r)  $==%R @RCASE @RSUBC        /*阿珍她们*/
+       ||  %r.yx=本人
+        => NP(!N/n)    					/*汤姆本人*/
+
+&& {nptw2} np->!r mp ::$.内部结构=同位,%r.音节=2,%r.后数量名=是,%mp.内部结构=~定中,%mp.量词子类=~度量~容量~动量~时量
+        || %mp.定语=Yes,%mp.定语.yx=几
+        => NP(A<all> P<of> !R/r) %R.RSUBC=RPERS,$.NPER=%R.RPER,$.NNUM=%R.RNUM    
+        || %mp.定语=Yes,%mp.定语.yx=~几
+        => NP(!R/r M/mp) %R.RSUBC=RPERS,$.NPER=%R.RPER,$.NNUM=%R.RNUM    /*他们两位*/
+
+/* np.定中结构 */
+
+&& {npdz11} np->vp !n :: $.内部结构=粘合定中,%vp.内部结构=单词|联合,%vp.后名=是,%n.前动=是,$.定语=%vp,$.中心语=%n,
+        IF %vp.内部结构=单词 THEN %vp.兼类=~n ENDIF,
+        IF %vp.内部结构=单词,%n.yx=~会 THEN %n.音节=2 ENDIF
+        => NP(AP/vp !N/n)
+        => NP(NP/vp !N/n)
+        => NP(VP/vp !N/n) %VP.FORM=VG,%VP.内部结构=单词    /*生产热情 起飞时间 工作人员 设计方案 研究成果 学习文件*/
+        => NP(!N/n VP/vp) %VP.FORM=VG,%VP.内部结构!=单词    
+ 
+&& {npdz12} np->r !np :: IF %np.内部结构=单词 THEN $.内部结构=粘合定中 ELSE $.内部结构=组合定中 ENDIF,$.定语=%r,$.中心语=%np,
+        %np.连接成分=No,%np.内部结构=~所字,%r.yx=~本,
+        IF %np.内部结构=定中,%np.定语.内部结构=的字,%np.定语.中心语.ccat=n,%np.定语.中心语.语义类=亲属和关系 FALSE,
+	/*~<我><姐姐的一个朋友>*/	
+        IF %np.内部结构=单词 THEN %np.ccat=~r ENDIF,
+        IF %np.内部结构=定中 THEN %np.中心语.cpcat=~ap,%np.定语.ccat=~g,%np.定语.中心语.定语.ccat=~g ENDIF,
+        IF %np.内部结构=组合定中 THEN %np.定语.中心语.内部结构=~所字 ENDIF,
+        IF %r.代词子类=ra,%np.内部结构=单词,%np.yx=大会|王 FALSE,
+        IF %r.代词子类=ra,%np.内部结构=单词 THEN %np.兼类=~v,%np.语义类=人|集体|构件|性能|空间|服饰 ENDIF,/*她生命~他们要求 ~她钱*/
+        IF %r.代词子类=ra,%np.内部结构=粘合定中,%r.后名=Yes THEN %np.定语.ccat=r,%np.定语.代词子类=rb ENDIF, /*你那一边*/
+        IF %r.代词子类=ra,%np.内部结构=组合定中,%np.定语.内部结构=单词,%np.定语.ccat=r,%np.定语.指代处所=Yes FALSE,
+        IF %r.代词子类=ra,%np.内部结构=组合定中 THEN %np.定语.中心语.cpcat=~vp~mp~sp ENDIF,   /*~他面前的道路*/
+        IF %r.代词子类=ra,%np.内部结构=组合定中 THEN %np.中心语.中心语.cpcat=~mp ENDIF, /*~我<看到的姑娘中最善良的一个>*/
+        IF %r.代词子类=ra,%np.内部结构=定中,%np.定语.cpcat=mp|mcp THEN %np.定语.量词子类=~动量~时量~不定~度量,%np.定语.定语.ccat=r ENDIF,  
+        IF %r.代词子类=ra,%np.内部结构=定中,%np.定语.内部结构=的字,%np.定语.中心语.内部结构=主谓,%np.定语.中心语.主语.语义类=人 FALSE,      /*~我<儿子出生的一年>*/  
+        IF %r.代词子类=ra,%np.内部结构=定中,%np.定语.cpcat=mp|mcp THEN %np.语义类=~人~时间 ENDIF,  
+        IF %r.代词子类=rb,%np.内部结构=组合定中,%np.定语.中心语.内部结构=单词,%np.定语.中心语.ccat=n FALSE,
+        IF %r.代词子类=rb,%r.后数量名=是,%np.内部结构=组合定中,%np.定语.cpcat=mp THEN %r.yx=这样|那么|这么|那样|这|那 ENDIF,
+        IF %r.代词子类=rc THEN $!=%np @语气,$==%r @语气 ENDIF                      /*~这<方面的研究> 这错误的原因*/
+        || {npdz12.1} %r.代词子类=~rc,IF %r.yx=这|那,%np.内部结构=单词 FALSE
+        => NP(T/r !NP/np) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM        /*我校 他力气 他们夏天的传统的游戏 这个复杂的问题*/
+        || {npdz12.2} %r.yx=这|那,%np.内部结构=单词 
+        => NP(T/r !NP/np) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM,  %T.TNNUM=SNGL      /*这男孩*/
+        || {npdz12.3} %r.yx=其它|其他
+        => NP(A/r !NP/np) %NP.NNUM=PLUR                             /*其他学生*/
+        || {npdz12.4} %r.yx=这样|那么|这么|那样,%np.定语.cpcat=mp,%np.内部结构=~单词
+        => NP(A/r !NP/np)                                             /*这样一间小草屋 那么一段不平凡的历史*/
+        || {npdz12.5} %r.代词子类=rc,$.语气=陈述|疑问
+        => NP(T/r !NP/np) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM
+        /*报上有什么重要消息吗？*/
+&& {npdz13} np->ap !np :: $.内部结构=粘合定中,
+        %ap.内部结构=单词|联合|状中,%ap.连接成分=No,%np.中心语.内部结构=~的字,   /* 正反两面 */
+        %np.yx=~地,$.定语=%ap,%ap.主体=%np,$.中心语=%np,
+        IF %ap.附加语=Yes FALSE,                                                /*~<只对了>一部分*/
+        IF %ap.内部结构=单词,%ap.ccat=a THEN %ap.形容词子类=aa ENDIF,    /*一~<对花瓶>*/
+        IF %ap.内部结构=单词,%ap.ccat=b THEN %ap.后名=Yes ENDIF,
+        IF %ap.内部结构=单词,%ap.yx=高,%np.内部结构=~单词 FALSE,        /*~<高><技术专家>*/
+        IF %ap.内部结构=状中 THEN %ap.状语.ccat=d|m ENDIF,/*<第二大>河*/
+        IF %np.内部结构=组合定中,%ap.语义类=~抽象事物 THEN %np.定语.内部结构=~的字 ENDIF /* 惟一(所有)可能的方法 */
+        => NP(AP/ap !NP/np)  %AP==%NP @NNUM                             /*老少社员都收割庄稼去了*/
+&& {npdz14} np->ap !np :: $.内部结构=组合定中,$.定语=%ap,$.中心语=%np,%ap.内部结构=的字,
+   	IF %ap.中心语.cpcat=vp THEN %np.语义类=%ap.中心语.主体.语义类 ENDIF,
+        IF %ap.中心语.cpcat=np,%np.语义类=人类 THEN %ap.中心语.语义类=人类 ENDIF, /*~<机器的学生>*/
+        IF %ap.中心语.cpcat=vp, %ap.中心语.兼类=a FALSE, /*~<北京><最好(hao4)的季节>*/
+        IF %ap.ccat=a,%ap.中心语.内部结构=~主谓 THEN %ap.主体=%np ENDIF,
+        IF %ap.语气=疑问 THEN $!=%np @语气,$==%ap @语气, $.语气=疑问 ENDIF,
+        IF %ap.中心语.yx=最近,%np.语义类=具体空间,%np.汉字=~文 FALSE,                    /*~<最近>的邮局 =>last*/   /* 今天的中国 */
+        IF %ap.中心语.cpcat=dj,%ap.ccat=a,%ap.中心语.主语.语义类=空间|集体 THEN %np.语义类=性能|抽象事物 ENDIF,
+        IF %ap.中心语.cpcat=dj,%np.内部结构=组合定中,%np.定语.cpcat=sp FALSE,       /*~<我看到的><姑娘中最善良的一个>*/
+        IF %ap.中心语=是,%ap.中心语.内部结构=状中,%ap.中心语.状语.yx=多么|多|真 THEN $!=%np @语气,$==%ap @语气, $.语气=感叹 ENDIF ,
+        IF %ap.中心语.内部结构=单词 THEN %ap.yx=~过 ENDIF,
+        IF %ap.中心语.内部结构=单词,%ap.yx=去 THEN %np.语义类=人类 ENDIF,
+        IF %np.语义类=人类,%ap.中心语.ccat=n,%ap.中心语.兼类=v FALSE      /*发言的人*/   /*~(我们学校最坏的)(学生)*/    
+        || {npdz14.1} %ap.中心语.ccat=r,%ap.中心语.代词子类=rb,%ap.中心语.指代处所=是
+        => NP(!NP/np D/ap) %D.DNEND=Yes                                                 /*这里的交通*/
+        || {npdz14.2} %ap.中心语.内部结构=组合定中
+        => NP(!NP/np P<of> NP/ap) %%NP.NCASE=COMM,%%NP.RSUBC=~RPOSS~RPERS    /*该协会的会员的总数 掌握劳动工具的人的技术素质*/
+        || {npdz14.3} %ap.中心语.内部结构=~组合定中,
+	   /*IF %ap.中心语.cpcat=vp FALSE,*/
+           IF %ap.中心语.cpcat=ap,%ap.中心语.状语=Yes,%ap.中心语.状语.cpcat=pp FALSE,
+           IF %ap.中心语.ccat=r,%ap.中心语.代词子类=ra,%np.内部结构=组合定中,%np.定语.内部结构=的字 FALSE 
+        => {npdz14.3.1} NP(T/ap !NP/np) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM             /*~他的<自行车的质量>*/
+        => {npdz14.3.2} NP(T/ap !NP/np) %T.TSUBC=TPOSS                                   /*谁的手套*/
+        => {npdz14.3.3} NP(AP/ap !NP/np)
+	=> {npdz14.3.4} NP(!NP/np PP/ap)  /* add by txp 中俄之间的问题 */
+	=> {npdz14.3.5} NP(!NP/np VP/ap)
+        || {npdz14.4} %ap.中心语.内部结构=~组合定中~主谓,
+           IF %ap.中心语.cpcat=ap,%ap.中心语.状语=Yes,%ap.中心语.状语.cpcat=pp FALSE,
+           IF %ap.中心语.ccat=r,%ap.中心语.代词子类=ra,%np.内部结构=组合定中,%np.定语.ccat=q TRUE
+        => NP(!NP/np P<of> NP/ap) %%NP.RSUBC=RPOSS,%%NP.NNUM=%NP.NNUM         /*他的一个朋友*/
+        || {npdz14.5} %ap.中心语.cpcat=ap,%ap.中心语.状语=Yes,%ap.中心语.状语.cpcat=pp
+        => NP(!NP/np AP/ap)                                                   /*比这再大的困难*/
+        || {npdz14.6} %ap.中心语.cpcat=tp|sp|pp,%ap.中心语.ccat=~t
+        => NP(!NP/np PP/ap)    %NP.NCASE=COMM                                      /*修改后的系统 工作中的错误*/
+        || {npdz14.7} %ap.中心语.内部结构=~组合定中,%ap.语义类=人
+        => NP(NP/ap !NP/np) %NP.NCASE=POSS,%NP.RSUBC=~RPOSS~RPERS            
+        || {npdz14.8} %ap.中心语.内部结构=~组合定中~主谓,
+	   IF %ap.中心语.cpcat=vp FALSE,
+           IF %ap.语义类=人 FALSE,
+           IF %ap.中心语.内部结构=单词,%ap.中心语.yx=工作,%np.yx=人 FALSE
+        => NP(!NP/np P<of> NP/ap) %%NP.NCASE=COMM,%%NP.RSUBC=~RPOSS~RPERS           /*该协会的会员 新一代计算机的结构和特点*/
+        || {npdz14.9} %ap.中心语.内部结构=单词,%ap.中心语.配价数=1|2|3, /*,%ap.中心语.主体=%np*/
+           IF %ap.中心语.内部结构=单词,%ap.中心语.配价数=2|3,%ap.中心语.客体=%np FALSE                /* ~丢的那本书*/      
+        => NP(VP/ap !NP/np) %VP.FORM=VG                                            /*撒谎的孩子 游泳的经验*/
+        || {npdz14.10} %ap.中心语.内部结构=单词,%ap.中心语.配价数=2|3,%ap.中心语.客体=%np,
+           IF %ap.中心语.配价数=2|3,%ap.中心语.主体=%np FALSE
+        => NP(VP/ap !NP/np) %VP.FORM=VN                                            /*丢的那本书*/
+        || {npdz14.11} %ap.中心语.内部结构=单词|述宾|双宾|状中,
+           IF %ap.中心语.主体=%np FALSE,
+           IF %ap.中心语.配价数=2|3,%ap.中心语.宾语=No,%ap.中心语.客体=%np FALSE                        /*学习外语的最好方法*/
+        => NP(!NP/np P<of> VP/ap ) %NP.NCASE=COMM,%VP.FORM=VG                      /*旅行的最后一站 科学种植西瓜的经验*/
+        || {npdz14.12} %ap.中心语.内部结构=所字
+        => NP(!NP/np CS/ap)                                                         /*他所说的话*/
+        => NP(VP/ap !NP/np)  %VP.FORM=VN                                            /*所说的问题*/
+        || {npdz14.13} %ap.中心语.内部结构=附加,%ap.中心语.配价数=1|2|3,%ap.中心语.主体=%np
+        => NP(VP/ap !NP/np) %VP.FORM=VG                                               /*活着的诗人*/
+        || {npdz14.14} %ap.中心语.内部结构=述补|状中|述宾|双宾,%ap.中心语.配价数=1|2|3,%ap.中心语.客体=%np,IF %ap.中心语.主体=%np FALSE
+        => NP(!NP/np VP/ap) %VP.FORM=VN                                               /*安装在桌子上的灯 最新出版的英汉词典*/
+        || {npdz14.15} %ap.中心语.内部结构=联合,%ap.中心语.cpcat=vp,%np.语义类=~人
+        => NP(VP/ap !NP/np) %VP.FORM=VG                                               /*计算与绘图的工作量*/
+        || {npdz14.16} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.cpcat=~sp~tp,%np.语义类=人,
+           IF %ap.中心语.客体=%np FALSE,
+           IF %ap.中心语.主语.语义类=人 FALSE 
+        => NP(!NP/np C<who> CS/ap) %NP.NCASE=COMM                                           
+        || {npdz14.17} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.cpcat=~sp~tp,%np.语义类=人,
+           /*%ap.中心语.宾语=No,*/IF %ap.中心语.客体=%np,%ap.中心语.主语.语义类=人 TRUE         /*保育员照看的婴儿*/
+        => NP(!NP/np C<whom> CS/ap) %NP.NCASE=COMM                         /*我喜欢的女孩 */
+        || {npdz14.18} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.语义类=亲属和关系,%ap.中心语.主语.配价数=1,%np.语义类=人
+        => NP(!NP/np C<whose> CS/ap) %NP.NCASE=COMM                                           /*父亲是烈士的那个女孩*/
+        || {npdz14.19} %ap.中心语.内部结构=主谓,%ap.中心语.主语.语义类=构件,%np.语义类=人
+        => NP(!NP/np C<whose> CS/ap) %NP.NCASE=COMM                                           
+	/*<眼睛是绿色>的姑娘*/
+        || {npdz14.20} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.cpcat=~sp~tp,%np.语义类=时间,
+	IF %ap.中心语.配价数=2|3,%ap.中心语.宾语=No,%ap.中心语.客体=%np FALSE
+        => NP(!NP/np C<when> CS/ap) %NP.NCASE=COMM                               
+        || {npdz14.21} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.cpcat=~sp~tp,%np.语义类=空间,
+           IF %ap.中心语.配价数=2|3,%ap.中心语.宾语=No,%ap.中心语.客体=%np FALSE
+        => NP(!NP/np C<where> CS/ap) %NP.NCASE=COMM                                      /*~我们去年参观过的教堂*/        
+        || {npdz14.22} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.cpcat=~sp~tp,
+            %np.语义类=~人~时间~空间,%ap.中心语.宾语=Yes
+        => NP(!NP/np C<that> CS/ap)                                                         /*我不赞成它的原因*/
+        || {npdz14.23} %ap.中心语.内部结构=主谓,%ap.中心语.主语.指代处所=No,%ap.中心语.主语.cpcat=~sp~tp,
+            %np.语义类=~人,%ap.中心语.宾语=No,
+            IF %np.语义类=空间 THEN %ap.中心语.配价数=2|3,%ap.中心语.客体=%np ENDIF,        /*~我们上周相会的地方=>that ...*/
+	    IF %np.语义类=时间 THEN %ap.中心语.配价数=2|3,%ap.中心语.客体=%np ENDIF,        /*我喜爱的月份*/
+            IF %ap.中心语.配价数=2|3,%ap.中心语.客体=%np THEN %ap.中心语.客体=%np ENDIF   /*这是他被谋杀的地方*/
+        => NP(!NP/np C<that> CS/ap)                                     /*计算机在国外应用的现状*/
+        || {npdz14.24} %ap.中心语.内部结构=述补|述宾|双宾|状中|联合|连谓,%ap.中心语.主体=%np,%np.语义类=人
+        => NP(!NP/np C<who> VP/ap) %NP.NCASE=COMM,%NP==%VP @NNUM    /*站在门口的人 为我打字的男孩 掌握劳动工具的人*/
+        || {npdz14.25} %ap.中心语.内部结构=述宾|双宾|状中|联合|连谓,%ap.中心语.主体=%np,%np.语义类=时间
+        => NP(!NP/np P<to> VP/ap) %NP.NCASE=COMM,%NP==%VP @NNUM,%VP.FORM=RT
+        || {npdz14.26} %ap.中心语.内部结构=述宾|双宾|状中|联合|连谓|述补,%ap.中心语.主体=%np,IF %np.语义类=人|时间 FALSE,%ap.中心语.ccat=~f
+        => NP(!NP/np C<that> VP/ap) %NP.NCASE=COMM,%NP==%VP @NNUM /*导致失败的主要原因 ~工作中的错误 有悠久历史的城市*/
+&& {npdz15} np->mcp !np :: $.内部结构=组合定中,%np.定语.cpcat=~mp~mcp,%np.定语.yx=~本,$.定语=%mcp,$.中心语=%np,
+        IF %np.内部结构=定中,%np.定语.内部结构=的字,%np.定语.中心语.内部结构=状中,%np.定语.中心语.状语.cpcat=mp FALSE, /*五~<十英尺宽的街道>*/
+        IF %np.内部结构=定中,%np.定语.内部结构=的字,%np.定语.中心语.cpcat=mp|mcp FALSE, /* ~ 四<十年的历史>*/
+        IF %np.ccat=n,%np.内部结构=单词 THEN %np.数名=a|b|c ENDIF,                     /*第二大河*/
+        IF %np.内部结构=组合定中 THEN %np.定语.中心语.定语.cpcat=~mcp~mp,%mcp.yx=~多~少 ENDIF,    
+        IF %np.内部结构=定中 THEN %np.定语.兼类=~q,%np.定语.yx=~多,%np.定语.定语.yx=~本 ENDIF 
+        || {npdz15.1} %mcp.数词结构=~序数,%mcp.数词子类=系数|位数,IF %np.内部结构=单词,%np.语义类=空间|集体 FALSE
+        => {npdz15.1.1} NP(M/mcp !NP/np) %M.MSUBC=MNUM,%M.NNUM=%NP.NNUM                            /*一万人*/
+        => {npdz15.1.2} NP(T/mcp !NP/np)  %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM
+        || {npdz15.2} %mcp.数词结构=~序数,%mcp.数词子类=系数|位数,IF %np.内部结构=单词,%np.语义类=空间|集体,%np.yx=~部分 TRUE
+        => NP(T<the> M/mcp !NP/np) %M.MSUBC=MORD,%NP.NNUM=SNGL                        /*二班 ~(三部分=> the third part)*/
+        || {npdz15.3} %mcp.数词子类=助数,IF %np.ccat=n THEN %np.数量名=是 ENDIF,%mcp.yx=~几
+        => NP(T/mcp !NP/np)     %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM                   /*很多水果*/
+	=> NP(M/mcp !NP/np)
+        || {npdz15.4} %mcp.数词结构=序数,%np.兼类=~q,IF %np.内部结构=定中,%np.定语.cpcat=ap,%np.定语.内部结构=单词|联合 FALSE                                            /*第二柴油机厂 ~<第二><大河>*/
+        => NP(M/mcp !NP/np) %M.MSUBC=MORD,%NP.NNUM=SNGL
+        || {npdz15.5} %mcp.数词子类=小数
+        => NP(N/mcp T<a> !NP/np)                                                         /*半小时*/
+&& {npdz16} np->mp !np :: $.内部结构=组合定中,%np.数量名=是,%np.ccat=~r,$.定语=%mp,$.中心语=%np,%mp.主体=%np,
+        IF %mp.语气=疑问 THEN $!=%np @语气,$==%mp @语气 ENDIF,
+        IF %mp.内部结构=单词 THEN %mp.数词子类=数量 ENDIF,
+        IF %mp.内部结构=单词,%mp.数词子类=数量,%np.内部结构=组合定中,%np.定语.中心语.内部结构=单词,%np.定语.中心语.ccat=n FALSE, /*~大多数<人的支持>*/
+         IF %mp.内部结构=~单词,%mp.量词子类=度量 THEN %np.定语.yx=~多  ENDIF, 
+         IF %mp.内部结构=~单词,%mp.量词子类=度量,%np.内部结构=定中,%np.定语.ccat=a,%np.定语.音节=1 FALSE,
+/*<五十英尺>~<宽的街道>*/
+         IF %mp.内部结构=~单词,%mp.量词子类=个体,%np.内部结构=定中 THEN %np.个体量词=%mp.yx,%np.定语.yx=~本 ENDIF,
+              IF %mp.中心语.内部结构=~单词 THEN %mp.定语.ccat=~r ENDIF,              /*<这个>人 ~<那几张>照片*/
+        IF %mp.中心语.量词子类=个体,%np.内部结构=组合定中,%np.定语.内部结构=的字,%np.定语.中心语.ccat=n,%np.定语.中心语.数量名=是,%np.定语.中心语.个体量词=%mp.yx FALSE,
+        IF %np.个体量词=%mp.yx,%mp.量词子类=~个体 FALSE                    /*~一块石头=>one Yuan of stone*/
+        || {npdz16.1} %mp.内部结构=单词    /*你有多少苹果*/
+        => NP(T/mp !NP/np) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM         /*一些小的错误 许多有趣的问题 许多简单的运算*/
+        => NP(AP/mp !NP/np) %AP.TNSUB=%NP.NSUBC,%AP.TNNUM=%NP.NNUM         /*多数人 一切困难*/ 
+        || {npdz16.2} %mp.内部结构=~单词,%mp.量词子类=个体,%np.个体量词=%mp.yx,%np.ccat=~v,%mp.定语.yx=~半      /*这台~<计算机需要>*/
+        => NP(T/mp !NP/np)  %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM         /*这台发动机*/
+        => NP(M/mp !NP/np)    %M.NNUM=%NP.NNUM,%NP.NSUBC=NCONT,%M.YX=~one     /*一个描写美国人的故事*/ 
+        => NP(AP/mp !NP/np) %AP.TNNUM=%NP.NNUM                                 /*好几座大桥*/ 
+        => NP(NP/mp P<of> !NP/np) %NP==%%NP @NNUM,%%NP.NSUBC=NUCNT,%NP.YX=~this~that~those~these          /*两张薄薄的纸*/
+        || {npdz16.3} %mp.内部结构=~单词,%mp.量词子类=个体,%np.个体量词=%mp.yx,%np.ccat=~v,%mp.定语.yx=半        
+        => NP(NP/mp P<of> T<a> !NP/np) %NP==%%NP @NNUM                                        /*半个苹果*/
+        || {npdz16.4} %mp.内部结构=~单词,%mp.量词子类=时量|度量|不定,%mp.ccat=~n,%np.ccat=~v,
+           IF %mp.yx=块 THEN %np.个体量词=%mp.yx ENDIF                    /*~几块<yuan>表<table>*/
+        => NP(T/mp !NP/np)  %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM         /*一些小的错误 许多有趣的问题*/
+        => NP(M/mp !NP/np)    %M.NNUM=%NP.NNUM,%NP.NSUBC=NCONT     
+        => NP(AP/mp !NP/np) %AP.TNNUM=%NP.NNUM               
+        => NP(NP/mp P<of> !NP/np) %NP==%%NP @NNUM                        /*一段不平凡的历史*/
+        || {npdz16.5} %mp.内部结构=~单词,%mp.量词子类=集体|容量|成形,%mp.ccat=~n,%np.名词子类=na|nb|nc|nd|ne
+        => NP(T/mp !NP/np)  %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM
+        => NP(NP/mp P<of> !NP/np) %%NP.NSUBC=NCONT,%%NP.NNUM=PLUR                           /*一批同学 一车蔬菜*/ 
+        => NP(NP/mp P<of> !NP/np) %%NP.NSUBC=NUCNT,$!=%%NP @NNUM,$==%NP @NNUM               /*一杯盐水*/ 
+        || {npdz16.7} %mp.内部结构=~单词,%mp.量词子类=动量,%mp.yx=~下,%mp.ccat=~n,IF %mp.yx=次 THEN %np.语义类=运动|事情 ENDIF
+        => NP(T/mp !NP/np)  %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM
+        => NP(M/mp !NP/np)    %M.NNUM=%NP.NNUM             /*一次事故*/ 
+        => NP(AP/mp !NP/np)     
+        || {npdz16.8} %mp.内部结构=~单词,%mp.量词子类=种类,%mp.ccat=~n,%np.名词子类=na|nb|nc|nd|ne
+        => NP(T/mp !NP/np)   %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM         /*这种速度*/
+        => NP(NP/mp P<of> !NP/np) %NP==%%NP @NNUM   
+        || {npdz16.9} %mp.ccat=n,%mp.临时量词=Yes
+        => NP(NP/mp P<of> !NP/np) %NP==%%NP @NNUM,%NP.NSUBC=NCONT       
+        => NP(NP/mp P<of> !NP/np) %NP.NSUBC=NUCNT                         /*两碗菜*/
+        => NP(T/mp !NP/np) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM
+&& {npdz17} np->np !np :: $.定语=%np,$.中心语=%%np,                             /*中国科学和技术协会*/
+        IF %%np.名词子类=ng,%%np.语义类=人 THEN %np.语义类=人,%np.名词子类=~ng ENDIF,   /*~<n认识><比尔>*/
+        IF %np.兼类=q FALSE,%np.ccat=~r,
+        IF %np.中心语.内部结构=~单词,%np.中心语.ccat=q FALSE,  /* ~ 做了np<五年> <秘书> "词典中有允许"五年"由mp上升成np的局部规则*/
+        %np.内部结构=~组合定中,%np.连接成分=No,%%np.连接成分=No,          /*~光能<或化学能>*/
+        %%np.ccat=~r,%%np.定语.ccat=~r,%%np.定语.yx=~没,
+        IF %np.内部结构=定中,%np.定语.yx=本 FALSE,                                  /*~这<本词典><资料室>的*/
+        IF %np.内部结构=定中,%np.定语.ccat=r THEN %%np.内部结构=单词 ENDIF,         /*我家乡城镇*/
+        IF %np.内部结构=单词,%%np.内部结构=单词 THEN %np.后名=Yes,%%np.前名=Yes ENDIF,          /*皮特<np先生高尔夫球>打得不好*/
+        IF %np.内部结构=单词|粘合定中,%%np.内部结构=单词|联合|粘合定中 THEN $.内部结构=粘合定中 ELSE $.内部结构=组合定中 ENDIF,
+        IF %np.名词子类=ng,%%np.名词子类=ng,%np.语义类=空间,%%np.语义类=空间,%np.处所单位=%%np.处所单位 FALSE,        
+        IF %%np.内部结构=组合定中,%%np.定语.内部结构=的字,%%np.定语.中心语.cpcat=vp,%%np.定语.主体=%np FALSE
+        || {npdz17.1} IF %np.名词子类=ng,%np.语义类=人,%%np.语义类=人 TRUE                     /* ~(敌人)(已经投降的消息) */
+        => NP(!NP//np NP/np) %NP.NRFLX=RT,$==%%NP @NCASE           /*毛泽东主席*/
+        || {npdz17.2} %np.内部结构=单词,IF %np.语义类=~人,%np.兼类=g,%%np.语义类=人 FALSE,             /*~毛主席 */
+            %np.后名=是,
+            IF %%np.内部结构=组合定中,%%np.定语.内部结构=的字 FALSE,    /*中国第二大河*/
+            %%np.前名=Yes,
+        => NP(AP/np !NP//np)                                                     /*日本计算机*/ 
+	=> NP(NP/np !NP//np) %NP.内部结构=单词 
+        || {npdz17.3} IF %np.语义类=空间 FALSE,
+           IF %np.语义类=~人,%np.兼类=g,%%np.语义类=人 FALSE,
+           IF %np.名词子类=ng,%np.语义类=人,%%np.语义类=人 FALSE
+        => NP(NP/np !NP//np) %NP.ECAT=~R    /*新一代计算机 科学研究工作 智能计算机系统 动力问题*/ 
+	/*
+        || {npdz17.4} IF %np.语义类=空间 TRUE
+        => NP(!NP//np P<of> NP/np)      */    /*两国人民 世界最高峰*/
+        || {npdz17.5} %np.内部结构!=单词,IF %np.语义类=~人,%np.兼类=g,%%np.语义类=人 FALSE, 
+        => {npdz17.5.1} NP(AP/np !NP//np)    
+	=> {npdz17.5.2} NP(!NP//np P<of> NP/np) %NP.内部结构!=单词
+	=> {npdz17.5.3} NP(NP/np !NP//np) %NP.内部结构=单词 
+&& {npdz18} np->np !np :: $.内部结构=组合定中,$.中心语=%%np,$.定语=%np,
+        %np.连接成分=No,%%np.连接成分=No,
+        %np.内部结构=单词|粘合定中,%np.ccat=~r,%%np.内部结构=组合定中|联合,%%np.定语.ccat=~r
+        || {npdz18.1} %np.yx=~部,%%np.定语.ccat=a|b,%np.语义类=空间|人类,%np.兼类=~v,%%np.ccat=~v,%%np.定语.中心语.内部结构=单词|状中
+        => NP(!NP//np P<of> NP/np)         /*我国长期的战略方针  中国最长的江 我们学校最坏的学生*/ 
+        || {npdz18.2} %np.内部结构=单词,%np.语义类=%%np.语义类,IF %%np.定语=Yes THEN %%np.定语.ccat=m|q ENDIF
+        => NP(NP/np !NP//np)            /*亚洲五国 ~我们一分钱*/
+&& {npdz19} np->np np(ap !vp) :: $.内部结构=组合定中,$.中心语=%%np,$.定语=%np, %np.连接成分=No, %%np.连接成分=No,%np.内部结构=单词|粘合定中,%np.ccat=~r,%ap.中心语.ccat=p,%%np.内部结构=组合定中
+        => NP(!NP/vp P<of> NP/np PP/ap)      /*计算机在企业管理中的应用 计算机对英语的分析 ~<老师><对他的学生们>*/
+&& {npdz1a} np->sp !np :: $.内部结构=组合定中,%np.内部结构=~联合,%np.ccat=~r,$.中心语=%np,$.定语=%sp,%np.名词子类!=ng,
+        IF %sp.内部结构=单词 THEN %sp.后名=是 ENDIF
+        || IF %sp.内部结构=单词,%np.内部结构=单词,%np.yx=部 FALSE
+        => NP(AP/sp !NP/np)                   /*国外机器翻译的现状 我国遥测系统中长期存在的问题*/
+        => NP(!NP/np PP/sp)                   /*两个人中较高的一个 我看到的姑娘中最善良的一个*/
+        => NP(!NP/np DP/sp) %DP.DNEND=Yes       /*户外天线 我们这里最有才华最有能力的人*/
+        || %sp.内部结构=单词,%np.内部结构=单词,%np.yx=部
+        => NP(NP/sp)                          /*西北部*/
+&& {npdz1b} np->t !np :: $.内部结构=定中,%t.后名=是,%np.语义类=~时间,%np.ccat=~r,$.中心语=%np,$.定语=%t 
+        || {npdz1b.1} %np.内部结构=组合定中,%np.定语.内部结构=的字,%np.定语.中心语.cpcat=~vp
+        => NP(!NP/np PP(P<of> N/t))                                    /*当代最好的交通工具 ~<昨天><买的那本书>*/
+        || {npdz1b.2} /* %np.语义类=~人类 */
+        => NP(A/t !NP/np)                                              /*最后一站 ~最后厂长 当代青年*/
+	=> NP(N/t !NP/np)   					       /*早间新闻*/
+&& {npdz21} np->mp !ap :: $.内部结构=组合定中,$.定语=%mp,$.中心语=%ap,
+        %mp.内部结构=~定中,%ap.内部结构=的字,%ap.中心语.内部结构=~状中
+        || %mp.定语.yx=~一,%ap.中心语.ccat=~n
+        => NP(M/mp !AP/ap)        
+        => NP(T/mp !AP/ap)
+        || %mp.定语.yx=一,%ap.中心语.ccat=~n 
+        => NP(T<a> !AP/ap M<one>)                                     /* 一本新的 */
+&& {npdz23} np->sp !ap :: $.内部结构=组合定中,%ap.内部结构=的字,%ap.中心语.cpcat=ap,%ap.中心语.内部结构=状中,%ap.中心语.状语.yx=最|较|比较,$.定语=%sp,$.中心语=%ap
+        => NP(!AP/ap PP/sp)        /* 全班最好的 */ 
+        => NP(!AP/ap DP/sp) %DP.DADJV=Yes
+&& {npdz24} np->np !ap :: $.内部结构=组合定中,$.定语=%np,$.中心语=%ap,
+        %np.语义类=空间|集体,
+        %ap.内部结构=的字,%ap.中心语.cpcat=ap,%ap.中心语.内部结构=状中,%ap.中心语.状语.yx=最|较|比较
+        => NP(!AP/ap PP(!P<in> NP/np))                       /* 中国最长的 */
+&& {npdz31} np->ap !mp :: $.内部结构=组合定中,%mp.量词子类=~不定,$.定语=%ap,$.中心语=%mp
+        || %ap.内部结构=的字,%ap.中心语.cpcat=ap,%mp.量词子类=个体,%mp.定语.yx=一,%ap.中心语.状语.yx=最
+        => NP(AP/ap)                                   /*最善良的一个*/
+        || %ap.内部结构=的字,%ap.中心语.cpcat=ap,%mp.量词子类=个体,%mp.定语.yx=一,%ap.中心语.状语.yx=~最
+        => NP(T<the> AP/ap)
+        || %ap.内部结构=的字,%ap.中心语.cpcat=ap,%mp.量词子类=个体,%mp.定语.yx=~一
+        => NP(T<the> M/mp AP/ap)
+        || %ap.内部结构=的字,%ap.中心语.cpcat=ap,%mp.量词子类=~个体
+        => NP(AP/ap !NP/mp)
+        || %ap.内部结构=的字,%ap.中心语.cpcat=dj,IF %mp.量词子类=时量
+THEN %ap.中心语.谓语.cpcat=vp,%ap.中心语.谓语.宾语=No,%ap.中心语.谓语.客体=%mp ENDIF
+        => NP(!NP/mp C<that> CS/ap)                /*我们喜欢的一年*/ 
+       || %ap.内部结构=的字,%ap.中心语.cpcat=dj,%mp.量词子类=时量,
+IF %ap.中心语.谓语.cpcat=vp,%ap.中心语.谓语.宾语=No,%ap.中心语.谓语.客体=%mp FALSE
+       => NP(!NP/mp C<when> CS/ap)                /*我们艰苦拼搏的一年*/ 
+       || %ap.内部结构=的字,%ap.中心语.cpcat=np,%mp.内部结构=单词,%mp.yx=一切
+        => NP(!N<everything> P<about> NP/ap) %NP.RCASE=OBJ,$.NNUM=SNGL
+&& {npdz41} np->n !v :: $.内部结构=粘合定中,%n.后动=Yes,%v.前名=是,%v.兼类=~n,$.定语=%n,$.中心语=%v
+        => NP(N/n !N/v)
+
+&& {npdz42} np->ap !vp :: $.内部结构=组合定中,$.定语=%ap,$.中心语=%vp,
+        %ap.内部结构=的字,
+        %vp.内部结构=~述宾~连谓,%vp.yx=~是,%vp.兼类=~n~p~d,%vp.音节=~1,
+        IF %vp.复数主语=是,%ap.中心语.cpcat=~pp THEN %ap.中心语.复数=是 ENDIF    /*理论与实际的结合*/
+        || {npdz42.1} IF %ap.中心语.内部结构=单词,%ap.ccat=r,%ap.语义类=人 FALSE
+        => {npdz42.1.1} NP(!NP/vp P<of> NP/ap)  
+        => {npdz42.1.2} NP(!VP/vp P<of> NP/ap) %VP.FORM=VG
+	|| {npdz42.2}
+        => {npdz42.2.1} NP(!NP/vp PP/ap)                                                          /*两国之间的合作 对汉语的分析*/
+        => {npdz42.2.2} NP(T/ap !NP/vp) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM                      /*他的请求 自己的亲身经历*/
+        => {npdz42.2.3} NP(AP/ap !NP/vp)                                                          /*现在的生活 研究开发工作的完成*/
+        => {npdz42.2.4} NP(AP/ap !VP/vp) %VP.FORM=VG    
+        => {npdz42.2.5} NP(VP/ap !NP/vp) %VP.FORM=VG,%VP.VSUBC=VI        
+
+&& {npdz43} np->r !vp :: $.内部结构=粘合定中,%r.代词子类=rb,%vp.内部结构=~述宾~联合~连谓,$.中心语=%vp,$.定语=%r,
+        IF %vp.内部结构=单词 THEN %vp.前名=是 ENDIF,
+        IF %vp.内部结构=状中 THEN %vp.状语.cpcat=~tp,%vp.状语.yx=~就 ENDIF
+        => NP(R/r !NP/vp)
+        => NP(T/r !NP/vp) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM    /*某些分类*/
+        => NP(T/r !VP/vp) %VP.FORM=VG    /*这一次谈话 ~<每><星期三下午会见>*/
+&& {npdz44} np->sp !vp :: $.内部结构=粘合定中,%sp.后名=是,%vp.前名=是,$.定语=%sp,$.中心语=%vp,
+        IF %sp.内部结构=单词,%sp.ccat=r FALSE                    /*~这里工作*/
+        => NP(!NP/vp PP/sp)
+        => NP(AP/sp !NP/vp)                                      /*农村生活*/
+&& {npdz45} np->mp !vp :: $.内部结构=组合定中,%mp.ccat=q,%mp.量词子类=动量,%vp.前名=是,$.定语=%mp,$.中心语=%vp
+        => NP(T/mp !NP/vp)                                      /*这次旅行*/
+&& {npdz46} np->m a !np :: $.内部结构=组合定中,%m.数词子类=系数,%a.音节=1,$.中心语=%np,$.定语=%a,
+        IF %np.内部结构=单词 THEN %a.形容词子类=aa ENDIF
+        => NP(M/m A/a !NP/np) %M.NNUM=%NP.NNUM                   /*两大城市*/
+&& {npdz51} np->c !np :: $.内部结构=扩展,$.连接成分=%c,$.作连接=Yes,$==%c @作照应,$!=%np @作照应 @作连接 @连接成分,
+        %c.yx=~和~兼~与~跟~由于~因为, %c.连体=Yes,
+        IF %c.yx=无论|不管|不论,%np.语气=疑问 THEN %np.语气=疑问, $!=%np @语气 ENDIF
+        => NP(C/c !NP/np)                              /* 无论什么社会 何况沈阳*/
+
+
+/* vp.动词短语 */
+
+/* vp.vbar */
+
+&& {vp1} vp -> !vp u<了> :: $.内部结构=附加,%vp.内部结构=~状中,$.中心语=%vp,$!=%vp @附加语,$.附加语=%u,
+        IF %vp.内部结构=述宾 THEN %vp.宾语.cpcat=~fj~dj ENDIF
+        => AP(!AP/vp)                              /*病了*/
+        || %vp.配价数=0
+        => VP(!VP/vp) %VP.USUBC=~UMOD
+        || %vp.配价数=1|2|3
+        => VP(!VP/vp) %VP.PERF=Yes,%VP.USUBC=~UMOD /*回上海了*/
+&& {vp2} vp -> !vp u<过> :: $.内部结构=附加,%vp.内部结构=单词|粘合述补,$.宾语=否,$.中心语=%vp,$!=%vp @附加语,$.附加语=%u
+        => VP(!VP/vp) %VP.PERF=Yes
+&& {vp3} vp -> !v u<着> :: $.内部结构=附加,$.宾语=否,$.中心语=%v,$!=%v @附加语,$.附加语=%u
+        => VP(!V/v)
+
+
+/* vp. 表达祈使意义 */
+
+&& {vprang1} vp -> !v<让> np ap   :: %ap.内部结构=状中,%ap.状语.yx=更加|更,$!=%v @语气,$.语气=祈使|陈述
+	=>VP( !V<Let> NP/np V<be> AP/ap ) %V.FORM=RT,%NP.RCASE=OBJ,%NP.RSUBC=~RPOSS,%V.VOICE=ACTI,%%V.FORM=RT,%NP==%%V @NNUM @NPER
+
+&& {vprang2} vp -> !v<让> np vp   ::$!=%v @语气,$.语气=祈使|陈述,%vp.被动=NO,IF %vp.内部结构=附加,%vp.附加语.yx=吧 FALSE,IF %vp.内部结构=连谓,%vp.前谓.yx=来 FALSE
+	=>VP( !V<let> NP/np VP/vp ) %V.FORM=RT,%NP.RCASE=OBJ,%NP.RSUBC=~RPOSS,%VP.VOICE=ACTI,%VP.FORM=RT,%NP==%VP @NNUM @NPER
+
+/* vp.联合结构 */
+
+&& {vplh1} vp->!vp vp :: $.内部结构=联合,$==%vp @否定,$.前项=%vp,$.后项=%%vp,
+        %vp.兼类=~p,%%vp.兼类=~y~u,%%vp.助动词=否,
+        %vp==%%vp @语义类 @内部结构 @趋向动词 @配价数,
+        %vp.宾语==%%vp.宾语 @cpcat @语义类,
+        %vp.状语==%%vp.状语 @ccat,
+        %vp.中心语.宾语==%%vp.中心语.宾语 @语义类,
+       IF %%vp.内部结构=单词,%%vp.兼类=n,%%vp.yx=%vp.客体.yx,%vp.外内=否 FALSE, /*~<v读><v信>*/
+       IF %%vp.内部结构=单词,%%vp.兼类=q FALSE, /*~<买支>钢笔 */
+        IF %vp.内部结构=单词|状中 THEN %vp.yx=~请~要~没~没有~会,%vp.助动词=否,%%vp.趋向动词=否,%%vp.补助动词=否,%%vp.yx=~比 ENDIF,
+        /* IF %vp.内部结构=单词,%vp.体谓准=谓,%%vp.内部结构=单词 FALSE, */ /*宣传教育*/       /* ~ 练习射击*/
+        IF %%vp.内部结构=单词 THEN %%vp.yx=~得 ENDIF,
+        IF %%vp.助动词=否 THEN %vp.助动词=否 ENDIF,
+        IF %%vp.助动词=否 THEN %vp.述语.助动词=否 ENDIF,
+        IF %vp.yx=%%vp.yx,%vp.内部结构=组合述补,%%vp.否定=是 THEN $!=%vp @语气,$.语气=疑问 ENDIF
+        || IF %vp.yx=%%vp.yx,%vp.内部结构=组合述补 FALSE
+        => VP(!VP/vp C<and> VP//vp) %VP==%%VP @FORM @VOICE @PERF @CONT @FUTR @PAST @NNUM @NPER
+        => NP(!NP/vp C<and> NP//vp)         /*唱歌跳舞 研究开发工作 ~对汉语的<分析><比>计算机对英语的分析 流血牺牲*/ 
+        || %vp.yx=%%vp.yx,%vp.yx=~是,IF %vp.内部结构=述宾|状中 FALSE
+        => VP(!VP/vp)                        /*看得出来看不出来*/
+&& {vplh2} vp->!vp w<"，"|"、"> vp :: $.内部结构=联合,$==%vp @否定,$.前项=%vp,$.后项=%%vp,
+        %vp.兼类=~p,%%vp.兼类=~y~u,%vp.连接成分=No,%%vp.连接成分=No,
+        %vp.状语.cpcat=%%vp.状语.cpcat,%vp==%%vp @语义类 @内部结构 @体谓准,
+        IF %vp.中心语.内部结构=附加,%%vp.中心语.内部结构=~附加 FALSE,
+        IF %vp.内部结构=状中,%%vp.内部结构=状中,%vp.状语.副词子类=dc THEN %%vp.状语.副词子类=dc ENDIF,
+        IF %vp.内部结构=单词 THEN %%vp.趋向动词=否,%%vp.补助动词=否 ENDIF
+        => VP(!VP/vp C<and> VP//vp) %VP==%%VP @FORM @VOICE @PERF @CONT @FUTR @PAST @NNUM @NPER
+        => NP(!NP/vp C<and> NP//vp)     
+&& {vplh3} vp->!vp c vp :: $.内部结构=联合,$==%vp @否定,$.前项=%vp,$.后项=%%vp,
+        %c.连谓=是,%c.前中后=中,%c.yx=~就是~不但~又~还是~反而~不仅,%vp==%%vp @内部结构
+        => VP(!VP/vp C<and> VP//vp) %VP==%%VP @FORM @VOICE @PERF @CONT @FUTR @PAST @NNUM @NPER    /*研究与开发 溜冰和滑雪*/
+        => NP(!NP/vp C<and> NP//vp)
+&& {vplh4} vp->!vp d<不|没> vp :: $.内部结构=联合,$!=%vp @语气,$.语气=疑问,$.前项=%vp,$.后项=%%vp,
+        %vp.内部结构=单词|述补|述宾,%%vp.内部结构=单词|述补|述宾,%vp==%%vp @yx,
+        IF %vp.内部结构=单词 THEN %%vp.内部结构=单词|述补 ENDIF,
+        IF %vp.yx=是 THEN %%vp.内部结构=单词 ENDIF                    /*是不是对这种作法有点意见*/
+        => VP(!VP/vp) 
+&& {vplh5} vp->!vp d<还是> vp :: $.内部结构=联合,$!=%vp @语气,$.语气=疑问,$==%vp @否定,$.前项=%vp,$.后项=%%vp,
+        %vp.内部结构=单词|述补|述宾|状中,%%vp.内部结构=单词|述补|述宾|状中,
+        IF %vp.内部结构=述宾,%%vp.内部结构=述宾 THEN %vp.宾语.ccat=%%vp.宾语.ccat ENDIF
+        => VP(!VP/vp C<or> VP//vp) %VP.FUTR=Yes,%VP==%%VP @FORM @VOICE @PERF @CONT @FUTR @PAST @NNUM @NPER
+&& {vplh6} vp->!vp w<"，"> d<还是> vp :: $.内部结构=联合,$.标点成分=Yes,$==%vp @否定,$!=%vp @语气,$.语气=疑问,
+        %vp.内部结构=单词|述补|述宾|状中,%%vp.内部结构=单词|述补|述宾|状中|连谓
+        => VP(!VP/vp C<or> VP//vp) %VP.FUTR=Yes,%VP==%%VP @FORM @VOICE @PERF @CONT @FUTR @PAST @NNUM @NPER
+&& {vplh7} vp->!vp d<没有> :: $.内部结构=联合,$!=%vp @语气,$.语气=疑问,%vp.内部结构=~单词,
+        IF %vp.yx=是 FALSE,
+        IF %vp.内部结构=述宾,%vp.宾语.cpcat=fj FALSE
+        => VP(!VP/vp) %VP.PERF=Yes         /*行李都搬出去没有*/ 
+
+/* vp.连锁结构 */
+&& {vpls1} vp->!vp vp :: $.内部结构=连锁,%vp.连接成分=Yes,%%vp.连接成分=Yes,%vp.连接成分.后照应=%%vp.连接成分.yx,%%vp.连接成分.前照应=%vp.连接成分.yx,%vp.作连接=是,%%vp.作连接=是,%vp.作照应=前,%%vp.作照应=后,
+        IF %vp.连接成分.yx=不是,%%vp.连接成分.yx=就是 THEN %vp.连接成分.ccat=c,%%vp.连接成分.ccat=c ENDIF
+        || IF %vp.连接成分.yx=一,%%vp.连接成分.yx=就 FALSE
+        =>VP(!VP/vp VP//vp) %VP.连接成分.ECAT=~C, %%VP.连接成分.ECAT=~C
+        =>VP(!VP/vp #C%%VP VP//vp) %VP.连接成分.ECAT=~C, %%VP.连接成分.ECAT=C,%C=%%VP.连接成分
+        =>VP(#C%VP !VP/vp VP//vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分, %%VP.连接成分.ECAT=~C
+        =>VP(#C%VP !VP/vp #C%%VP VP//vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分, %%VP.连接成分.ECAT=C,%%C=%%VP.连接成分
+        || %vp.连接成分.yx=一,%%vp.连接成分.yx=就
+        =>VP(!VP//vp VP/vp)        /*一躺下去就睡着*/
+
+/* vp.连谓结构 */
+
+&& {vplw1} vp->vp !vp :: $.内部结构=连谓,$.前谓=%vp,$.后谓=%%vp,$==%vp @被动 @否定,
+        %vp.兼语句=否,%vp.内部结构=~连锁,%vp.助动词=否,%vp.状语.cpcat=~dp~tp,%vp.中心语.宾语.cpcat=~dj,
+        %vp.宾语.cpcat=~dj~vp,
+        /*  IF %%vp.内部结构=单词,%vp.内部结构=~述宾,%vp.客体.yx=%%vp.yx FALSE,他~<v撕掉了><v通知>*/	
+        IF %%vp.连接成分=Yes,%%vp.连接成分.ccat=c THEN %%vp.yx=而后|然后 ELSE %%vp.连接成分.ccat=~c ENDIF,
+        /*原来就是%%vp.连接成分.ccat=~c ,为了翻译句子“吃完晚饭去买东西” wangbin 98/3/12*/
+        %vp.yx=~象~论~在~是~让~叫~乘~用于~比,
+        %%vp.yx=~得~是~给~在~过~住~有~会,                                                /*~餐具架上<有一对花瓶>*/
+        %%vp.内部结构=~附加,%%vp.助动词=否,%%vp.系词=No,%%vp.状语.ccat=~t,%%vp.状语.yx=~并~正在~一,
+        IF %vp.yx=给 THEN %vp.内部结构=双宾 ENDIF,
+        IF %vp.yx=碰到,%vp.内部结构=述宾 FALSE,     
+        IF %vp.yx=有,%%vp.内部结构=单词,%%vp.yx=种 FALSE,                          /*~<有三百多>种 */
+        IF %vp.动结=是,%%vp.内部结构=单词,%%vp.yx=完|掉 FALSE,
+        IF %vp.宾语=否,%vp.补语=否,%%vp.内部结构=述宾,%vp.动趋=趋,%%vp.趋向动词=是,%vp.趋向补语=%%vp.yx FALSE,
+        IF %vp.宾语=是,%vp.小句宾=是 FALSE,                                                /*~喜欢学生有创造性*/
+        IF %vp.宾语=是,%vp.兼类=p THEN %vp.yx=到 ENDIF,                      /*到车站接汤姆 ~为自己的祖国献出了生命*/
+        IF %vp.体谓准=谓|准 THEN %vp.宾语=是 ENDIF,
+        IF %vp.内部结构=单词,%vp.趋向动词=否,%vp.外内=否 FALSE, 
+        IF %vp.内部结构=单词 ,%vp.趋向动词=否,%vp.离合=否 FALSE , 
+        IF %vp.内部结构=单词,%vp.兼类=n FALSE,                                             /*~工作按计划进行*/
+        IF %vp.内部结构=单词,%vp.趋向动词=否,%vp.外内=是,%%vp.内部结构=状中,%%vp.状语=是,%%vp.状语.yx=还是|不久 FALSE, 
+        IF %vp.内部结构=单词,%vp.趋向动词=是 THEN %%vp.状语.格标=~施事 ENDIF,               /*~刮风还是下雨*/  /*回去取*/
+        IF %vp.内部结构=单词,%vp.趋向动词=是,%vp.音节=1 THEN %vp.yx=去|来 ENDIF,           
+        IF %vp.内部结构=状中,%vp.语气=疑问 FALSE,                                            /*~为什么不去问他*/
+        IF %vp.内部结构=状中,%vp.中心语.内部结构=单词,%vp.yx=~送 THEN %vp.趋向动词=是,%vp.yx=~起~上,%%vp.状语.格标=~施事 ENDIF,
+        IF %vp.内部结构=状中,%vp.状语.yx=把,%%vp.客体=%vp.状语.宾语 FALSE,                 /*~<把这些衣服送到洗衣店去>洗一洗*/
+        IF %vp.内部结构=述宾,%vp.yx=有|面临,%vp.宾语.内部结构=的字,%%vp.内部结构=单词 FALSE,       /*~<有多方面的>配合*/
+        IF %vp.内部结构=述宾,%vp.述语.助动词=是,%%vp.内部结构=单词 FALSE,                  /*~<应该再写一份>报告*/
+        IF %vp.内部结构=述宾,%vp.宾语.cpcat=mp,%%vp.兼类=n FALSE,                          /*~<完成这项><工作两个小时>*/
+        IF %vp.内部结构=连谓,%%vp.内部结构=单词,%%vp.yx=去|来|活 FALSE,                    /*~<看上去都很快>活*/
+        IF %vp.内部结构=粘合述补,%vp.补语.ccat=v,%vp.补语.趋向动词=是 THEN %vp.中心语.内部结构=单词 ENDIF, 
+        IF %vp.内部结构=粘合述补,%vp.补语.yx=到,%%vp.内部结构=状中,%%vp.状语.yx=里 FALSE,  /*~被分配到公司里作了翻译*/
+        IF %vp.内部结构=单词|附加 THEN %vp.yx=~作~出 ENDIF,                                /*~作了翻译 ~出了贡献*/
+        IF %vp.内部结构=联合|述宾,%vp.语气=疑问 FALSE,                                     /*去不去由你决定  做什么工作*/
+        IF %%vp.内部结构=单词,%%vp.趋向动词=是 FALSE,                                      /*~寄一份资料来 ~下田去了*/
+        IF %%vp.内部结构=单词 THEN %%vp.yx=~作~没有~要 ENDIF,
+        IF %%vp.内部结构=单词,%%vp.兼类=n,%vp.客体=%%vp FALSE,
+        IF %%vp.内部结构=述宾,%%vp.兼类=p,%%vp.宾语.语义类=人,%%vp.宾语.yx=~这儿~这里~那儿~那里 FALSE  /*穿绿衣服的姑娘~<看上去比她>的同伴更漂亮*/
+        || {vplw1.1} IF %%vp.连接成分=Yes,%%vp.连接成分.ccat=c,%%vp.连接成分.yx=而后|然后 FALSE,
+           IF %vp.yx=%%vp.yx FALSE,
+           IF %vp.yx=来,%vp.内部结构=单词,%%vp.语义类=搬移|给予 FALSE
+        => VP(!VP/vp P<to> VP//vp) %VP.ECAT=~U,%VP==%%VP @PERF, %%VP.FORM==RT     /*把这些衣服送到洗衣店去洗一洗*/
+        => VP(!VP/vp VP//vp) %VP.ECAT=U,%VP==%%VP @PERF, %%VP.FORM=RT               /*我有办法通知他  */
+                       => VP(!VP//vp PP/vp) %VP.ECAT=~U   /* 吃完饭散步去*/
+        || {vplw1.2} IF %%vp.连接成分=Yes,%%vp.连接成分.ccat=c,%%vp.连接成分.yx=而后|然后 FALSE,
+        IF %vp.yx=来,%vp.内部结构=单词,%%vp.语义类=搬移|给予 TRUE
+        => VP(!VP//vp)                                                          /*你来解释一下*/
+        || {vplw1.3} IF %%vp.连接成分=Yes,%%vp.连接成分.yx=而后|然后 FALSE,
+        %vp.yx=%%vp.yx,%%vp.内部结构=状中,%%vp.内部结构=~单词,%vp.内部结构=~联合,%%vp.状语.cpcat=pp,
+           IF %vp.内部结构=%%vp.内部结构 FALSE
+        => VP(!VP//vp)                                                          /*她<考虑问题><比我考虑得周到>???*/
+        || {vplw1.4} IF %%vp.连接成分=Yes,%%vp.连接成分.ccat=c,%%vp.连接成分.yx=而后|然后 FALSE,
+        %vp.yx=%%vp.yx,%%vp.内部结构=述补,%%vp.内部结构=~单词,%vp.内部结构=~联合,%%vp.状语.yx=~还是~不,
+           IF %vp.内部结构=%%vp.内部结构 FALSE
+        => VP(!VP/vp DP//vp)  %DP.DVEND=Yes                                     /*说英语说得很清楚*/
+        || {vplw1.5} IF %%vp.连接成分=Yes,%%vp.连接成分.ccat=c,%%vp.连接成分.yx=而后|然后 TRUE
+        => VP(!VP/vp VP//vp) 
+&& {vplw2} vp->!vp vp ::  $.内部结构=连谓,$.前谓=%vp,$.后谓=%%vp,$==%vp @被动 @否定,
+        %vp.兼语句=是,%vp.宾语=是,%vp.内部结构=~连谓~附加,%vp.连接成分.ccat=~c,
+        %%vp.被动=否,/*%%vp.助动词=否,*/%%vp.系词=No,%%vp.状语.yx=~并~正在~一,          /*~两天的活叫你们一天给干完了*/
+        %%vp.yx=~得~是~给~在~过~住,%%vp.连接成分.ccat=~c,
+        IF %vp.yx=让,%%vp.内部结构=附加,%%vp.附加语.yx=吧 FALSE,                    /* ~<让我们><开始吧>*/
+        IF %vp.内部结构=状中,%vp.状语.cpcat=tp|pp FALSE,                        /*~<现在让我们><开始>  ~<用车送我>到机场*/
+        IF %%vp.助动词=Yes THEN %%vp.yx=要,%%vp.内部结构=~单词 ENDIF,                              /*告诉在那儿玩的男孩子们不要吵闹*/
+        IF %%vp.内部结构=单词,%%vp.yx=去|来,%vp.语义类=给予|搬移|自移 FALSE,  /* ~ <送几本书>来 */
+        IF %%vp.内部结构=单词,%%vp.yx=去|来 THEN %vp.内部结构=述宾,%vp.述语.音节=1 ENDIF    /*要他们来*/
+        || {vplw2.1} %%vp.内部结构=状中,%%vp.状语.ccat=r,%%vp.状语.代词子类=rc
+	=> VP(!VP/vp VP//vp) %VP==%%VP @PERF, %%VP.FORM=RT   
+	/*教他怎样游泳*/
+        || {vplw2.2} IF %%vp.内部结构=状中,%%vp.状语.ccat=r,%%vp.状语.代词子类=rc  FALSE	     
+	=> VP(!VP/vp P<to> VP//vp) %VP.ECAT=~U,%VP==%%VP @PERF, %%VP.FORM=RT        /*派他们出国学习*/ 
+&& {vplw3} vp->!vp ap :: $.内部结构=连谓,$==%vp @被动 @否定,
+        %vp.助动词=No,%vp.内部结构=~单词,%ap.内部结构=状中|单词|述补                                /*你一定~<会成功> 到火这边来暖和一下*/
+        || %vp.内部结构=粘合述补,%vp.补语.趋向动词=是,%vp.yx=~看                    /*说起来容易   ~看起来漂亮*/
+        => VP(!V<be> AP/ap P<to> VP/vp ) $!=%V @VOICE,$==%VP @VOICE,%VP.FORM=RT
+        || %vp.内部结构=粘合述补,%vp.补语.趋向动词=是,%vp.yx=看                    /*看起来漂亮*/
+        => VP(!VP/vp AP/ap)                                                     /*看上去都很快活*/ 
+        || %vp.内部结构=述宾,%vp.宾语.cpcat=~mp,%vp.小句宾=No,%vp.兼语句=是,%ap.内部结构=~的字,%ap.形谓语=是
+        => VP(!VP/vp AP/ap)                                                     /*称赞学生能干 喜欢这里安静*/
+        || %vp.yx=~比~离~在,%ap.内部结构=状中|述补,         /*~海滨<离这儿不远>*/
+           IF %vp.内部结构=粘合述补,%vp.补语.趋向动词=是,%vp.yx=看 FALSE,
+           %ap.状语.ccat=d,%ap.很=是     /*~这个姑娘vplw<比她的姐妹><更聪明>*/
+        => AP(!AP/ap P<to> VP/vp) %VP.FORM=RT                                       /*给狗起这个名字多可笑 ~抱怨食物不好=>recover*/
+        => VP(!VP/vp P<to> VP/ap) %%VP.FORM=RT                                    /*~分子运动<lw有多快> 到火这边来暖和一下*/
+
+/* vp.述补结构 */
+
+&& {vpsbu1} vp->!vp v :: $.内部结构=粘合述补,$.述语=%vp,$.补语=%v,%vp.宾语.cpcat=~mcp,%vp.内部结构=单词,%vp.动结=是,
+	IF %vp.补语=是 THEN $!=%vp @补语 ENDIF,
+        IF %vp.内部结构=单词 THEN $!=%vp @配价数 @客体,$.配价数=2,$.客体=[语义类:事物|运动] ENDIF,
+        || {vpsbu1.1} %vp.内部结构=单词,%v.补助动词=是,%v.单作补语=是,%v.趋向动词=否,%v.yx=~完~走~成~死
+        => {vpsbu1.1.1} VP(!V/v)
+        => {vpsub1.1.2} VP(!VP/vp D/v) %D.DVEND=Yes
+        || {vpsbu1.2} %vp.内部结构=单词,%v.yx=死,%vp.yx=~去                    /*他不怕~<去死>*/
+        => VP(!VP/vp PP(P<to> N<death>))                                          /*咬死*/
+        || {vpsbu1.3} %vp.内部结构=单词,%v.yx=完
+        => VP(!V/v VP/vp) %V.PERF=Yes,%VP.FORM=VG                                 /*吃完*/
+        || {vpsbu1.4} %vp.内部结构=单词,%v.yx=成                            /*<转换成>热能、光能或化学能*/
+        => VP(!VP/vp)                                                     /*缩成速写*/
+
+&& {vpsbud} vp->!vp v :: $.内部结构=粘合述补,$.述语=%vp,$.补语=%v,%vp.宾语.cpcat=~mcp,%vp.内部结构=单词,%vp.动趋=是,%vp.趋向补语=%v.yx,%v.趋向动词=是,%v.yx=进|出|到,
+	IF %vp.补语=是 THEN $!=%vp @补语 ENDIF,
+        IF %vp.内部结构=单词,%vp.语义类=自移|搬移/*|给予*/ 
+           THEN $!=%vp @配价数 @客体,$.配价数=2,$.客体=[语义类:空间|人为事物] ENDIF    /*飞到了北京  ~<献出了>生命*/
+        || {vpsbu1.5} %vp.内部结构=单词,%v.yx=去|走
+        => VP(!VP/vp) %VP.PERF=Yes                                              /*飞去 送去*/
+        || {vpsbu1.6} %vp.内部结构=单词,%vp.语义类=自移|搬移|对待,%v.yx=进|出|到
+        => VP(!VP/vp P/v)                                                                  /*跳进*/
+        || {vpsbu1.7} %vp.内部结构=单词,%vp.语义类=自移|搬移|对待,%v.yx=进去|出去|进来|出来|下|上
+        => VP(!VP/vp D/v)  %D.DVEND=Yes
+        || {vpsbu1.8} %vp.内部结构=单词,%vp.语义类=自移|搬移|对待,
+           %v.yx=~去~出去~出~出来~进去~进~进来~到~下~上
+        => VP(!VP/vp)                                                                
+        || {vpsbu1.9} %vp.内部结构=单词,%vp.语义类=~自移~搬移~对待,%v.yx=~去~走
+        => VP(!VP/vp)                                                                 /*唱起来*/
+        || {vpsbu1.10} %vp.内部结构=述宾|粘合述补|组合述补|附加,%vp.yx=~到~兼,%vp.语义类=搬移|自移|给予|对待|获取,
+           %v.趋向动词=是,%v.yx=~上,%v.兼类=~p,
+           IF %vp.内部结构=附加 THEN %vp.附加语.yx=了 ENDIF,                        /*走了出来*/
+           IF %vp.内部结构=组合述补 THEN %vp.补语.cpcat=pp ENDIF
+        => {vpsbu1.10.1} VP(!VP/vp D/v) %D.DVEND=Yes
+        => {vpsbu1.10.2} VP(!VP/vp)                     /*寄一份资料来  转到这边来  钻到图书馆去 买菜去*/
+&& {vpsbu2} vp->!v pp :: $.内部结构=组合述补,$.述语=%v,$.补语=%pp,$.宾语=否,
+        %v.动结=是,%pp.介补语=是,
+        IF %pp.语气=疑问 THEN $!=%v @语气,$== %pp @语气,$.主题成分=%pp ENDIF,/*他住<在哪里>*/
+        IF %v.yx=成立|生,%pp.yx=于 THEN $.被动=是 ENDIF,
+        IF %v.yx=准备,%pp.yx=在|于 FALSE                         /*~<准备在花园里>干什么*/
+        || IF %v.yx=成立|生,%pp.yx=于 FALSE
+        => VP(!V/v PP/pp)                                          /*装在车上*/
+        => VP(!V/v DP/pp)  %DP.DVEND=Yes                        /*坐在后面*/
+        || %v.yx=成立|生,%pp.yx=于
+        => VP(!V/v PP/pp)  %V.VOICE=PASS,%V.PAST=Yes            /*成立于一九二零年*/
+&& {vpsbu4} vp->!v u<极了> :: $.内部结构=组合述补,%v.很=是,$.宾语=否,$.述语=%v,$.补语=%u
+        => VP(D/u !V/v)%D.DVPRE=Yes                                /*害怕极了 想念极了*/
+&& {vpsbu5} vp->!v d<不> v :: $.内部结构=组合述补,$.述语=%v,$.补语=%%v,$.否定=是,$.宾语=否,
+        IF %v.yx=%%v.yx FALSE,%%v.补助动词=是
+        || %%v.yx=~完~起~懂
+        => VP(U<can> D<not> !V/v) %V.FORM=RT                    /*吃不了 管不着 超不过*/
+        || %%v.yx=完
+        => VP(U<can> D<not> V//v) %V.FORM=RT                    /*做不完*/
+        || %%v.yx=起
+        => VP(U<can> D<not> V<afford>) %V.FORM=RT,$.VSUBC=VI|VO,$.OBJTYPE=NP                                   /*住不起*/
+        || %%v.yx=懂
+        => VP(U<can> D<not> V<understand>) %V.FORM=RT,$.VSUBC=VI|VO,$.OBJTYPE=NP               /*听不懂*/
+&& {vpsbu6} vp->!v d<不> a :: $.内部结构=组合述补,$.述语=%v,$.补语=%a,$.否定=是,$.宾语=否,
+        %a.形补语=组,%v.配价数=~0
+        => VP(U<can> D<not> !V/v D/a) %V.FORM=RT,%%D.DVEND=Yes         /*长不高 拉不长 讲不流利 ~剩下不好的*/
+&& {vpsbu7} vp->!v u<得> d<很> :: $.内部结构=组合述补,$.宾语=否,$.述语=%v,$.补语=%d,%v.很=是
+        => VP(V<be> D/d  A/v) %D.DADJV=Yes        /*害怕得很*/
+&& {vpsbu8} vp->!v u<得> r :: $.内部结构=组合述补,$.宾语=否,$.述语=%v,$.补语=%r,$!=%v @语气,$==%r @语气 ,$.语气=疑问,
+        %r.代词子类=rc,%r.yx=怎么样|怎样|如何,$.主题成分=%r
+        => VP(D/r !V/v) %D.DVPRE=Yes                                         /*进行得怎么样*/
+&& {vpsbu9} vp->!v u<得> ap :: $.内部结构=组合述补,$.宾语=否,$.述语=%v,$.补语=%ap,
+        %ap.ccat=~b,
+        IF %ap.内部结构=的字 THEN %ap.中心语.内部结构=单词,%ap.中心语.ccat=a,%ap.中心语.重叠形式=AA|AABB ENDIF, /*养得胖胖的*/
+        IF %ap.ccat=a THEN %ap.形补语=组 ENDIF,
+        IF %ap.ccat=z THEN %ap.状补语=Yes ENDIF,
+        IF %ap.内部结构=状中,%ap.状语.yx=多么|多 THEN $!=%v @语气,$==%ap @语气, $.语气=感叹,$.主题成分=%ap ENDIF
+        || {vpsbu9.2} IF %ap.内部结构=状中,%ap.状语.yx=最 FALSE                            /*~唱得最好=>sing the best*/
+        => VP(!V/v AP/ap) %V.VSUBC=VC,%V.COMPTYPE=AP,%V==%AP @DEGR            /*长得高 长得苗条 讲得流利 跑得比我快*/
+        || {vpsub9.3} %v.yx=干
+        => VP(!V<be> AP/ap)                                   /*干得相当累*/
+        || {vpsub9.4} %v.yx=病
+        => VP(!V<be> DP/ap A/v)  %DP.DVEND=Yes                /*病得不轻*/
+	|| {vpsbu9.1} 
+        => {vpsbu9.1.1} VP(!V/v DP/ap) %DP.DVEND=Yes,%V==%DP @DEGR  
+        => {vpsbu9.1.2} VP(!V/v VP/ap) %VP.FORM=VG
+&& {vpsbua} vp->!v u<得> vp :: $.内部结构=组合述补,$.宾语=否,$.述语=%v,$.补语=%vp
+        || %vp.补助动词=否,%vp.yx=~希望,                /*~工作进展得<不象我们希望>的那样顺利*/
+           IF %vp.内部结构=单词 THEN %vp.趋向动词=否,%vp.单作补语=Yes ENDIF,
+           IF %vp.配价数=1 THEN %vp.内部结构=单词|附加|状中 ENDIF,
+           IF %vp.配价数=2 THEN %vp.内部结构=~单词~附加~述补 ENDIF    /*~吃得<vpsbu过多>*/
+        => VP(!V/v VP/vp)    %VP.FORM=VG               /*气得发抖*/
+        || %vp.补助动词=是,%vp.内部结构=单词
+        => VP(U<can> !V/v)  %V.FORM=RT                /*打得死 吃得了 管得着 超得过*/
+&& {vpsbub} vp->!v u<得> dj :: $.内部结构=组合述补,$.宾语=否,$.述语=%v,$.补语=%dj
+        => VP(!V/v C<"so that"> CS/dj)    /*乐得嘴也合不上 激动得一句话也说不出来 他气得浑身发抖*/
+&& {vpsbuc} vp->!ap ap :: $.内部结构=述补,$.述语=%ap,$.补语=%%ap,
+        %ap.内部结构=~的字~组合述补~状中,%ap.带补=是,%%ap.形补语=粘,%%ap.内部结构=单词|状中,
+        IF %ap.内部结构=单词,%%ap.内部结构=状中 FALSE,
+        IF %ap.内部结构=单词,%%ap.内部结构=单词,%ap.yx=多,%%ap.yx=远 FALSE,        /*~到纽约有多远*/
+        IF %ap.yx=%%ap.yx FALSE
+        || %%ap.yx=~坏
+        => AP(!AP/ap AP//ap)                        /*我的机器已经<坏了很久了>*/ 
+        || %%ap.yx=坏
+        => VP(!V<be> D<very> AP/ap)                 /*乐坏了*/
+
+
+/* vp.述宾结构 */
+
+&& {vpsb1} vp->!vp np :: $.内部结构=述宾,$.述语=%vp,$.宾语=%np,$==%vp @否定,%np.语义类=%vp.客体.语义类,
+        %vp.内部结构=~双宾~状中~连谓,%vp.补语.ccat=~p,
+        %np.内部结构=~所字,                               /* %vp.客体=%np,*/
+        IF %vp.yx=受 THEN $.被动=是 ENDIF,
+        /* IF %vp.yx=叫 THEN $.兼语句=No ENDIF,*/
+        IF %vp.内部结构=单词,%vp.外内=否,%np.ccat=n|r THEN %vp.体谓准=体 ENDIF,
+        IF %vp.内部结构=附加,%vp.中心语.内部结构=双宾|状中|连谓 FALSE,
+        IF %vp.内部结构=述宾 THEN %vp.宾语.cpcat=mp,%vp.宾语.ccat=~r,%vp.宾语.量词子类=动量|时量 ENDIF,        
+  	/* IF %np.ccat=v THEN %vp.体谓准=谓|准 ENDIF,  */   /* 用户十分信赖公司的服务  ~<研究><开发工作的完成>*/
+        IF %vp.内部结构=述宾,%vp.宾语.cpcat=mp,%vp.yx=是 FALSE,                              /*是一分钱*/        
+        IF %np.语气=感叹|疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %vp.附加语=Yes,%vp.附加语.ccat=u THEN %vp.附加语.yx=~的 ENDIF,                  /*~送给他礼物 买这些书*/
+        IF %vp.双宾=是,%np.内部结构=定中,%np.定语.内部结构=单词,%np.定语.ccat=r,%np.定语.代词子类=ra,%np.中心语.ccat=n FALSE,
+        IF %vp.内部结构=单词,%vp.动结=介,%np.内部结构=定中,%np.定语.中心语.ccat=p FALSE   /*~<摆><在我们面前的任务>*/
+        || {vpsb1.1} %np.ccat=r,%np.代词子类=rc,
+           IF %vp.yx=是,%np.yx=什么 FALSE,
+           IF %vp.ccat=a FALSE
+        => {vpsb1.1.1} VP(!VP/vp NP/np) %VP.VSUBC=VO|VOO|VOC,%VP.OBJTYPE=NP,%NP.RCASE=OBJ              /*去哪儿  不想说什么*/
+        => {vpsb1.1.2} VP(!VP/vp NP/np) %VP.VSUBC=VC,%VP.COMPTYPE=NP,%NP.RCASE=OBJ          
+        || {vpsb1.2} %np.ccat=r,%np.代词子类=rc,%vp.yx=是,%np.yx=什么,
+           IF %vp.ccat=a FALSE 
+        => VP(!VP/vp NP/np) %NP.RCASE=OBJ                                 /*是什么*/
+        || {vpsb1.3} %vp.配价数=1,%vp.主体=%np,%vp.体谓准=体,
+           IF %vp.ccat=a FALSE
+        => CS(NP/np !VP/vp )                                                 /*发生了这个事故*/
+        || {vpsb1.4} %vp.客体=%np,%vp.yx=是,
+           IF %np.ccat=r THEN %np.代词子类=~rc ENDIF,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp NP/np) %VP==%NP @NNUM,%VP.VSUBC=VO|VOC,%NP.RCASE=OBJ   /*我们是学生    1992年是我们艰苦拼搏的一年*/ 
+        => VP(!VP/vp AP/np)           /*眼睛是绿色*/
+        || {vpsb1.5} %vp.配价数=0|2|3,%vp.yx=~是,
+           IF %np.ccat=n|r THEN %vp.客体=%np ENDIF,
+           IF %vp.趋向动词=Yes,%vp.处所=%np FALSE,
+           IF %vp.yx=借给 FALSE,                                    /*~借给<我的那本书>*/
+           IF %vp.yx=过去 THEN %np.内部结构=~单词 ENDIF,
+           IF %vp.ccat=a FALSE
+        => {vpsb1.5.1} PP(!PP/vp NP/np)                          /*论/on知识表达的几种方法*/
+        => {vpsb1.5.2} VP(!VP/vp NP/np) %VP.VSUBC=VO|VOO|VOC,%VP.OBJTYPE=NP,%NP.RCASE=OBJ   /*送去了一车蔬菜  1992年是我们艰苦拼搏的一年*/ 
+        => {vpsb1.5.3} VP(!VP/vp NP/np) %VP.VSUBC=VC,%VP.COMPTYPE=NP,%NP.RCASE=OBJ        
+        => {vpsb1.5.4} VP(!VP/vp PP(!P NP/np)) %VP.VSUBC=VC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP,%NP.RCASE=OBJ,%NP.YX=~here~there~where    /*作为终身的职业*/
+        => {vpsb1.5.5} VP(!VP/vp PP(!P NP/np)) %VP.VSUBC=VI,%VP.OBJTYPE=PP,%P.YX=%VP.DOBJPREP,%NP.RCASE=OBJ    ,%NP.YX=~here~there~where    /*想主意*/    
+        => {vpsb1.5.6} VP(!VP/vp NP/np) %VP.VSUBC=VC,%VP.COMPTYPE=PP,%NP.RCASE=OBJ,%NP.YX=here|there|where /*在哪儿*/   
+        => {vpsb1.5.7} VP(!VP/vp NP/np) %VP.VSUBC=VI,%VP.OBJTYPE=PP,%NP.RCASE=OBJ  ,%NP.YX=here|there|where      
+        || {vpsb1.6} %vp.邻体=%np,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp NP/np) %VP.VSUBC=VO|VC,%NP.RCASE=OBJ,%VP.IOBJTYPE=NP
+        => VP(!VP/vp PP(!P NP/np)) %VP.VSUBC=VOO|VOC,%NP.RCASE=OBJ,%VP.IOBJTYPE=PP,%P.YX=%VP.IOBJPREP,%NP.RCASE=OBJ
+        || {vpsb1.7} %vp.工具=%np,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp PP(!P<with> NP/np)) 
+        || {vpsb1.8} %vp.处所=%np,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp NP/np)%VP.VSUBC=VO|VOO|VOC,%NP.RCASE=OBJ,%VP.COMPTYPE=~PP
+        => VP(!VP/vp PP(P NP/np)) %VP.VSUBC=VC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP,%NP.YX=~here~there~where
+        => VP(!VP/vp NP/np) %VP.VSUBC=VC,%VP.COMPTYPE=PP,%NP.YX=here|there|where
+        || {vpsb1.9} %vp.内部结构=粘合述补|附加,
+           IF %vp.内部结构=附加 THEN %vp.中心语.内部结构=粘合述补,%vp.中心语.补语.yx=~去~来,%vp.中心语.补语.处所=%np ENDIF,
+           IF %vp.内部结构=粘合述补 THEN %vp.补语.ccat=v,%vp.补语.yx=~去~来,%vp.补语.处所=%np ENDIF,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp PP(!P NP/np)) %VP.VSUBC=VC|VOC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP,%NP.RCASE=OBJ   /*小孩把鱼带回家去*/
+        => VP(!VP/vp NP/np) /* %VP.VSUBC=VI|VO  */                                                       /*飞出了校园  流下了眼泪*/
+        || {vpsb1.10} %vp.内部结构=粘合述补|附加,
+           IF %vp.内部结构=附加 THEN %vp.中心语.内部结构=粘合述补,%vp.中心语.补语.yx=去|来 ENDIF,
+           IF %vp.内部结构=粘合述补 THEN %vp.补语.ccat=v,%vp.补语.yx=去|来 ENDIF,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp NP/np)                                   /*干旱带来了严重的后果*/
+        || {vpsb1.11} %vp.内部结构=组合述补,%vp.补语.内部结构=单词,
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp NP/np) %VP.VSUBC=VO|VOO,%NP.RCASE=OBJ,%NP.RCASE=OBJ,%VP.COMPTYPE=~PP             /*离不开技术的进步*/
+        => VP(!VP/vp PP(P NP/np)) %VP.VSUBC=VOC|VC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP  /* 步行去办公室*/
+        || {vpsb1.12} %vp.内部结构=单词|附加,%np.语义类=时间,%np.内部结构=~单词, %np.yx=~时候,      /* ~<上><英语课的时候> */
+           IF %np.内部结构=定中 THEN %np.定语.cpcat=mp|mcp|ap,%np.定语.ccat=~r ENDIF,
+           IF %vp.配价数=0|2|3,%vp.客体=%np FALSE,  /*在罗马住过很长时间*/ 
+           IF %vp.ccat=a FALSE
+        => VP(!VP/vp PP(!P<for> NP/np))  /*工作了两个月 讲了三个半小时*/
+        || {vpsb1.13} %np.内部结构=~单词,%np.中心语=Yes,%np.中心语.内部结构=的字,%np.定语.数词子类=~数量,IF %vp.ccat=a FALSE
+        => VP(!VP/vp NP/np)    %VP.VSUBC=VO|VOO|VOC                         /*买一本新的 ~做许多简单的*/
+        || {vpsb1.13} %vp.ccat=a,%vp.内部结构=述补|附加
+        => VP(NP/np !VP/vp) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER                 /*乐坏了我们*/
+        || {vpsb1.15} %vp.yx=有
+        => NP(NP/np)
+/*我看见<盒子里有几块表>=>NP*/
+&& {vpsb2} vp->!vp sp :: $.内部结构=述宾,$.述语=%vp,$.宾语=%sp,$==%vp @否定,
+        %vp.内部结构=单词|附加|粘合述补,%vp.体谓准=体,
+        %sp.ccat=~r,
+        IF %vp.yx=上,%sp.yx=里 FALSE,                                /*~在山<上><一个小屋里>度假*/
+        IF %vp.yx=是,%sp.ccat=f FALSE,                               /*~奶奶<是我们家中>最老的*/
+        IF %vp.内部结构=粘合述补,%vp.补语.ccat=a FALSE,
+        IF %vp.内部结构=附加,%vp.中心语.内部结构=粘合述补,%vp.中心语.补语.ccat=a FALSE
+        => VP(!VP/vp PP(P NP/sp)) %VP.VSUBC=VC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP        /*去江边*/
+        || IF %vp.补语=是,%vp.补语.yx=入|进|遍 FALSE,
+           IF %vp.yx=到,%sp.yx=里 FALSE                             /*~到<屋子里>=>go in room*/
+        => VP(!VP/vp PP/sp)                                          /*放桌子上 来到乡下 来到了村子里 通向河边*/    
+        => VP(!VP/vp DP/sp)    %DP.DVEND=Yes                             /*到国外*/
+        || %vp.补语=是,%vp.补语.yx=入|进|遍
+        => VP(!VP/vp NP/sp) %VP.VSUBC=~VC                            /*跳入水中*/  
+        || %vp.yx=在,%vp.内部结构=单词,%sp.ccat=f,%sp.yx=边
+        => VP(!VP/vp PP(P<by> NP/sp))                                /*在松花江边*/
+&& {vpsb3} vp->!vp tp :: $.内部结构=述宾,$.述语=%vp,$.宾语=%tp,$==%vp @否定,
+        %vp.内部结构=单词|附加,%vp.体谓准=体,$.客体=%tp,              
+        IF %vp.yx=有,%tp.yx=年|月|日 FALSE,                                      /*有30年*/
+        IF %tp.语气=疑问 THEN $!=%vp @语气,$==%tp @语气,$.主题成分=%tp ENDIF    /*今天是星期几？*/
+	|| {vpsb3.1}
+        => VP(!VP/vp NP/tp)    %VP.VSUBC=VO|VOC|VOO,%NP.RCASE=OBJ                                    /*今天是星期天 */
+        => VP(!VP/vp PP(!P NP/tp))    %VP.VSUBC=VC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP,%NP.RCASE=OBJ    /*盼望着新年*/
+        || {vpsb3.2} %vp.yx=在
+        => VP(!V<be> PP/tp)                                                                          /*在眼前 */
+&& {vpsb4} vp->!vp mp :: $.内部结构=述宾,$.述语=%vp,IF %vp.宾语=是 THEN $!=%vp @宾语 ENDIF,$.宾语=%mp,$==%vp @否定,
+        IF %vp.内部结构=述宾,%vp.宾语.内部结构=~单词,%vp.宾语.cpcat=mcp|mp FALSE,
+        IF %vp.内部结构=附加,%vp.中心语.内部结构=连谓|联合 FALSE,
+        IF %vp.内部结构=单词,%vp.yx=到 FALSE,                            /*~lw<到这所><学校里上学>*/
+        IF %vp.yx=转|绕,%mp.yx=周 THEN %mp.量词子类=动量 ENDIF,         /*地球每24小时转<一周>*/
+        IF %mp.量词子类=~动量~时量 THEN %vp.体谓准=体 ENDIF,
+        IF %mp.量词子类=动量|时量,%mp.内部结构=定中,%mp.定语.ccat=r,%mp.定语.代词子类=rb FALSE,    /*~<推迟这次>旅行*/
+        IF %mp.语气=疑问 THEN $!=%vp @语气,$==%mp @语气,$.主题成分=%mp ENDIF  /*今天是几号了？*/
+        || %vp.内部结构=单词|附加|述宾,%vp.后时量词=是,%vp.yx=~是~有,%mp.量词子类=时量,%mp.内部结构=~单词
+        => VP(!VP/vp PP(P<for> NP/mp)) 
+        => VP(!V<be> AP/vp PP(P<for> NP/mp))                                    /*他病了一周*/
+        || %vp.内部结构=单词,%vp.yx=是,%mp.量词子类=时量,%mp.内部结构=~单词
+        => VP(!VP/vp NP/mp) 
+        || %vp.内部结构=单词,%vp.yx=有,%mp.量词子类=时量,%mp.内部结构=~单词
+        => VP(!VP/vp NP/mp) 
+        || %vp.内部结构=单词|附加|述宾,%vp.后动量词=是,%mp.量词子类=动量,%mp.定语.yx=一,%mp.yx=~次~周
+        => VP(!VP/vp)                                         /*把工作在几个工作人员中<分配一下> 打了他一拳*/
+        || %vp.内部结构=单词|附加|述宾,%vp.后动量词=是,%mp.量词子类=动量,%mp.yx=次|周
+        => VP(!VP/vp PP(P<for> NP/mp))                       /*去哈尔滨一次*/
+        => VP(!VP/vp DP/mp)                      
+        || %vp.内部结构=单词|附加|述宾,%vp.后动量词=是,%mp.量词子类=动量,%mp.定语.yx=~一,%mp.yx=~次~周
+        => VP(!VP/vp NP/mp)                                  /*有几步 来了三趟  下了三场 ~<去哈尔滨一次 去了两次>*/
+        || %vp.内部结构=~述宾~双宾~状中~连谓~联合,%mp.量词子类=~动量~时量
+        => VP(!VP/vp NP/mp)                                  /*带着一家 有十万元 ~实现这种*/
+        => VP(!VP/vp M/mp)                                   /*借一本*/
+        => VP(!VP/vp T/mp) %T.YX=~a~an                       /*缺这个*/
+&& {vpsb5} vp->!vp mcp :: $.内部结构=述宾,$.述语=%vp,$.宾语=%mcp,$==%vp @否定,
+        %vp.内部结构=单词|附加,/*%vp.配价数=0,*/%mcp.数词子类=系数|位数|数量,
+        IF %vp.yx=有 THEN %mcp.数词结构=~单词 ENDIF
+        => VP(!VP/vp M/mcp)   %M.MSUBC=MNUM  /*有六十*/
+	=> AP(!AP/vp M/mcp)
+&& {vpsb6} vp->!vp mp np :: $.内部结构=述宾,$.述语=%vp,$.客体=%np,$==%vp @否定,
+        %vp.内部结构=单词|附加,%np.内部结构=~联合~同位,%mp.量词子类=动量, %mp.yx=~把, /*~<买><两把><牙刷>*/
+        IF %vp.宾语=是 THEN $!=%vp @宾语 ENDIF,$.宾语=%np,
+        IF %mp.yx=次,%np.语义类=运动/*|事情*/ FALSE  /* 举办了一次有趣的报告会 */ 
+        || %np.内部结构=单词,%np.音节=1
+        => VP(!VP/vp PP(P<for> NP/mp))                                          /*谈一次话*/
+        || IF %np.内部结构=单词,%np.音节=1 FALSE,IF %mp.yx=次 FALSE,%mp.定语.ccat=r|m,IF %mp.定语.ccat=m THEN %mp.定语.yx=一 ENDIF
+        => VP(!VP/vp T/mp NP/np)                                                /*等那场电影*/
+        || IF %np.内部结构=单词,%np.音节=1 FALSE,IF %mp.yx=次 TRUE
+        => VP(!VP/vp NP/np PP(P<for> NP/mp))  
+        => VP(!VP/vp NP/np DP/mp)                                               /*研究一下这个问题*/
+        || IF %np.内部结构=单词,%np.音节=1 FALSE,IF %mp.yx=次 FALSE,%mp.定语.ccat=m,%mp.定语.yx=~一
+        => VP(!VP/vp NP/np P<for> NP/mp)
+        => VP(!VP/vp NP/np DP/mp)
+&& {vpsb7} vp->!vp q np :: $.内部结构=述宾,$.述语=%vp,$.宾语=%np,$==%vp @否定,
+        %np.ccat=~r,%vp.内部结构=~述宾~状中~连谓,%vp.体谓准=体,%vp.客体=%np,%np.定语.yx=~本,
+        IF %np.个体量词=%q.yx,%q.量词子类=~个体 FALSE /*<买>~<支 watt>钢笔*/
+        || %q.量词子类=不定
+        => VP(!VP/vp T/q NP/np)    %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM     /*取些钱*/
+        || %q.量词子类=度量|容量
+        => VP(!VP/vp M<one> N/q P<of> NP/np) %N.NNUM=SNGL   /*喝了杯牛奶*/
+        || %q.量词子类=个体,%np.个体量词=%q.yx
+        => VP(!VP/vp T<a> NP/np)    %NP.NSUBC=NCONT,%NP.NNUM=SNGL /*买了件礼物 开个会*/
+        => VP(!VP/vp T<a> N/q P<of> NP/np) %NP.NSUBC=NUCNT       /*买张纸*/ 
+        || %q.yx=个,%np.名词子类=ne|nf /* 有个好身体 出了个毛泽东 */
+        => VP(!VP/vp T<a> NP/np)    %NP.NSUBC=NCONT,%NP.NNUM=SNGL
+
+&& {vpsb8} vp->!vp vp :: $.内部结构=述宾,$.述语=%vp,$.宾语=%%vp,$==%vp @否定,
+        %vp.助动词=否,%vp.体谓准=谓|准,%vp.宾语=No,%vp.内部结构!=单词,           /*~<比赛将在>星期三开始*/
+        IF %vp.yx=比赛,%%vp.yx=能 FALSE, /* ~<比赛不能>按时进行*/
+        IF %vp.内部结构=单词,%vp.兼类=d,%%vp.内部结构=单词 FALSE, /*~<比较><关心>*/
+        %%vp.yx=~是~在,%%vp.连接成分.ccat=~c,                                /*~<批评是>比较容易的*/
+        IF %vp.语义类=~心理活动,%%vp.内部结构=单词|附加 THEN %%vp.单作宾语=Yes ENDIF,       /*~ 对<<计划><有>>意见   感觉有*/
+        IF %%vp.语气=疑问|感叹 THEN $!=%vp @语气 @主题成分,$==%%vp @语气 @主题成分 ENDIF,
+        IF %vp.yx=%%vp.yx FALSE,
+        IF %vp.yx=开始 THEN %%vp.内部结构=~附加 ENDIF,                 /*开始上学了*/  
+        IF %vp.yx=开始 THEN %%vp.中心语.内部结构=~附加 ENDIF,          /*开始向新的目标迈进了*/
+        IF %vp.yx=是,%%vp.否定=是,%%vp.中心语.助动词=是 FALSE,            /*否认这个事实<是不可>能的*/
+        IF %vp.内部结构=单词,%%vp.内部结构=附加,%%vp.中心语.内部结构=单词,%%vp.趋向动词=是,%vp.趋向补语=%%vp.yx FALSE,
+        IF %vp.内部结构=单词|述宾,%vp.动趋=是,%%vp.内部结构=单词,%vp.趋向补语=%%vp.yx,%%vp.趋向动词=是 FALSE,
+        IF %vp.内部结构=单词,%vp.动结=是,%%vp.内部结构=附加,%%vp.中心语.内部结构=单词,%%vp.补助动词=是 FALSE,
+        IF %%vp.否定=是,%%vp.内部结构=状中,%%vp.补助动词=是 FALSE,     /*~听<不懂英语>*/
+        IF %%vp.语气=疑问 THEN $!=%vp @语气,$==%%vp @语气 ENDIF,
+        IF %%vp.内部结构=单词 THEN %%vp.助动词=否 ENDIF,
+        IF %%vp.内部结构=单词, %vp.体谓准=准,%%vp.兼类=n FALSE            /*继续工作*/
+        || %vp.内部结构=单词|附加,%%vp.语气=~疑问,
+           IF %vp.yx=做,%%vp.内部结构=单词|附加,%%vp.补助动词=是 FALSE,
+           IF %vp.yx=~做 THEN %vp.体谓准=准,%%vp.准谓宾=是,%vp.助动词=否 ENDIF
+        => VP(!VP//vp)                                                  /*做出了贡献 有变化 进行了谈判*/
+        || %vp.内部结构=单词,%vp.语义类=心理活动,%vp.yx=~做~进行,%%vp.语气=~疑问
+        => VP(!VP/vp VP//vp) %VP.ECAT=~U,%VP.OBJTYPE=VG,%%VP.FORM=VG             /*感到满意 打算去江边 ~是用来测温度的仪表*/
+        => VP(!VP/vp P<to> VP//vp) %VP.ECAT=~U,%VP.OBJTYPE=TO,%%VP.FORM=RT         /*希望到中国观光*/
+        => VP(!VP/vp NP//vp) %VP.ECAT=~U,%VP.OBJTYPE=NP 
+        => VP(!VP/vp CS//vp) %VP.ECAT=~U,%VP.OBJTYPE=CS                          /*听见有一个人喊他*/
+        => VP(!VP/vp VP//vp) %VP.ECAT=U,%%VP.FORM=RT  /*要热爱学生*/
+        || %vp.内部结构=单词|附加,%vp.语义类=~心理活动,%vp.yx=~做~进行~请,%%vp.语气=~疑问
+        => VP(!VP/vp P<to> VP//vp) %VP.OBJTYPE=TO,%%VP.FORM=RT     /*写在实验报告里 想要看 轮流照看老人 ~是记录每位老师的建议*/
+        => VP(!VP/vp VP//vp) %VP.VSUBC=VO,%VP.OBJTYPE=VG,%%VP.FORM=VG    
+        => VP(!VP/vp VP//vp) %VP.VSUBC=VO,%VP.OBJTYPE=NF,%%VP.FORM=RT
+        => VP(!VP/vp NP//vp) %VP.VSUBC=VO|VC,%VP.OBJTYPE=NP 
+        => VP(!VP/vp CS//vp) %VP.OBJTYPE=CS 
+        || %vp.内部结构=单词|附加,%vp.yx=请,%%vp.语气=~疑问
+        => VP(!VP/vp VP//vp) %VP.FORM=RT,%%VP.FORM=RT                      /*请付现金*/
+        || %vp.内部结构=联合,%vp.yx=~是,%vp.语气=疑问,%%vp.语气=~疑问
+        => VP(!VP/vp VP//vp)
+        || %vp.内部结构=联合|单词,%vp.yx=是,%vp.语气=疑问,%%vp.语气=~疑问
+        => VP(!VP//vp)                                                     /*他是不是有点发烧*/
+        || %%vp.语气=疑问,%%vp.主题成分=Yes                                /*不知道什么时候发生了这个事故*/
+        => VP( !VP/vp #DP%%VP P<to> VP//vp )%DP=%%VP.主题成分,%VP.OBJTYPE=TO,%%VP.FORM=RT 
+        => VP( !VP/vp #DP%%VP VP//vp )%DP=%%VP.主题成分,%VP.OBJTYPE=VG,%%VP.FORM=VG
+        => VP( !VP/vp #NP%%VP P<to> VP//vp ) %NP=%%VP.主题成分,%VP.OBJTYPE=TO,%%VP.FORM=RT    
+        => VP( !VP/vp #NP%%VP VP//vp ) %NP=%%VP.主题成分,%VP.OBJTYPE=VG,%%VP.FORM=VG   
+        => VP( !VP/vp #AP%%VP P<to> VP//vp ) %AP=%%VP.主题成分,%VP.OBJTYPE=TO,%%VP.FORM=RT      
+        => VP( !VP/vp #AP%%VP VP//vp ) %AP=%%VP.主题成分,%VP.OBJTYPE=VG,%%VP.FORM=VG  
+&& {vpsb9} vp->!vp vp :: $.内部结构=述宾,$.述语=%vp,%vp.宾语=%%vp,$==%%vp @被动,
+        %vp.助动词=Yes,
+        $!=%vp @配价数 @语义类 @主体 @客体 @邻体 @处所 @方式 @工具, 
+        $==%%vp @配价数 @语义类 @主体 @客体 @邻体 @处所 @方式 @工具,
+        IF %vp.客体=Yes THEN $.客体=Yes ENDIF,
+        %vp==%%vp @主体,
+        %vp.宾语=No,%%vp.连接成分.ccat=~c,IF %vp.yx=%%vp.yx FALSE,
+        IF %%vp.语气=疑问|感叹 THEN $!=%vp @语气 @主题成分,$==%%vp @语气 @主题成分 ENDIF,
+        IF %vp.yx=可,%%vp.yx=能 FALSE,                                             /*~<不可><能摆脱你自己>*/
+        IF %vp.否定=Yes THEN $==%vp @否定 ELSE $==%%vp @否定 ENDIF,
+        IF %vp.内部结构=状中 THEN %vp.状语.ccat=d ENDIF,
+        IF %%vp.内部结构=单词 THEN %%vp.助动词=否 ENDIF
+        /*IF %%vp.内部结构=单词,%%vp.兼类=n FALSE*/
+        => VP(!VP/vp VP//vp) %VP.ECAT=U,%VP.YX=~be,$!=%VP @VOICE,$==%%VP @VOICE,%%VP.FORM=RT           /*要鼓励他们自己创造良好的环境*/
+       => VP(!VP/vp P<to> VP//vp) %VP.ECAT=V,%VP.YX=~be,%%VP.FORM=RT           /*允许离开*/
+ => VP(!VP/vp P<to> VP//vp) %VP.YX=be,$!=%VP @VOICE,$==%%VP @VOICE,%%VP.FORM=RT      /*不可能完成*/
+&& {vpsba} vp->!vp ap :: $.内部结构=述宾,$.述语=%vp,$.宾语=%ap,$==%vp @否定,%vp.yx=~得,    /*~病得很重*/
+        IF %ap.语气=疑问|感叹 THEN $!=%vp @语气 @主题成分,$==%ap @语气 @主题成分 ENDIF,
+        IF %ap.内部结构=单词,%ap.ccat=b FALSE,  /*~<是><专门>的计算机公司*/
+        IF %ap.语气=疑问|感叹,%ap.内部结构=~联合 THEN $.主题成分=%ap ENDIF
+        || %vp.助动词=是,%ap.内部结构=~的字
+        => VP(!VP/vp V<be> AP/ap) %V.FORM=RT                /*不能安静*/
+        => VP(!VP/vp VP/ap) %%VP.FORM=RT 
+        || %vp.助动词=否,%vp.内部结构=单词|附加,%vp.形宾=形,%ap.内部结构=~的字 
+        => VP(!VP/vp NP/ap) 
+        => VP(!VP/vp AP/ap)                                  /*觉得合适  希望成功*/
+        => VP(!VP/vp R<that> VP/ap) %%VP.FORM=RT,%%VP.VSUBC=~VO    /*说不行*/
+        || %vp.助动词=否,%vp.内部结构=单词,%vp.配价数=0,%ap.内部结构=的字,%ap.ccat=~r,%ap.中心语.cpcat=~vp~dj
+        => VP(!VP/vp P<of> NP/ap)                             /*这只笔是他的同学的*/
+        => VP(!VP/vp PP/ap)
+        => VP(!VP/vp AP/ap)                                  /*西瓜只剩下不好的了*/
+        || %vp.内部结构=单词,%vp.yx=是,%ap.内部结构=的字,%ap.ccat=r,%ap.中心语.cpcat=~vp,%ap.中心语.被动=否
+        => VP(!VP/vp NP/ap) %NP.RSUBC=RPOSS                 /*这些书是我的*/
+        || %vp.内部结构=单词,%vp.yx=是,%ap.中心语.cpcat=vp,%ap.中心语.被动=否
+        => VP(!VP/ap)                                       /*是由于一根火柴引起的 是赞扬黄河的*/
+        || %vp.内部结构=单词,%vp.yx=是,%ap.内部结构=的字,%ap.中心语.内部结构=~单词,%ap.中心语.cpcat=dj,%ap.中心语.被动=否
+        => VP(!VP/vp NP/ap)                                 /*那是我听到的*/
+        => CS(CS/ap)                                        /*有一件事是我们没想到的*/
+        || %vp.内部结构=单词,%vp.yx=是,%ap.中心语.被动=否,%ap.中心语.内部结构=主谓,%ap.中心语.主语.cpcat=~sp
+        => VP(!VP/vp CS/ap)                                                             /*是谁开的*/
+        || %vp.内部结构=单词,%vp.yx=有,%ap.内部结构=状中,$==%ap @主体
+        => VP(!V<be> AP/ap)                                                             /*有多高*/
+&& {vpsbb} vp->!vp dj :: $.内部结构=述宾,$.述语=%vp,$.宾语=%dj,$==%vp @否定,%vp.宾语=No,%vp.内部结构=~述宾~连谓,%vp.小句宾=是,%vp.附加语.yx=~过 ,/*%vp.yx=~问,*/
+        %dj.内部结构=~存在~是字,%dj.主语.cpcat=~tp~sp,%dj.标点成分=No,
+        IF %dj.语气=疑问 THEN %dj.语气=~陈述 ENDIF,
+       	IF %dj.语气=祈使 FALSE,
+       	IF %vp.yx=是 THEN %dj.yx=~是 ENDIF,                                              /*~你是学生还是老师*/
+        IF %vp.yx=是,%dj.内部结构=主谓,%dj.主语.内部结构=的字,%dj.谓语.cpcat=ap FALSE,    /*~那是<dj汤姆的错>*/
+        IF %vp.yx=该,%dj.内部结构=主谓 THEN %dj.主语.语义类=人类 ENDIF, /*~v<该>dj<协会的会员的总数已达到一万人>*/
+        IF %vp.内部结构=状中 THEN %vp.状语.yx=不|没,%vp.助动词=是 ENDIF,
+        IF %dj.内部结构=扩展,%dj.状语=Yes THEN %dj.状语.ccat=c|d ENDIF,
+        IF %dj.内部结构=附加,%dj.附加语.yx=的 FALSE,                    /*~那是<dj我听到的>*/
+        IF %dj.谓语=Yes,%dj.谓语.cpcat=tp|sp|mp|mcp|np FALSE
+        || {vpsbb.1} %dj.主题成分=No,%dj.内部结构=~有字,%dj.连接成分=No
+        => {vpsbb.1.1} VP(!VP/vp C<that> CS/dj) %VP.VSUBC=VO,%VP.OBJTYPE=CS,%VP.ECAT=~U        /*承认生产工艺落后 知道她是我们这里最有才华最有能力的人*/ 
+        => {vpsbb.1.2} VP(!VP/vp VP/dj) %VP.ECAT=~U,%VP.VSUBC=VO,%%VP.FORM=VG   /*感到自己有不足之处*/
+        => {vpsbb.1.3} VP(!VP/vp VP/dj) %VP.ECAT=U,%%VP.FORM=RT                    /*要自己一个人干这个工作*/
+        || {vpsbb.2} %dj.主题成分=No,%dj.内部结构=~有字,%dj.连接成分=Yes
+        => VP(!VP/vp CS/dj)  %VP.VSUBC=VO,%VP.OBJTYPE=CS            /*是由于交通拥挤*/
+        || {vpsbb.3} %dj.主题成分=No,%dj.内部结构=有字
+        => VP(!VP/vp CS/dj)  %VP.VSUBC=VO,%VP.OBJTYPE=CS            /*看见有人学语言*/
+        || {vpsbb.4} %dj.主题成分=Yes,IF %dj.语气=疑问 FALSE
+        => VP(!VP/vp CS/dj)  %VP.VSUBC=VO,%VP.OBJTYPE=CS            /**/
+        || {vpsbb.5} %dj.主题成分=Yes,IF %dj.语气=疑问 TRUE
+        => {vpsbb.5.1} VP(!VP/vp #NP%CS CS/dj) %NP=%CS.主题成分,%VP.VSUBC=VO,%VP.OBJTYPE=CS            
+        => {vpsbb.5.2} VP(!VP/vp #AP%CS CS/dj) %AP=%CS.主题成分,%VP.VSUBC=VO,%VP.OBJTYPE=CS            
+        => {vpsbb.5.3} VP(!VP/vp #DP%CS CS/dj) %DP=%CS.主题成分,%VP.VSUBC=VO,%VP.OBJTYPE=CS               /*我感兴趣的是他什么时候干了此事*/
+        => {vpsbb.5.4} VP(!VP/vp #D%CS CS/dj) %D=%CS.主题成分,%VP.VSUBC=VO,%VP.OBJTYPE=CS               /*我问他是否认识比尔*/
+
+&& {vpsbc} vp->!vp np np :: $.内部结构=双宾,$.宾语=%%np,$.间接宾语=%np,$.述语=%vp,$==%vp @否定,
+        %vp.双宾=是,%vp.客体=%%np,%np.中心语.cpcat=~ap
+        || {vpsbc.1} %vp.内部结构=单词|附加,%vp.邻体=%np,
+           IF %np.ccat=r,%%np.ccat=r,%np.代词子类=ra,%%np.代词子类=ra FALSE
+        => VP(!VP/vp NP/np NP//np ) %NP.RCASE=OBJ,%VP.VSUBC=VOO        /*叫他王先生*/   
+        || {vpsbc.2} %vp.内部结构=~述宾~状中~连谓,%vp.体谓准=体,%np.内部结构=定中,%np.定语.cpcat=mp,%vp.yx=~是,%np.语义类=时间
+        => VP(!VP/vp NP//np P<for> NP/np)         /*做了五个月秘书*/
+
+&& {vpsbd} vp->!vp np mp np :: $.内部结构=双宾,$.述语=%vp,$.宾语=%%np,$.间接宾语=%np,$==%vp @否定,
+        %vp.内部结构=单词|附加,%vp.双宾=是,%vp.客体=%%np,%vp.邻体=%np,%mp.量词子类=动量
+        => VP(!VP/vp NP/np NP//np P<for> NP/mp ) %NP.RCASE=OBJ,%VP.VSUBC=VOO     /*我曾送过他一两次东西*/
+&& {vpsbe} vp->!vp np dj :: $.内部结构=双宾,$.述语=%vp,$.宾语=%dj,$.间接宾语=%np,$==%vp @否定,
+        %vp.内部结构=单词|附加,%vp.双宾=是,%vp.邻体=%np,%vp.客体=%dj,
+        %dj.内部结构=~扩展,%dj.谓语.cpcat=vp|ap,%dj.主语.cpcat=~tp,%dj.标点成分=No
+        || %vp.yx=~问,IF %dj.主题成分=Yes,%dj.语气=疑问 FALSE 
+        => VP(!VP/vp NP/np C<that> CS/dj ) %NP.RCASE=OBJ,%VP.DOBJTYPE=CS     /*告诉他我们一起走*/
+        || %vp.yx=问,IF %dj.主题成分=Yes,%dj.语气=疑问 FALSE
+        => VP(!VP/vp NP/np CS/dj ) %NP.RCASE=OBJ                             /*问他大会的主席是谁*/
+        || IF %dj.主题成分=Yes,%dj.语气=疑问 TRUE                            /*告诉我你说了什么*/
+        => VP(!VP/vp NP/np #NP%CS CS/dj) %NP=%CS.主题成分,%NP.RCASE=OBJ,%VP.DOBJTYPE=CS
+        => VP(!VP/vp NP/np #AP%CS CS/dj) %AP=%CS.主题成分,%NP.RCASE=OBJ,%VP.DOBJTYPE=CS
+        => VP(!VP/vp NP/np #DP%CS CS/dj) %DP=%CS.主题成分,%NP.RCASE=OBJ,%VP.DOBJTYPE=CS
+	=> VP(!VP/vp NP/np #D%CS CS/dj) %D=%CS.主题成分,%NP.RCASE=OBJ,%VP.DOBJTYPE=CS
+&& {vpsbf} vp->!vp r :: $.内部结构=述宾,$.述语=%vp,$.宾语=%r,$==%vp @否定,
+        %vp.内部结构=单词|附加,%vp.体谓准=体,%r.代词子类=rb,%r.yx=~这~这样~那样      /*~有过这样的冲突*/
+        => VP(!VP/vp T/r)                                                              /*不缺这个*/
+        => VP(!VP/vp D/r)  %D.DVEND=Yes                                              /*到这儿 去那里 久居这里*/
+&& {vpsbg} vp->!vp fj :: $.内部结构=述宾,$.述语=%vp,$.宾语=%fj,%vp.小句宾=Yes,%vp.语义类=心理活动
+        => VP(!VP/vp C<that> CS/fj) %VP.OBJTYPE=CS     /*我们认为按水平分班,更便于教师因材施教*/
+
+
+/* vp.状中结构 */
+
+&& {vpzz1} vp->pp !vp :: $.内部结构=状中,$.状语=%pp,$.中心语=%vp,$==%vp @否定,
+        %pp.格标=~施事,%pp.yx=~关于,%vp.语气=~祈使,       
+        IF %pp.yx=给,%vp.语义类=~给予~搬移~创造 THEN %pp.格标=与事 ENDIF, /* 医生给小狗检查身体 */
+        IF %pp.yx=和,%vp.被动=Yes FALSE,                                            /*~我和一批同学被分配到公司里作了翻译*/
+        IF %pp.yx=从|自,%vp.内部结构=状中,%vp.状语.cpcat=pp THEN %vp.状语.yx=~向~到~至 ENDIF,
+        /*IF %pp.格标=~原因~根据,%vp.内部结构=单词 THEN %vp.单作谓语=是 ENDIF, 由于一根火柴引起 在我们头上盘旋 */
+        IF %pp.格标=原因,%vp.内部结构=述宾,%vp.宾语=否 THEN $.被动=是 ELSE $==%vp @被动 ENDIF,
+        IF %pp.格标=原因 THEN %vp.趋向动词=否 ENDIF,
+        IF %pp.yx=比,%vp.内部结构=单词 FALSE,                              /*  ~<他比他的朋友学习>更勤奋*/
+        IF %vp.yx=派,%pp.yx=向 THEN %pp.格标=与事 ENDIF,                            /*向工厂派出了医疗队*/ 
+        IF %vp.yx=引起,%vp.宾语=No,%pp.格标=~原因 FALSE,
+        IF %vp.yx=是 THEN %vp.内部结构=述宾,%vp.宾语.内部结构=的字,%vp.宾语.中心语.cpcat=ap ENDIF,/*他对我是友好的*/
+        IF %pp.宾语.yx=最后,%vp.内部结构=状中 THEN %vp.状语.cpcat=~mp ENDIF,        /*~<在最后><一次检查机器>*/
+        IF %pp.语气=疑问 THEN $!=%vp @语气,$==%pp @语气 @主题成分 ENDIF,
+        IF %pp.格标=处所,%vp.内部结构=状中 THEN %vp.状语.yx=~和~到 ENDIF,              /*从桌子上把书拿走*/
+        IF %pp.格标=与事,%pp.yx=给 THEN %vp.形式动词=否,%vp.内部结构=~单词 ENDIF, 
+	IF %pp.格标=与事,%pp.yx=给,%vp.内部结构=粘合述补 THEN %vp.补语.yx=来|去 ENDIF,  /* 给我送一些书来 */
+        IF %pp.格标=对象 THEN %pp.yx=~和~跟 ENDIF,                                  /*~我就<跟你去>-> as you */
+        IF %pp.格标=时间 THEN %vp.状语.cpcat=~tp ENDIF,                                         /*我于1964年在上海出生*/
+        IF %pp.格标=时间,%vp.状语.cpcat=pp THEN %vp.状语.宾语.sem=空间 ENDIF,                /*于明天下午在教室里召开*/
+        IF %pp.格标=受事,%vp.内部结构=连谓,%vp.前谓.yx=送,%vp.前谓.补语.yx=到 FALSE,
+        IF %pp.格标=受事,%vp.配价数=3,%vp.内部结构=述宾 THEN %vp.客体=%pp.宾语 ENDIF,     /*把这个任务交给了研究所*/
+        IF %pp.格标=受事,%vp.配价数=2|3 THEN %vp.客体=%pp.宾语 ENDIF,                         /*把她从车站接来了*/
+        IF %pp.格标=目的,%pp.yx=到,%vp.内部结构=单词 THEN %vp.趋向动词=否 ENDIF,        /*~到外婆家去*/
+        IF %pp.格标=处所|来源|工具|根据 THEN %vp.兼类=~f ENDIF,                            
+        IF %vp.内部结构=状中,%pp.格标=受事,%vp.状语.cpcat=pp,%vp.状语.格标=施事 FALSE,  /*将照片给我看了*/
+        IF %vp.内部结构=状中,%pp.格标=对象,%pp.yx=跟 FALSE,                             /* ~跟==> as */        
+        IF %vp.内部结构=状中,%pp.格标=与事|对象,%vp.状语.yx=一样 FALSE,                 /*~<跟我><一样喜欢打乒乓球>*/
+        IF %vp.内部结构=状中,%vp.状语.cpcat=sp FALSE                                  /*~<从这本><书里学了很多知识>*/
+        || {vpzz1.1} %pp.格标=~原因,%pp.yx=~比
+        => VP(!VP/vp DP/pp)      %DP.DVEND=Yes             /*向前移动 计算机<在国外应用>*/
+        => VP(!VP/vp PP/pp)                             /*在邮局里出售 在今天晚上 为用户维修机器*/
+        => AP(!AP/vp DP/pp)                             /*在国外很有影响*/
+        => AP(!AP/vp PP/pp)                             /*对你的回答很满意*/
+        || {vpzz1.2} %pp.格标=~原因,%pp.yx=~比~对,%vp.yx=~进行
+        => VP(!VP/vp NP/pp) %VP.VSUBC=VO|VOO|VOC|VC                                                 /*把鱼带回家*/
+        || {vpzz1.3} %pp.格标=~原因,%pp.yx=~比~对,%vp.yx=进行
+        => VP(!VP/vp PP(!P NP/pp)) %VP.VSUBC=VC,%VP.COMPTYPE=PP,%P.YX=%VP.COMPPREP,%NP.RCASE=OBJ    /*将革命进行到底*/
+        || {vpzz1.4} %pp.格标=对象,%pp.yx=比
+        => VP(!VP/vp PP/pp) %VP.DEGR=COMP                                        /*这本书比那本书容易读*/
+        || {vpzz1.5} %pp.格标=对象,%pp.yx=对
+        => VP(!VP/vp PP/pp) 
+        || {vpzz1.6} %pp.格标=原因,%vp.宾语=否
+        => {vpzz1.6.1} VP(!VP/vp PP/pp) %VP.VOICE=PASS
+        => {vpzz1.6.2} VP(!VP/vp DP/pp) %VP.VOICE=PASS,%DP.DVEND=Yes    /*由秘书处理*/
+        || {vpzz1.7} %pp.格标=原因,%vp.宾语=是
+        => {vpzz1.7.1} VP(!VP/vp PP/pp)
+        => {vpzz1.7.2} VP(!VP/vp DP/pp) %DP.DVEND=Yes
+&& {vpzz2} vp->pp w<"，"> !vp :: $.内部结构=状中,%pp.yx=~和,%pp.格标=~施事,$.状语=%pp,$.中心语=%vp,$==%vp @否定,
+        %vp.内部结构=~单词,%vp.宾语=Yes,$.标点成分=%w
+        => VP(!VP/vp PP/pp)                                  /*在休息的时候，不是看书，就是看报*/
+        => VP(!VP/vp NP/pp)                                  /*把为大桥出的一点力,流的一点汗,当作光荣和幸福*/
+&& {vpzz3} vp->pp !vp :: $.内部结构=状中,$.状语=%pp,$.中心语=%vp,$.被动=是,
+        %pp.格标=施事,%pp.宾语.ccat=~v,%pp.yx=~为,%vp.语气=~祈使,
+        %vp.主体=No,/* %vp.客体=No,*/%vp.yx=~是,  /* 让孩子们打了一个洞 */
+        IF %pp.yx=给|让|叫 THEN %vp.内部结构=述补|附加|状中|述宾 ENDIF,                  /*两天的活叫你们一天给干完了*/
+        IF %pp.yx=给|让|叫,%vp.内部结构=述补 THEN %vp.述语.内部结构=~述宾 ENDIF,     /*~<给研究所><寄一份资料来>*/
+        IF %vp.内部结构=单词 THEN %vp.配价数=2|3 ENDIF
+        => VP(!VP/vp PP/pp) %VP.VOICE=PASS     
+&& {vpzz4} vp->p !vp :: $.内部结构=状中,$.被动=是,$.状语=%p,$.中心语=%vp,$==%vp @否定,
+        %p.格标=施事,%p.yx=被|给,%vp.配价数=2|3,%vp.yx=~作~写                                /*~给<家里写信>*/
+        || IF %vp.内部结构=粘合述补,%vp.补语.趋向动词=Yes FALSE,
+        IF %vp.内部结构=附加,%vp.中心语.内部结构=连谓 THEN %vp.中心语.后谓.yx=~做 ENDIF,  /*~被分配到公司里做了翻译*/
+        IF %vp.内部结构=连谓,%vp.后谓.内部结构=单词 FALSE,
+        IF %vp.内部结构=连谓,%vp.兼语句=是 FALSE,                                       /*~被<送到特为聋哑人办的学校去了>*/
+        IF %vp.内部结构=单词,%vp.yx=送 FALSE,
+        IF %p.yx=给 THEN %vp.内部结构=~单词 ENDIF
+        => VP(!VP/vp) %VP.VOICE=PASS                                                         /*给打碎 ~被<分配到公司里作了翻译>*/
+        || IF %vp.内部结构=粘合述补,%vp.补语.趋向动词=Yes,%vp.补语.yx=出来,%vp.述语.内部结构=单词 TRUE 
+        => VP(!VP/vp) %VP.VOICE=PASS,%VP.VSUBC=VC   /*被放出来,被找出来*/
+&& {vpzz5} vp->ap !vp :: $.内部结构=状中,$.状语=%ap,$.中心语=%vp,$==%vp @被动 @否定,
+        %ap.内部结构=~的字,%ap.状语.yx=~没有,
+        IF %ap.yx=科学 THEN %vp.内部结构=单词|述宾,%vp.yx=~是 ENDIF,            /*科学种植西瓜*/
+        IF %ap.语气=疑问 THEN $!=%vp @语气,$==%ap @语气,$.主题成分=%ap ENDIF,
+        IF %ap.ccat=b,%ap.内部结构=单词 FALSE,
+        IF %ap.ccat=a,%ap.内部结构=单词 THEN %ap.形状语=是 ENDIF,
+        IF %ap.ccat=z,%ap.内部结构=单词 THEN %ap.状状语=是 ENDIF,
+        IF %ap.ccat=a,%ap.内部结构=状中,%ap.状语.ccat=d,%ap.形状语=是 FALSE,
+        IF %ap.yx=很快,%vp.内部结构=单词,%vp.yx=活 FALSE,                          /*~<都很快>活*/
+        IF %vp.助动词=是 THEN %vp.宾语=是 ENDIF,
+        IF %vp.yx=是,%ap.内部结构=状中 FALSE                                            /*分子运动有多快仍是个问题*/
+        || %ap.yx=~善于~一样
+        => VP(!VP/vp DP/ap)  %DP.DVEND=Yes,%VP==%DP @DEGR                        /*认真学习  正确处理 这本书比那本书容易读*/
+        => VP(DP/ap !VP/vp)  %DP.DVPRE=Yes     
+        => VP(!VP/vp PP/ap)                                                              /*及时派出了车 迅速送到了医院*/ 
+        => VP(!V<be> AP/vp PP/ap)     
+        => VP(!V<be> DP/ap AP/vp )  %DP.DADJV=Yes                                     /*他很少生病*/
+    /*    => NP(AP/ap !VP/vp)  */       /*一系列考试*/
+    /*    => NP(AP/ap !VP/vp) %VP.FORM=VG   */
+        || %ap.yx=善于
+        => VP(!VP/ap VP/vp) %%VP.FORM=VG                                              /*善于突出自己的美德*/
+        || %ap.yx=一样,%ap.状语.cpcat=pp
+        => VP(!VP/vp AP/ap)                                                             /*跟我一样喜欢打乒乓球*/
+&& {vpzz6} vp->dp !vp :: $.内部结构=状中,$.状语=%dp,$.中心语=%vp,$==%vp @被动,
+        %vp.yx=~了,%vp.兼类=~y,
+        IF %vp.内部结构=附加,%vp.附加语.ccat=y FALSE,
+        IF %dp.内部结构=单词,%dp.yx=真,%vp.yx=是,%vp.内部结构=述宾,%vp.宾语.cpcat=np THEN $!=%vp @语气,$.语气=感叹 ENDIF,
+        IF %dp.内部结构=单词,%dp.yx=还,%vp.yx=是,%vp.内部结构=述宾,%vp.宾语.cpcat=vp FALSE,                      /*~还是努力学英文*/
+        IF %dp.内部结构=单词,%dp.yx=还,%vp.yx=是,%vp.内部结构=附加,%vp.中心语.宾语.cpcat=vp FALSE,         /*~还<是去游泳了>*/
+        IF %dp.内部结构=单词,%dp.yx=不|没|别|甭|没有 THEN $.否定=是 ELSE $==%vp @否定 ENDIF,
+        IF %dp.内部结构=单词,%dp.yx=不|没|决不|未,%vp.助动词=是 THEN %vp.内部结构=单词 ENDIF,
+        IF %dp.内部结构=单词,%dp.yx=不|没|决不|未,%vp.内部结构=述宾,%vp.述语.助动词=是 FALSE,
+        IF %dp.内部结构=单词,%dp.yx=又 THEN %vp.内部结构=~单词 ENDIF,  /* 答应~<过帮助>你,"过.副词子类=da" */
+        IF %dp.内部结构=单词,%dp.副词子类=da,%dp.yx=很|十分|最|过|非常|极 THEN %vp.很=是 ENDIF,
+        IF %dp.内部结构=单词,%vp.内部结构=述宾,%vp.助动词=是 THEN %vp.宾语.cpcat=dj|ap|vp ENDIF,         /* ^(才)(能知道) */
+        IF %dp.内部结构=单词,%vp.内部结构=状中,%vp.状语.ccat=a,%dp.音节=1,%vp.状语.音节=1 FALSE,   /* ^(多)(久才能知道) */
+        IF %dp.yx=别|甭|快,%dp.内部结构=单词 THEN $!=%vp @语气,$.语气=祈使 ENDIF,
+        IF %dp.yx=很|十分|最,%vp.yx=有 THEN %vp.宾语.语义类=~具体事物 ENDIF,
+        IF %dp.yx=在,%vp.内部结构=状中,%vp.状语.cpcat=np|tp FALSE,                        /* ~(在)(五点下班) */
+        IF %dp.yx=从 THEN %vp.内部结构=状中,%vp.状语.yx=不 ENDIF,      /* ~(在)(五点下班) */
+        IF %dp.ccat=d,%dp.连接=Yes THEN $!=%vp @作照应 @作连接 @连接成分,$.连接成分=%dp,$==%dp @作照应 @作连接 ENDIF,
+        IF %dp.yx=一,%vp.兼类=q FALSE  /*~一<套旧的> */
+        || {vpzz6.1} $.作连接=否,%dp.yx=~一~正在~正~在~无法~不~没~别~甭~没有~从不~未~最~决不,%dp.内部结构!=单词
+        => {vpzz6.1.1} VP(!VP/vp DP/dp) %VP==%DP @PAST @FUTR @CONT @PERF,%DP.DVEND=Yes            /*努力地为工厂工作*/ 
+        => {vpzz6.1.3} VP(!VP/vp PP/dp)              /*长期从事机器人的研究*/
+        => {vpzz6.1.4} VP(!VP/vp R/dp)                /*互相看*/
+	|| {vpzz6.9} $.作连接=否,%dp.yx=~一~正在~正~在~无法~不~没~别~甭~没有~从不~未~最~决不,%dp.内部结构=单词
+        => {vpzz6.1.2} VP(DP/dp !VP/vp) %VP==%DP @PAST @FUTR @CONT @PERF,%DP.DVPRE=Yes            /*逐步深入 很好地配合*/ 
+        => {vpzz6.1.5} VP(VP/dp !VP/vp) %VP.ECAT=U,%%VP.FORM=RT  /*必须具备一定的才干*/
+        => {vpzz6.1.6} AP(DP/dp !AP/vp) %DP.DADJV=Yes            /*很满意  很有影响*/
+        => {vpzz6.1.7} DP(DP/dp !DP/vp) %DP.DADJV=Yes            /*<非常乐意>地帮助了我们*/
+        => {vpzz6.1.8} NP(AP/dp !NP/vp)        
+        => {vpzz6.1.9} VP(!V<be> AP/vp DP/dp) %V==%DP @PAST @FUTR @CONT @PERF,%DP.DADJV=Yes,%DP.DVEND=Yes     /*已经坏了很久了*/
+        || {vpzz6.2} $.作连接=否,%dp.yx=最
+        => VP(!VP/vp A<most>)                       /*最不喜欢*/
+	/*
+        || {vpzz6.3} $.作连接=否,%dp.yx=更加|更
+        => VP(!VP/vp) %VP.DEGR=COMP           
+	*/    
+	/*更加<努力学习>*/
+        || {vpzz6.4} $.作连接=否,%dp.yx=无法
+        => VP(!V<be> AP/dp P<to> VP/vp) %VP.FORM=RT  /*无法出席这次会议*/
+        || {vpzz6.5} $.作连接=否,%dp.yx=正在|正|在,%vp.状语.cpcat=~mp~sp,
+        IF %vp.内部结构=状中,%vp.状语.cpcat=tp THEN %vp.状语.中心语.yx=次 ENDIF              /*在最后一次检查机器*/
+        => VP(!VP/vp)  %VP.CONT=是    /*正在起床 正在处理 正在看 ~在/d<近两年内增加了>/vp*/
+        || {vpzz6.6} $.作连接=否,%dp.内部结构=单词,%dp.yx=不|没|别|甭|没有|从不|未|决不,
+        IF %vp.yx=是,%vp.内部结构=述宾,%vp.宾语.cpcat=vp THEN %vp.宾语.述语.yx=为了 ENDIF
+        => {vpzz6.6.1} VP(!VP/vp DP/dp) %VP.ECAT=U,%VP==%DP @PAST @FUTR @CONT @PERF,%DP.DVNEG=Yes      /*不应*/
+        => {vpzz6.6.2} VP(DP/dp !VP/vp) %VP.ECAT=~U,%VP.AUXV=YES,%VP==%DP @PAST @FUTR @CONT @PERF,%DP.DVNEG=Yes/*不是十分美好的 不检查*/
+        || {vpzz6.7} $.作连接=是,%dp.内部结构=单词,%dp.连接=Yes,
+           IF %vp.状语=Yes,%vp.状语.兼类=v FALSE,    
+           IF %dp.yx=一,%vp.内部结构=状中,%vp.状语.cpcat=tp FALSE
+        => {vpzz6.7.1} VP(C/dp !VP/vp)
+        => {vpzz6.7.2} VP(DP/dp !VP/vp) %DP.DVPRE=Yes
+        || {vpzz6.8} $.作连接=是,%dp.内部结构=单词,%dp.连接=No,%vp.内部结构=状中,%vp.状语.ccat=c,
+           IF %vp.状语.兼类=v FALSE,    /* ~也要试制 */
+           IF %dp.yx=一,%vp.内部结构=状中,%vp.状语.cpcat=tp FALSE
+        => {vpzz6.8.1} VP(C/dp !VP/vp)
+        => {vpzz6.8.2} VP(DP/dp !VP/vp) %DP.DVPRE=Yes      /*更何况跑*/
+&& {vpzz7} vp->r !vp :: $.内部结构=状中,$.状语=%r,$.中心语=%vp,$==%vp @被动 @否定,
+        IF %r.代词子类=ra THEN %r.yx=自己 ENDIF,
+        IF %r.代词子类=rb THEN %r.指代程度=Yes ENDIF,
+        IF %r.代词子类=rc THEN %r.代状语=是,$!=%vp @语气,$==%r @语气 ,$.语气=疑问,$.主题成分=%r ENDIF,
+        IF %vp.附加语=Yes,%vp.附加语.ccat=y FALSE
+        || {vpzz7.1} %r.yx=自己
+        => VP(!VP/vp)                           /*自己去问校长*/
+        || {vpzz7.2} %r.yx=~自己
+        => {vpzz7.2.1} VP(!VP/vp PP/r)                      /*这样解决问题*/
+        => {vpzz7.2.2} VP(D/r !VP/vp) %D.DVPRE=Yes    
+ && {vpzz8} vp->tp !vp :: $.内部结构=状中,$.状语=%tp,$.中心语=%vp,$==%vp @被动 @否定, /*~今天是星期几*/
+        IF %vp.内部结构=状中,%vp.状语.cpcat=tp THEN %tp.汉字=每 ENDIF,%vp.yx=~是,     /* ~1996年<10月成立> 每天几点起床*/    
+            IF %tp.语气=疑问 THEN $!=%vp @语气,$==%tp @语气, $.语气=疑问,$.主题成分=%tp ENDIF, 
+        IF %tp.内部结构=单词,%tp.yx=时 FALSE,                                           /*高兴~<时就摇尾巴>*/    
+        IF %tp.内部结构=单词,%tp.yx=最后,%vp.内部结构=状中,%vp.状语.ccat=q FALSE,     /*~<最后><一次检查机器>*/
+        IF %vp.内部结构=附加,%vp.附加语.ccat=y FALSE
+        || {vpzz8.1} %tp.内部结构=单词,%tp.汉字=星|周|月
+        => VP(!VP/vp P<on> NP/tp)                                                     /*星期天自愿来这里工作*/
+        || {vpzz8.2} %tp.内部结构=~单词,%tp.中心语.cpcat=~mp,IF %tp.汉字=点|时|分|秒 TRUE
+        => VP(!VP/vp P<at> NP/tp)                                                       /*早晨六点赶到车站*/
+        || {vpzz8.3} %tp.内部结构=~单词,%tp.中心语.cpcat=~mp,IF %tp.汉字=日|星|期|月|午|晚|晨 TRUE
+        => VP(!VP/vp P<on> NP/tp)
+        || {vpzz8.4} %tp.内部结构=~单词,%tp.中心语.cpcat=~mp,IF %tp.汉字=点|时|分|秒|日|星|期|月|午|晚|晨 FALSE
+        => VP(!VP/vp P<in> NP/tp)
+	|| {vpzz8.5} 
+        => VP(!VP/vp PP/tp)
+        => VP(!VP/vp DP/tp) %DP.DVEND=Yes,%VP==%DP @PAST @FUTR @CONT @PERF            /*现在变得很虚弱*/ 
+
+&& {vpzz9} vp->mp !vp :: $.内部结构=状中,%vp.yx=~是,$.状语=%mp,$.中心语=%vp,$==%vp @被动 @否定
+        || %mp.量词子类=动量,%vp.内部结构=述补|述宾|状中,%mp.定语.yx=~第,%mp.yx=~周 /*~每周来这儿一次=> each circuit*/    
+        => VP(!VP/vp P<in> NP/mp)                                                   /*一次看完  一把抓住*/ 
+        || %mp.量词子类=动量,%vp.内部结构=单词,%mp.定语.yx=一      
+        => VP(!VP/vp)                                                               /*一次考试*/ 
+        || %mp.量词子类=动量,%vp.内部结构=述补|述宾|状中|单词,%mp.定语.yx=第
+        => VP(!VP/vp P<for>  NP/mp)                                           /*第一次流下了眼泪*/
+        || %mp.量词子类=时量,%vp.内部结构=述补|述宾|状中,%vp.yx=~有,
+           IF %vp.内部结构=状中,%vp.状语.cpcat=tp FALSE,                            /*~<1975年>5月3日举行*/
+           %mp.yx=~岁        => VP(!VP/vp P<in> NP/mp)                                                   /*两年学完*/
+        || %mp.量词子类=时量,%vp.内部结构=述补|述宾|状中,%vp.yx=~有,
+           IF %vp.内部结构=状中,%vp.状语.cpcat=tp FALSE,                             /*~<1975年>5月3日举行*/
+            %mp.yx=岁
+        => VP(!VP/vp P<at> NP/mp)           /*十五岁就上了大学*/                                        
+        || %mp.量词子类=个体,%mp.定语.yx=第,%vp.内部结构=单词|述补|述宾|状中
+        => VP(!VP/vp M/mp)                                  /*第一个到学校*/
+
+&& {vpzzb} vp->sp !vp :: $.内部结构=状中,$.中心语=%vp,$.状语=%sp,$==%vp @被动 @否定,
+        %vp.内部结构=~连谓,%vp.趋向动词=否,%vp.yx=~作~存在,   /*~公司里作了翻译*/
+     /*    IF %vp.yx=有,%vp.宾语=是 FALSE,                       ~今天报上有什么消息 */
+        IF %sp.中心语.yx=上 THEN %sp.定语.yx=~马  ENDIF       /*~<马上><召集大家开个会来研究一下这个问题>*/
+         || IF %vp.yx=有,%vp.宾语=是 FALSE                       /* ~今天报上有什么消息 */
+        => VP(!VP/vp PP/sp)                                   /*国内见  屋里坐 ~<江边去>*/
+        => VP(!VP/vp DP/sp) %DP.DVEND=Yes                     /*我<以前没见过你> 这里讲英语*/
+          || IF %vp.yx=有,%vp.宾语=是 TRUE                       /* np<=<盒子里><有几块表>*/
+        => NP(!NP/vp PP/sp) 
+
+&& {vpzzc} vp->c !vp :: $.内部结构=状中,%c.连谓=是,$.中心语=%vp,$.状语=%c,$==%vp @被动 @否定,
+        $!=%vp @作照应 @作连接 @连接成分,$==%c @作照应,$.连接成分=%c,
+        /*%c.yx=~并,*/                           /*~并<没有引起他的兴趣>*/
+        IF %c.yx=无论|不管|不论,%vp.语气=疑问 THEN %vp.语气=疑问,$!=%vp @语气 ENDIF
+        || $.主题成分=No 
+        => VP(C/c !VP/vp)                  /*与其坐火车，不如乘飞机*/
+        => VP(D/c !VP/vp) %D.DVPRE=Yes     /*结果误了末班车*/
+        => VP(C/c !AP/vp)                  /*反而越下越大*/
+        => VP(U/c !VP/vp) %VP.FORM=RT      /*宁可将可作小说的材料缩成速写 */
+        || $.主题成分=Yes,%vp.语气=疑问
+        => VP(C/c #NP%VP !VP/vp) %NP=%VP.主题成分   /*不管做什么工作*/
+        => VP(C/c #AP%VP !VP/vp) %AP=%VP.主题成分
+        => VP(C/c #DP%VP !VP/vp) %DP=%VP.主题成分
+
+
+&& {djdui} dj->p<对> np !ap
+	=> CS(R<it> V<"is"> !AP/ap P<on> NP/np)
+
+/* dj.主谓结构短语 */
+
+/* dj.np|mp|tp谓语 */
+
+&& {djnp1} dj->np np :: $.内部结构=主谓,%%np.连接成分=No,$.主语=%np,$.谓语=%%np,            /*~学生还是老师*/
+        IF %np.语气=疑问 THEN $==%np @语气,$.主题成分=%np ENDIF,
+        IF %%np.语气=疑问 THEN $==%%np @语气,$.主题成分=%%np ENDIF,
+        IF %%np.内部结构=单词 THEN %%np.名谓语=Yes ENDIF
+        || %np.内部结构=~单词,%np.语义类=人类|构件|人为事物,%%np.内部结构=~组合定中,%%np.语义类=构件|人为事物
+        => CS(NP/np !VP(!V<have> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER                 /*那个人黄头发*/
+        || %np.内部结构=~单词,%np.语义类=人为事物,%%np.yx=钱
+        => CS(NP/np !VP(!V<cost> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER                 
+        || %np.语义类=人,%%np.ccat=~q,%%np.语义类=人,%%np.定语.cpcat=~sp,%%np.内部结构=单词|粘合定中
+        => CS(NP/np !VP(!V<be> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER          /*小王急性子 ~<我们><班里最快乐的男孩>*/
+        || %np.定语.cpcat=mp,%np.语义类=时间,%%np.定语.cpcat=mp,%%np.语义类=时间
+        => CS(NP/np !VP(!V<be> NP//np)) %NP.RCASE=SUB     /*一个月四个星期*/
+&& {djnp2} dj->mp np :: $.内部结构=主谓,$.主语=%mp,$.谓语=%np,
+        %mp.内部结构=数量,%np.定语.cpcat=mp,%np.语义类=时间,
+        IF %mp.语气=疑问 THEN $==%mp @语气,$.主题成分=%mp ENDIF,
+        IF %np.语气=疑问 THEN $==%np @语气,$.主题成分=%np ENDIF
+        => CS(NP/mp !VP(!V<be> NP/np))           /*一年十二个月*/
+&& {djnp3} dj->np mp :: $.内部结构=主谓,$.主语=%np,$.谓语=%mp,
+        %np.兼类=~v,%mp.量词子类=度量|时量|个体|集体|容量|种类,
+        IF %np.语气=疑问 THEN $==%np @语气,$.主题成分=%np ENDIF,
+        IF %mp.语气=疑问 THEN $==%mp @语气,$.主题成分=%mp ENDIF,
+        IF %np.语义类=时间 THEN %mp.量词子类=时量 ENDIF                      /* (以)~每小时一哩(的速度) */
+        => CS(NP/np !VP(!V<be> NP/mp)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER         /*他七十五公斤 一个月三十天*/
+        => CS(NP/np !VP(!V<be> M/mp)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER         /*他七十五岁*/
+&& {djnp31} dj->np mcp :: $.内部结构=主谓,$.主语=%np,$.谓语=%mcp,%np.内部结构=单词,%np.语义类=人      /*他六十多了*/
+        => CS(NP/np !VP(!V<be> M/mcp)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER
+&& {djnp4} dj->mp mp :: $.内部结构=主谓,$.主语=%mp,$.谓语=%%mp,%mp.量词子类=~不定,
+        IF %mp.语气=疑问 THEN $==%mp @语气,$.主题成分=%mp ENDIF,
+        IF %%mp.语气=疑问 THEN $==%%mp @语气,$.主题成分=%%mp ENDIF
+        => CS(NP/mp !VP(!V<be> NP//mp))                    /*一年三百六十五天*/
+&& {djnp5} dj->tp tp :: $.内部结构=主谓,%%tp.ccat=~m,%tp.语义类=相对时间,%%tp.语义类=时间,$.主语=%tp,$.谓语=%%tp,%tp.时间单位=%%tp.时间单位,
+        IF %tp.语气=疑问 THEN $==%tp @语气,$.主题成分=%tp ENDIF,
+        IF %%tp.语气=疑问 THEN $==%%tp @语气,$.主题成分=%%tp ENDIF
+        => CS(NP/tp !VP(!V<be> NP//tp))         /*后天清明节 今天星期一*/
+        => CS(R<it> !VP(!VP(!V<be> NP//tp) DP/tp))  %DP.DVEND=Yes
+&& {djnp6} dj->np d np :: $.内部结构=主谓,%np.语义类=人类,%d.副名=是,%%np.语义类=具体事物,$.主语=%np,$.谓语=%%np
+        => CS(NP/np !VP(!V<have> NP//np)) %NP.RCASE=SUB,%NP==%V @NNUM @NPER      /*这个厂就一辆车*/
+&& {djnp7} dj->dj d mp :: $.内部结构=主谓,%dj.内部结构=主谓,%dj.标点成分=No,$.谓语=%mp
+        => CS(R<that> CS/dj !V<be> D/d NP/mp) /*我们结婚已经三十年*/
+&& {djnp8} dj->np d mcp :: $.内部结构=主谓,$.谓语=%mcp
+        => CS(NP/np !V<be> D/d M/mcp)    %NP==%V @NNUM @NPER,%NP.RCASE=SUB 
+&& {djnp9} dj->np d mp :: $.内部结构=主谓,$.谓语=%mp,
+       IF %d.兼类=a FALSE /*它~<重chong><20斤>*/
+        => CS(NP/np !V<be> D/d NP/mp)   %NP==%V @NNUM @NPER,%NP.RCASE=SUB 
+
+/* dj.ap谓语 */
+
+&& {djap1} dj->np !ap :: $.内部结构=主谓,$.主语=%np,$.谓语=%ap,$==%ap @连接成分 @作连接,
+        IF %np.内部结构=单词,%np.名主语=否 FALSE,
+/*一~<本漂亮>的英语词典*/
+        IF %np.ccat=r,%np.代词子类=ra,%np.内部结构=单词 THEN %ap.内部结构=~的字 ENDIF,
+        IF %np.语气=疑问 THEN $!=%ap @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %ap.语气=疑问|感叹,%ap.内部结构=状中|附加 THEN $.主题成分=%ap ENDIF,
+        IF %ap.内部结构=的字,%ap.中心语.cpcat=vp THEN %ap.中心语.宾语.cpcat=~dj ENDIF,   /*~<他和他兄弟>一样聪明*/
+        IF %ap.内部结构=状中,%ap.状语.yx=一样|一般,%np.内部结构=联合,%np.连接成分=Yes,%np.连接成分.yx=和 FALSE, 
+        IF %np.内部结构=组合定中,%np.定语.内部结构=~的字,%np.定语.ccat=s|f,%np.中心语.内部结构=单词 FALSE             /*~<村庄里人>很少*/
+        || {djap1.1} %np.ccat=r,%np.代词子类=rc
+        => CS(NP/np !V<be> AP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK
+        || {djap1.2} %ap.内部结构=附加|组合述补|状中,%ap.中心语.内部结构=单词|附加,%ap.补语.ccat=p,
+           IF %np.ccat=n|r THEN %ap.主体=%np ENDIF,
+           IF %ap.内部结构=状中 THEN %ap.状语.yx=渐渐 ENDIF
+        => CS(NP/np !V<become> AP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK   /*脸红了 灯光亮了一点*/
+        || {djap1.3} %ap.内部结构=附加,%ap.中心语.内部结构=~单词,
+           IF %np.ccat=n|r THEN %ap.主体=%np ENDIF
+        => {djap1.3.1} CS(NP/np !V<be> AP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK        /*脸太红了*/
+        => {djap1.3.2} CS(NP/np VP/ap)    %NP.RCASE=SUB,%NP==%VP @NNUM @NPER                                /*我<在工作上已经落后了>*/
+        || {djap1.4} %ap.内部结构=单词,%ap.形谓语=是,
+           IF %np.ccat=n|r THEN %ap.主体=%np ENDIF
+        => CS(NP/np !V<be> AP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK         /*操作系统的工作正常*/
+        || {djap1.5} %ap.内部结构=述补|状中|联合|附加,%ap.补语.ccat=~p, /*火车晚了十分钟  他的病<好了> */
+           IF %np.ccat=n|r THEN %ap.主体=%np ENDIF,
+           IF %ap.内部结构=状中,%ap.状语.yx=渐渐 FALSE
+        => {djap1.5.1} CS(NP/np !V<be> AP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%V==%AP @NNUM,%AP.ASUBC=~AFORE~ABACK /*哈尔滨的冰灯很美*/
+        => {djap1.5.2} CS(NP/np VP/ap)    %NP.RCASE=SUB,%NP==%VP @NNUM @NPER                                /*八个人也不行*/
+        || {djap1.6} %ap.内部结构=的字,%ap.中心语.ccat=z|a,%ap.中心语.内部结构=~状中
+        => CS(NP/np !V<be> AP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK     /*地里的庄稼绿油油的*/
+        || {djap1.7} %np.名主语=是,%np.名词子类=~ng,%ap.内部结构=的字,%ap.中心语.cpcat=np,
+           IF %np.内部结构=联合 FALSE,IF %np.中心语.内部结构=联合 FALSE
+        => CS(NP/np !V<be> P<of> NP/ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER                         /*这本书李先生的*/
+        || {djap1.8} %np.名主语=是,%ap.内部结构=的字,%ap.中心语.cpcat=vp,%ap.中心语.内部结构=~单词~附加
+        => CS(NP/np VP/ap) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER                                    /*工作中的错误总是不可避免的*/
+&& {djap11} dj->ap !ap :: $.内部结构=主谓,$.主语=%ap,$.谓语=%%ap,$==%%ap @连接成分 @作连接,
+                        IF %ap.内部结构=的字,%%ap.内部结构=的字,%%ap.中心语.cpcat=dj FALSE,   /*~<摆在我们面前的> <任务是光荣而艰巨的>*/
+        IF %%ap.内部结构=单词,%%ap.兼类=n FALSE, /*~<工厂的><困难>*/
+                        IF %ap.语气=疑问 THEN $!=%%ap @语气,$==%ap @语气,$.主题成分=%ap ENDIF,
+        IF %%ap.语气=疑问|感叹,%%ap.内部结构=状中|附加 THEN $.主题成分=%%ap ENDIF
+        || %ap.内部结构=的字,%ap.中心语.cpcat=dj|vp|np|ap,
+           IF %%ap.内部结构=的字,%%ap.中心语.cpcat=vp THEN %%ap.中心语.宾语.cpcat=~dj ENDIF
+        => CS(NP/ap !V<be> AP//ap) %NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK      /*你说的最有趣*/
+        || %ap.内部结构=单词,%%ap.内部结构=状中,%%ap.状语.ccat=d|c,%%ap.形谓语=~否               /*聪明固然好，但勤奋更好*/
+        => CS(R<it> !V<be> AP//ap T<to> V<be> AP/ap) %%V.FORM=RT,%AP.ASUBC=~AFORE~ABACK 
+&& {djap2} dj->sp !ap :: $.内部结构=主谓,%ap.内部结构=状中|单词,$.主语=%sp,$.谓语=%ap,$==%ap @连接成分 @作连接,
+        IF %sp.yx=中|里,%ap.语义类=性能|身份 FALSE,     /* (奶奶是)~我们家中最老(的) ~他是<dj那个村子里最富有>的*/
+        IF %ap.ccat=b,%ap.内部结构=单词 FALSE,
+        IF %ap.内部结构=单词|状中,%ap.ccat=a THEN %ap.形谓语=~否 ENDIF,
+        IF %ap.内部结构=单词,%ap.ccat=z THEN %ap.状谓语=谓 ENDIF
+        => CS(R<it> !V<be> AP/ap PP/sp) %AP.ASUBC=~AFORE~ABACK                             /*大街上很热闹*/
+        => CS(R<it> !V<be> AP/ap DP/sp) %DP.DSENT=Yes,%AP.ASUBC=~AFORE~ABACK              /*这里很安静*/
+&& {djap3} dj->tp !ap :: $.内部结构=主谓,%ap.内部结构=状中,%ap.形谓语=~否,$.主语=%tp,$.谓语=%ap,$==%ap @连接成分 @作连接
+        => CS(NP/tp  !V<be> AP/ap) %NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK    /*今天真热*/ 
+&& {djap4} dj->vp !ap :: $.内部结构=主谓,$.主语=%vp,$.谓语=%ap,$==%ap @连接成分 @作连接,
+        %vp.内部结构=述宾|单词,%vp.助动词=NO,/*~<能跑得象马一样><快>*/
+       IF %vp.内部结构=述宾,%vp.宾语.ccat=m FALSE,/*~<克服了许多>困难*/
+        %vp.yx=~比~离~是~惹  /*,%ap.主体=%vp*/ /*~<是汤姆的>错 ~他<比他的兄弟><更勤奋>  ~海滨<dj离这儿不远>*/
+        || %vp.内部结构=单词,%vp.单作主语=是,%ap.内部结构=状中|单词,%ap.谓词性主语=是,%ap.形谓语=~否,%ap.ccat=a
+        => VP(!V<be> AP/ap P<to> VP/vp ) %VP.FORM=RT,%AP.ASUBC=~AFORE~ABACK
+        => VP(VP/vp DP/ap)  %DP.DVEND=Yes                                                   /*学习努力*/
+        => CS(R<It> !V<be> AP/ap P<to> VP/vp ) %VP.FORM=RT,%AP.ASUBC=~AFORE~ABACK            /*分手不久*/
+        || %vp.内部结构=述宾,%ap.内部结构=状中|单词,%ap.谓词性主语=是,%ap.形谓语=~否,%ap.ccat=a,
+           IF %ap.yx=久,%ap.状语.yx=多,%vp.助动词=是 FALSE,%vp.yx=~有                       /*~有半个苹果就够了*/
+        => CS(R<It> !V<be> AP/ap P<to> VP/vp ) %VP.FORM=RT,%AP.ASUBC=~AFORE~ABACK
+        => VP(!V<be> AP/ap P<to> VP/vp ) %VP.FORM=RT,%AP.ASUBC=~AFORE~ABACK                 /*提高产品的质量很重要 ~是完全正确的*/
+        || %ap.状谓语=是,%ap.ccat=z
+        => CS(R<It> !V<be> AP/ap P<to> VP/vp ) %VP.FORM=RT,%AP.ASUBC=~AFORE~ABACK
+&& {djap5} dj->dj(np !vp) !ap :: $.内部结构=主谓,$.主语=%dj,$.谓语=%ap,$==%ap @连接成分 @作连接,%vp.内部结构=~单词,%ap.谓词性主语=是,
+        %vp.主体=%np,%vp.兼类=~p~f,%ap.内部结构=状中,%ap.状语.yx=~越~那么~这么,%ap.形谓语=~否,  /*~<讲演者没有先前的>那么好*/
+        IF %vp.宾语=Yes,%vp.宾语.cpcat=mcp,%ap.内部结构=状中,%ap.状语.cpcat=mp  FALSE,  /*~ 这个游泳池有二十五米宽*/
+        IF %vp.宾语=Yes,%vp.宾语.yx=%ap.yx FALSE,                                        /*~<你觉得疼><不疼>*/
+        IF %vp.内部结构=粘合述补,%vp.yx=看,%vp.补语.yx=来 FALSE,                         /*~<结果看来>十分理想*/
+        IF %ap.yx=久,%ap.内部结构=状中,%ap.状语.yx=多,%vp.助动词=是 FALSE,
+        IF %vp.yx=具有|是|没有|有 THEN %vp.宾语=是 ENDIF                                /*这个孩子有半个苹果就够了*/
+        => CS(R<it> !V<be> AP/ap VP/dj(P<for> NP/np P<to> !VP/vp)) %R.RCASE=SUB,%NP.RCASE=OBJ,%VP.FORM=RT,%R==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK    /*她考虑问题比较周到* 小孩吃太多糖不好 */ 
+&& {djap6} dj->dj(np !ap) !ap :: $.内部结构=主谓,$.主语=%dj,$.谓语=%ap,$==%ap @连接成分 @作连接,
+        %ap.主体=%np,%ap.形谓语=~否,%ap.形状语=No,%%ap.形谓语=~否,
+        IF %ap.内部结构=状中,%%ap.内部结构=状中,%ap.状语.ccat=%%ap.状语.ccat FALSE, /*~<天气又冷><又潮湿> ~天气已不冷也不潮湿*/
+        IF %ap.内部结构=组合述补 FALSE,                                               /*~<水热得多>快*/
+        IF %ap.内部结构=单词,%ap.兼类=d FALSE,  /*~<我快><饿死了>*/
+        IF %ap.yx=%%ap.yx FALSE
+        => CS(C<that> CS/dj(NP/np V<be> AP/ap) !V<be> AP//ap)    %AP.ASUBC=~AFORE~ABACK,%%AP.ASUBC=~AFORE~ABACK
+&& {djap7} dj->r !ap :: $.内部结构=主谓,$.主语=%r,$.谓语=%ap,%r.代词子类=rb,%r.指代处所=No,%ap.内部结构=状中
+         => CS(R/r !V<be> AP/ap)         %V.NNUM=%R.RNUM        /*那将对你的健康不利*/
+
+
+/* dj.vp谓语 */
+
+&& {djvp1} dj->np !vp :: $.内部结构=主谓,$.主语=%np,$.谓语=%vp,%vp.ccat=~a,
+        IF %np.连接成分=Yes THEN %np.内部结构=联合 ENDIF,                  /*<不是我><把消息告诉小刘>的*/
+        IF %vp.助动词=No THEN %vp.配价数=1|2|3 ENDIF,
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %np.内部结构=单词 THEN %np.名主语=是 ENDIF,
+        IF %vp.附加语=Yes,%vp.附加语.ccat=y FALSE,
+        IF %vp.内部结构=状中,%vp.状语.ccat=c THEN %vp.状语.连主谓=Yes ENDIF,
+        IF %vp.内部结构=状中,%vp.被动=否,%vp.状语=是,%vp.状语.ccat=p,%vp.状语.格标=目的,%vp.配价数=2|3 THEN %vp.宾语=是 ENDIF, 
+        IF %vp.内部结构=状中|单词,%vp.复数主语=是,%np.内部结构=联合,%np.连接成分=Yes,%np.连接成分.yx=和|跟 FALSE
+        || {djvp1.1} %np.ccat=r,%np.代词子类=rc                                                          /*他和每个人都吵架*/
+        => {djvp1.1.1} CS(NP/np !VP/vp) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER    
+        => {djvp1.1.2} VP(!VP/vp NP/np)%VP.VOICE=ACTI,%VP.VSUBC=VO                                         /*什么都知道*/
+        || {djvp1.2} %vp.被动=否,
+           IF %vp.助动词=No THEN %vp.主体=%np ENDIF,
+           IF %vp.助动词=Yes,%np.ccat=r THEN %vp.主体=%np ENDIF,
+           IF %vp.助动词=Yes,%vp.内部结构=述宾,%vp.述语.助动词=Yes THEN %vp.主体=%np ENDIF,/*~<污染 - 主体>应该消除*/
+           IF %vp.内部结构=单词 THEN %vp.单作谓语=是 ENDIF,
+           IF %vp.内部结构=粘合述补,%vp.补语.ccat=v,%vp.补语.趋向动词=Yes FALSE                /*~穿绿衣服的姑娘<看上去>*/    
+        => {djvp1.2.1} CS(NP/np !VP/vp) %NP.RCASE=SUB,%NP.RSUBC=~RPOSS,%VP.VOICE=ACTI,%NP==%VP @NNUM @NPER       /*老师对他的学生们感到满意*/
+        => {djvp1.2.2} CS(NP/np V<be> !AP/vp) %NP.RCASE=SUB,%NP.RSUBC=~RPOSS,%V.VOICE=ACTI,%NP==%V @NNUM @NPER
+        || {djvp1.3} %vp.被动=否,%vp.配价数=2|3,%vp.客体=%np,
+           IF %vp.主体=%np FALSE,
+           IF %vp.趋向动词=Yes FALSE,
+           IF %vp.内部结构=单词 FALSE,                        /*~机器人研究*/
+           IF %vp.配价数=2|3,%vp.助动词=Yes,%vp.内部结构=述宾,%vp.宾语.宾语=是 FALSE/* ,  ~ <科学研究><应当参考同类题目的文献资料> */ 
+          /* IF %vp.配价数=2|3,%vp.助动词=否,%vp.宾语=是 THEN %vp.宾语.cpcat=sp|mp|vp ENDIF */   /*消息很快传遍了全国 ~人们说他很聪明, 这本书<已经翻译成了多种语言> */
+        => CS(NP/np !VP/vp) %NP.RCASE=SUB,%VP.VOICE=PASS,%NP==%VP @NNUM @NPER               /*邮票在邮局里出售 会议顺利进行*/
+        || {djvp1.4} %vp.被动=否,%vp.配价数=2|3,%vp.客体=%np,
+            IF %vp.主体=%np FALSE,
+            IF %vp.配价数=2 THEN %vp.内部结构=~述宾~双宾 ENDIF
+        => VP(!VP/vp NP/np)
+        || {djvp1.5} %vp.被动=是
+        => CS(NP/np !VP/vp) %VP.VOICE=PASS,%NP==%VP @NNUM @NPER,%NP.RCASE=SUB 
+        || {djvp1.6} %np.yx=自己
+        => VP(!VP/vp NP/np) %VP.VOICE=ACTI,%NP.RCASE=OBJ,%NP.GEND=MALE|FEML                /*自己一个人干这个工作*/
+&& {djvp2} dj->np !vp :: $.内部结构=主谓,$.主语=%np,$.谓语=%vp,%vp.配价数=0,                   /*电影的教育价值不能被否定*/ 
+        IF %vp.yx=是|有,%vp.内部结构=述宾,%vp.宾语.ccat=a THEN %vp.宾语.主体=%np ENDIF,        /*~<分子运动有多>快是个问题*/      
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %np.语义类=相对时间,%vp.助动词=Yes FALSE,                                         /*~几个月不能休息*/
+        IF %np.语义类=集体|空间,%vp.内部结构=述宾,%vp.yx=有|没有|没,%vp.宾语.ccat=n FALSE,
+        IF %np.内部结构=单词,%np.定语=No THEN %np.名主语=是 ENDIF,                            /*马同志 ~同志*/
+        IF %np.内部结构=单词,%vp.内部结构=述宾,%vp.yx=是,%vp.宾语.cpcat=dj FALSE,       /*~金属<是良导体的原因容易回答>*/
+        IF %vp.单作谓语=否 THEN %vp.内部结构=~单词 ENDIF,
+        IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF,
+        IF %vp.内部结构=附加,%vp.语气=疑问,%vp.附加语.ccat=y FALSE                      /*~这个座位<有人吗>*/
+        || %np.ccat=r,%np.代词子类=rc
+        => CS(NP/np !VP/vp) %NP.RCASE=SUB                                                 /*谁是最伟大的活着的诗人*/
+        || %vp.yx=~用于~存在~在
+        => CS(NP/np !VP/vp) %NP==%VP @NNUM @NPER,%NP.RCASE=SUB,%NP.RSUBC=~RPOSS      
+        => CS(NP/np !V<be> AP/vp) %NP==%V @NNUM @NPER,%NP.RCASE=SUB,%NP.RSUBC=~RPOSS    /*他的名字在国外很有影响*/
+        || %vp.yx=用于,%np.语义类=~人
+        => CS(NP/np !VP/vp) %NP.RCASE=SUB,%VP.VOICE=PASS,%NP==%VP @NNUM @NPER           /*这种仪器用于工业上的测试*/
+        || %vp.yx=存在,%np.语义类=人类,%vp.主体=%np
+        => CS(NP/np !VP/vp)%NP==%VP @NNUM @NPER,%NP.RCASE=SUB,%NP.RSUBC=~RPOSS
+        || %vp.yx=存在,%np.语义类=~人类,%vp.主体=%np
+        => CS(D<there> !VP/vp P<in> NP/np) %NP==%VP @NNUM @NPER,%NP.RCASE=SUB,%NP.RSUBC=~RPOSS  /*设计的方案存在致命的错误*/
+        || %vp.yx=在,%vp.主体=%np
+        => CS(NP/np !VP/vp) %NP==%VP @NNUM @NPER,%NP.RCASE=SUB,%NP.RSUBC=~RPOSS                  /*我的家在松花江边*/
+
+&& {djchaoguo} dj->np !v<超过> np :: %np.语义类=%%np.语义类
+	=> CS(NP/np !VP(!V/v NP//np))
+
+&& {djchaoguole} dj->np !v<超过> u<了> np :: %np.语义类=%%np.语义类
+	=> CS(NP/np !VP(!V/v NP//np))
+
+&& {djvp3} dj->tp !vp :: $.内部结构=主谓,$.主语=%tp,$.谓语=%vp,%vp.状语.cpcat=~tp,
+        IF %vp.yx=是,%vp.宾语.ccat=v FALSE,
+        IF %vp.中心语.内部结构=联合 THEN %vp.语气=~疑问 ENDIF
+        || %vp.语义类=关联,%vp.宾语=是
+        => CS(NP/tp !VP/vp)                                            /*秋天是收获的季节 昨天有足球赛*/ 
+        || %vp.助动词=否,
+            IF %vp.yx=下|刮|是|冷|热|凉|暖|暖和|寒冷|温暖 TRUE,
+            IF %vp.宾语=是 THEN %vp.宾语.语义类=自然事物 ENDIF
+        => CS(R<it> !VP/vp DP/tp) %DP.DVEND=Yes,%VP==%DP @PAST @FUTR @PERF @CONT    /*昨天下了一场大雪 现在是阴天 */
+        || %vp.助动词=否,%tp.语义类=相对时间,
+            IF %vp.yx=来|去|来到|重返 TRUE
+       => CS(NP/tp !VP/vp)                                                         /*今年冬天来得早*/
+        || %vp.助动词=是,%vp.宾语=是,
+           IF %vp.宾语.宾语=是 THEN %vp.宾语.yx=下|刮|是,%vp.宾语.宾语.语义类=自然事物 ELSE %vp.宾语.汉字=下|刮|冷|热|凉|暖|返 ENDIF
+        => CS(R<it> !VP/vp DP/tp) %DP.DVEND=Yes,%VP==%DP @PAST @FUTR @PERF @CONT    /*今天还要冷一些 明天将会下雨*/
+&& {djvp4} dj->sp !vp :: $.内部结构=主谓,$.主语=%sp,$.谓语=%vp,
+        IF %sp.内部结构=单词 THEN %sp.ccat=~r ENDIF
+        || %vp.yx=是|在,%vp.宾语=是,IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF
+        => CS(NP/sp !VP/vp)              /*西北是一个美丽的地方 商业区在河的南面*/
+        || %sp.ccat=r
+        => CS(DP/sp !VP/vp) %DP.DVEND=Yes       /*我们这里都有*/
+&& {djvp5} dj->r !vp :: $.内部结构=主谓,$.主语=%r,$.谓语=%vp,
+        %r.代词子类=rb,%vp.宾语=是,%vp.yx=~有,
+        IF %r.yx=这里|那里,%vp.yx=~是 FALSE,
+        IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF,
+        IF %vp.内部结构=状中 THEN %vp.状语.内部结构=单词 ENDIF
+         => CS(R/r !VP/vp)         %VP.NNUM=%R.RNUM        /*这是全国最大的城市*/
+         => CS(N/r !VP/vp)         %VP.NNUM=%N.NNUM        /*这里是地处偏僻的东海之滨的一座小城*/
+&& {djvp6} dj->np w<"，"> !vp :: $.内部结构=主谓,$.主语=%np,$.谓语=%vp,$.标点成分=%w,
+        %np.内部结构=~单词,%vp.内部结构=~单词,%vp.连接成分.连主谓=是,%vp.连接成分.前中后=~前,
+        IF %np.连接成分=Yes FALSE,
+        IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF,
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %np.语义类=集体|空间,%vp.内部结构=述宾,%vp.yx=有|没有|没 FALSE
+        => CS(NP/np !VP/vp) %NP==%VP @NNUM @NPER,%NP.RCASE=SUB,%NP.RSUBC=~RPOSS      
+        || %np.ccat=r,%np.代词子类=rc
+        => CS(NP/np !VP/vp) %NP.RCASE=SUB
+&& {djvp8} dj->vp !vp :: $.内部结构=主谓,$.主语=%vp,$.谓语=%%vp,
+        %vp.yx=~是~请,%vp.助动词=否,%%vp.谓词性主语=是,
+        IF %vp.体谓准=谓,%%vp.语气=疑问 FALSE,                                /*~不知道什么时候发生了这个事故*/
+        IF %vp.内部结构=述宾,%vp.配价数=2,%%vp.内部结构=连谓 FALSE,
+        IF %vp.内部结构=连谓,%vp.配价数=2,%%vp.内部结构=述宾 FALSE,
+        IF %vp.内部结构=附加 THEN %vp.宾语=是 ENDIF,
+        IF %vp.内部结构=述补, %vp.宾语=否,%vp.补语.趋向动词=是 FALSE,     /* 看起来象我儿子 */
+        IF %vp.内部结构=状中 THEN %vp.连接成分=No ENDIF,
+        IF %vp.内部结构=述宾,%%vp.内部结构=述宾,%%vp.yx=是,%%vp.宾语.ccat=n,%%vp.宾语.sem=人 FALSE ,
+        IF %vp.yx=还,%%vp.yx=是 FALSE,
+        IF %vp.yx=告诉,%%vp.yx=要 FALSE,                                    /*~<告诉在那儿玩的男孩子们><不要吵闹>*/
+        IF %vp.yx=让,%%vp.内部结构=附加,%%vp.附加语.yx=吧 FALSE,                       /* ~<让我们><开始吧>*/
+        IF %vp.yx=没有,%vp.宾语=No FALSE,                                               /*~<并没有><引起他的兴趣>*/
+        IF %%vp.yx=是,%%vp.内部结构=状中,%%vp.状语.yx=还 FALSE,                          /*~喝茶还是喝咖啡*/
+        IF %%vp.yx=能,%%vp.内部结构=单词 FALSE,                                        /*<否认这个事实是不可>能*/    
+        IF %%vp.内部结构=单词 THEN %%vp.单作谓语=Yes ENDIF
+        || %vp.内部结构=单词,%vp.单作主语=是,IF %%vp.yx=是 THEN %%vp.状语.yx=~还~就 ENDIF
+        => CS(VP/vp !VP//vp) %VP.FORM=VG,%%VP.ECAT=~U                /*早起使人健康*/
+        => CS(NP/vp !VP//vp)                                        /*实践证明了他的理论 恢复健康需要一个多月的时间*/
+        || %vp.内部结构=~单词,%vp.状语.cpcat=~pp~tp,%vp.yx=~在~有,%%vp.yx=~是~有
+        => CS(NP/vp !VP//vp)    /*管理科学的研究要赶上时代的需要 设计控制系统需要丰富的知识*/    
+        => CS(R<it> !VP//vp P<to> VP/vp) %%VP.FORM=RT 
+        || %vp.内部结构=~单词,%vp.yx=~在~有,%%vp.yx=是|有,%%vp.宾语.cpcat=~ap,
+           IF %vp.内部结构=状中 THEN %vp.状语.cpcat=~pp ENDIF,
+           IF %%vp.yx=有 THEN %%vp.内部结构=状中,%%vp.状语.cpcat=pp ENDIF               /*坚持锻炼对身体有很大的好处*/
+        => CS(VP/vp !VP//vp) %VP.FORM=VG    /*缺乏经验是导致失败的主要原因 划船可不是一件容易的事*/
+
+/* dj.dj谓语 */
+
+&& {djdj1} dj->sp !dj(np !ap) :: $.内部结构=主谓,$.主语=%sp,$.谓语=%dj,%dj.标点成分=No
+        => CS(D<there> VP(V<be> AP/ap NP/np) PP/sp) %V==%NP @NNUM @NPER,%AP.主体=%NP    /*村子里人很少*/
+&& {djdj2} dj->np !dj :: $.内部结构=主谓,$.主语=%np,$.谓语=%dj,%dj.标点成分=No,
+        %np.语义类=集体|空间,
+        %dj.主语.语义类=人,%dj.stru=~附加,%dj.谓语.cpcat=~dj,
+/*        IF %dj.内部结构=主谓,%dj.主语.ccat=r FALSE,*/                              /* (为了进入)~大学你必须通过一系列考试 */
+        IF %dj.内部结构=主谓,%dj.主语.ccat=n,%dj.主语.内部结构=单词,%dj.主语.前名=是 FALSE,
+        IF %dj.内部结构=主谓,%dj.主语.内部结构=组合定中 THEN %dj.主语.定语.ccat=~v ENDIF
+        || IF %dj.谓语.客体=%np,%np.语义类=空间 TRUE
+        => CS(!CS/dj P NP/np) %CS.VSUBC=VC,%CS.COMPTYPE=PP,%CS.COMPPREP=%P.YX  /*中国我去过*/ 
+        || %np.内部结构=单词,
+           IF %dj.谓语.客体=%np,%np.语义类=空间 FALSE
+        => CS(!CS/dj P<in> NP/np) /*工厂没人工作 ~<农村><人口大量涌入城市>*/
+&& {djdj3} dj->np !dj(np !ap) :: $.内部结构=主谓,$.主语=%np,$.谓语=%dj,
+        %ap.主体=%%np,%ap.内部结构=~的字,%ap.状语.cpcat=~pp,%%np.定语.ccat=~p,
+IF %np.内部结构=定中,%np.定语.内部结构=的字,%np.定语.中心语.cpcat=dj,%np.中心语.cpcat=mp,%%np.个体量词=%np.中心语.yx FALSE,
+/*~<我居住的那个><城市极其美丽>*/
+IF %np. 内部结构=单词,%np.名主语=定 FALSE,       
+IF %ap.内部结构=单词,%ap.yx=一般 FALSE,                                     /*~这座房子<象古堡/np><一般>*/
+        IF %%np.内部结构=单词 THEN %%np.前名=是 ENDIF,
+        IF %%np.内部结构=组合定中 THEN %%np.定语.ccat=~v ENDIF
+        || %np.ccat=~r,%np.语义类=人
+        => CS( NP/np NP//np !V<be> AP/ap) %NP.NCASE=POSS,%NP.RCASE=SUB,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK     /*当代的年轻人购买能力极强*/  
+        || %np.ccat=~r,%np.语义类=~人
+        => CS( NP//np P<of> NP/np !V<be> AP/ap) %NP.RCASE=SUB,%%NP.RCASE=OBJ,%NP==%V @NNUM @NPER,%AP.ASUBC=~AFORE~ABACK     
+        || %np.ccat=r
+        => CS(T/np NP//np !V<be> AP/ap) %T.TNSUB=%NP.NSUBC,%T.TNNUM=%NP.NNUM,%NP==%V @NNUM @NPER ,%AP.ASUBC=~AFORE~ABACK /*他脸色苍白*/
+&& {djdj4} dj->np !dj(vp !ap) :: $.内部结构=主谓,$.主语=%np,$.谓语=%dj,
+        %vp.语义类=~心理活动,%vp.内部结构=单词|述宾,%vp.主体=%np,%ap.内部结构=~的字, /*~彼得<dj抱怨食物不好>*/
+        IF %ap.内部结构=状中 THEN %ap.状语.cpcat=~pp ENDIF                      /*这位同志办事认真 办公室离家不远*/
+        => CS(NP/np !V<be> AP/ap P<to> VP/vp) %NP.RCASE=SUB,%VP.FORM=RT,%NP==%V @NNUM @NPER ,%AP.ASUBC=~AFORE~ABACK
+        => CS(NP/np !VP/vp DP/ap) %DP.DVEND=Yes,%NP.RCASE=SUB,%NP==%VP @NNUM @NPER   /*小王学习努力*/
+&& {djdj5} dj->np !dj(dp !dj)  ::  $.内部结构=主谓,%%dj.谓语.cpcat=ap|vp,$.主语=%np,$.谓语=%dj,
+        IF %%dj.谓语.cpcat=vp THEN %%dj.谓语.内部结构=述补,%%dj.谓语.客体=%np ENDIF
+        || %%dj.谓语.cpcat=ap
+        => CS(DP/dp NP/np !CS//dj) %NP.RCASE=SUB,%DP.DSENT=Yes        /*研究生一般年龄较大*/ 
+        || %%dj.谓语.cpcat=vp
+        => CS(DP/dp !CS(!CS//dj NP/np)) %NP.RCASE=OBJ,%DP.DSENT=Yes       /*他的病幸亏大夫治得及时*/
+&& {djdj7} dj->vp !dj :: $.内部结构=主谓,%vp.内部结构=述宾,$.主语=%vp,$.谓语=%dj,%dj.语气=疑问,
+        IF %vp.双宾=是 FALSE                                    /*~告诉我<这是什么>*/
+        => CS(!CS/dj P<to> VP/vp) %VP.FORM=RT                   /*开调查会人多好,还是人少好*/
+&& {djdj8} dj->np !dj :: $.内部结构=主谓,%dj.内部结构=联合|扩展,%np.名主语=是,%dj.附加语.yx=~了,$.谓语=%dj,
+        IF %dj.内部结构=扩展 THEN %dj.作连接=Yes,%dj.状语.ccat=c ENDIF
+        => CS(NP/np !CS/dj)        /*这个长方体长两米,宽一点五米,高零点五米 ~<农村><给我的印象太深了>*/
+&& {djdj9} dj->np w<"，"> !dj :: $.内部结构=主谓,$.谓语=%dj,$.主语=%np,$.标点成分=%w,
+        %np.内部结构=~单词~粘合定中,%dj.附加语.yx=~了,
+        IF %np.内部结构=~联合 THEN %np.连接成分=No ENDIF    /*不用说这么点困难,就是比这再大的困难,我们也能克服*/
+        => CS(NP/np W<","> !CS/dj)  /*这么大的工程,过去我们连听也没听说过*/
+
+/* dj.fj谓语 */
+&& {djfj1} dj->np w<"，"> fj :: $.内部结构=主谓,$.主语=%np,$.谓语=%fj,$.标点成分=%w
+        => CS(NP/np W<","> CS/fj) %NP.RCASE=SUB  /*我这个发言，与其说是一个老科学工作者的心声，毋宁说是对一部巨著的期望*/
+
+/* dj.扩展句 */
+
+&& {djkz1} dj->dp !dj :: $.内部结构=扩展,$.状语=%dp,$.中心语=%dj,%dj.标点成分=No,%dp.主前后=前, 
+        IF %dj.连接成分.前照应=%dp.yx,%dp.后照应=%dj.连接成分.yx FALSE,/*凡是可能找到他的地方我都去了*/
+        IF %dp.连接=Yes THEN $!=%dj @作照应 @作连接 @连接成分,$.连接成分=%dp,$==%dp @作照应,$.作连接=Yes ENDIF
+        => CS(DP/dp !CS/dj)  %DP.DSENT=Yes
+        => CS(C/dp !CS/dj)
+	=> CS(!CS/dj PP/dp)
+&& {djkz2} dj->tp !dj :: $.内部结构=扩展,$.状语=%tp,$.中心语=%dj,%tp.语气=陈述,
+        %dj.状语.cpcat=~tp,%dj.主语.ccat=~v~t,%dj.标点成分=No,
+        IF %tp.内部结构=单词,%dj.内部结构=主谓,%dj.主语.ccat=~r,%tp.后名=是,%dj.主语.语义类=~时间~空间~人类 FALSE        /* 当时大陆刚解放 */
+        => CS(DP/tp !CS/dj) %DP.DSENT=Yes,%CS==%DP @PAST @FUTR @PERF @CONT
+        => CS(!CS/dj DP/tp) %DP.DSENT=No,%CS==%DP @PAST @FUTR @PERF @CONT
+        => CS(!CS/dj PP/tp) 
+        || %tp.内部结构=单词,%tp.汉字=星|期|周|月
+        => CS(!CS/dj P<on> NP/tp)                                                     /*星期二我们最忙*/
+        || %tp.内部结构=~单词,%tp.中心语.cpcat=~mp,%tp.汉字=点|时|分|秒 
+        => CS(!CS/dj P<at> NP/tp)                                                    
+        || %tp.内部结构=~单词,%tp.中心语.cpcat=~mp,%tp.汉字=日|星|期|月|午|晚|晨
+        => CS(!CS/dj P<on> NP/tp)                                                    
+        || %tp.内部结构=~单词,%tp.中心语.cpcat=~mp,IF %tp.汉字=点|时|分|秒|日|星|期|月|午|晚|晨 FALSE
+        => CS(!CS/dj P<in> NP/tp)         /*最近几年他一直在从事科学研究工作  ~<每天早上> dj<坚持锻炼对身体有很大的好处> */
+&& {djkz20} dj->sp !dj :: $.内部结构=扩展,$.状语=%sp,$.中心语=%dj,%dj.标点成分=No
+        => CS(!CS/dj PP/sp)            /*姑娘们中谁唱得最好*/
+&& {djkz21} dj->mp !dj :: $.内部结构=扩展,$.状语=%mp,$.中心语=%dj,%mp.语气=陈述,
+        %dj.状语.cpcat=~tp,%dj.主语.ccat=~v~t,%dj.标点成分=No,%mp.内部结构=定中,%mp.量词子类=时量,%mp.定语.ccat=r
+        => CS(!CS/dj NP/mp)        /*那年我们建设了亚洲最好的体育场*/
+&& {djkz3} dj->pp !dj :: $.内部结构=扩展,$.状语=%pp,$.中心语=%dj,%dj.内部结构=~扩展,%dj.标点成分=No,%pp.介主前后=前,
+        IF %pp.宾语.内部结构=的字 FALSE,          /*~<关于运动会的>最新消息是什么*/
+        IF %pp.宾语.ccat=q,%dj.主语.内部结构=单词,%dj.主语.个体量词=%pp.宾语.yx FALSE,/*关于那件事我忘了告诉她*/
+        IF %dj.内部结构=主谓,%dj.主语.内部结构=组合定中,%dj.主语.定语.中心语.cpcat=vp FALSE  /*~从贝加尔湖吹来的冷风在呼啸 */
+        => CS(!CS/dj PP/pp)         /*在这些人当中有几个人已不在这里了 ~<在邮局><工作的人都很忙>*/
+        => CS(!CS/dj DP/pp)
+&& {djkz4} dj->dp w<"，"> !dj :: $.内部结构=扩展,%dp.主前后=前,$.状语=%dp,$.中心语=%dj,$.标点成分=%w
+        => CS(DP/dp W<","> !CS/dj)   %DP.DSENT=Yes      /*通常,我步行去办公室*/
+&& {djkz5} dj->r w<"，"> !dj :: $.内部结构=扩展,%r.yx=这时|这里|这样,$.状语=%r,$.中心语=%dj,$.标点成分=%w
+        => CS(D/r W<","> !CS/dj)  %D.DSENT=Yes  /*这时，大家都把目光移向厂长*/
+&& {djkz6} dj->pp w<"，"> !dj :: $.内部结构=扩展,%pp.介主前后=前,$.状语=%pp,$.中心语=%dj,$.标点成分=%w
+        => CS(!CS/dj PP/pp)        /*在大学里,学生被培养成老师和工程师*/
+&& {djkz7} dj->sp w<"，"> !dj :: $.内部结构=扩展,$.状语=%sp,$.中心语=%dj,$.标点成分=%w
+        => CS(PP/sp W<","> !CS/dj)    /*灯光下,他的脸色红润起来*/
+&& {djkz8} dj->tp w<"，"> !dj :: $.内部结构=扩展,%dj.状语.cpcat=~tp,$.状语=%tp,$.中心语=%dj,$.标点成分=%w
+        => CS(PP/tp W<","> !CS/dj)
+        => CS(DP/tp W<","> !CS/dj) %DP.DSENT=Yes,%CS==%DP @PAST @FUTR @PERF @CONT
+        => CS(NP/tp W<","> !CS/dj)     /*黄昏以后,我们乘汽车离开这里  1992年11月,在北京,我们举行了一个会议*/
+&& {djkz9} dj->pp w<"，"> !dj :: $.内部结构=扩展,$.状语=%pp,$.中心语=%dj,%dj.内部结构=~扩展,%dj.标点成分=No
+        => CS(!CS/dj PP/pp)         /*到去年年底，我们已学会了两千多个英语单词和词组*/
+        => CS(!CS/dj DP/pp)
+&& {djkza} dj->c !dj :: $.内部结构=扩展,$!=%dj @作照应 @作连接 @连接成分,%c.仅主前后=前,%c.连句=是,$.连接成分=%c,$.状语=%c,$==%c @作照应,$.作连接=Yes,
+        IF %dj.内部结构=联合,%dj.后项.连接成分=Yes,%dj.后项.连接成分.前照应=%c.yx FALSE,
+        IF %dj.内部结构=扩展,%dj.连接成分=Yes,%dj.连接成分.前照应=%c.yx FALSE
+        || $.主题成分=No
+        =>CS(C/c !CS/dj)
+        =>CS(U/c C<that> !CS/dj)                      /*不如数量少而质量好*/
+        || $.主题成分=Yes
+        =>CS(C/c #NP%CS !CS/dj) %NP=%CS.主题成分
+        =>CS(C/c #AP%CS !CS/dj) %AP=%CS.主题成分
+        =>CS(C/c #DP%CS !CS/dj) %DP=%CS.主题成分
+&& {djkzb} dj->c w<"，"> !dj :: $.内部结构=扩展,$!=%dj @作照应 @作连接 @连接成分,%c.仅主前后=前,%c.连句=是,$.连接成分=%c,$==%c @作照应,$.作连接=Yes,$.标点成分=%w
+        =>CS(!CS/dj)
+
+
+/* dj.dj联合结构 */
+
+&& {djlh1} dj->!dj c<而> dj :: $.内部结构=联合,$.前项=%dj,$.后项=%%dj,
+        %c.连句=Yes,%dj==%%dj @内部结构 @ccat,%dj.谓语.内部结构=%%dj.谓语.内部结构,
+        IF %dj.标点成分=No,%%dj.标点成分=Yes THEN $==%dj @标点成分 ENDIF
+        => CS(!CS/dj C/c CS//dj)
+&& {djlh2} dj->!dj d<还是> dj :: $.内部结构=联合,$!=%dj @语气,$.语气=疑问,$.前项=%dj,$.后项=%%dj,
+        %dj==%%dj @内部结构,%dj.主语.内部结构=%%dj.主语.内部结构,%dj.谓语.内部结构=%%dj.谓语.内部结构,
+          IF %dj.标点成分=No,%%dj.标点成分=Yes THEN $==%dj @标点成分 ENDIF
+        => CS(!CS/dj C<or> CS//dj)
+&& {djlh3} dj->!dj w<"，"> d<还是> dj :: $.内部结构=联合,$!=%dj @语气,$.标点成分=%w,$.语气=疑问,$.前项=%dj,$.后项=%%dj,
+        %dj==%%dj @内部结构,%dj.主语.内部结构=%%dj.主语.内部结构,%dj.谓语.内部结构=%%dj.谓语.内部结构
+        => CS(!CS/dj C<or> CS//dj)
+&& {djlh4} dj->!dj w<"、"|"，"> dj :: $.内部结构=联合,$.前项=%dj,$.后项=%%dj,$.标点成分=%w,
+        %dj==%%dj @内部结构 @语气,%dj.谓语==%%dj.谓语 @cpcat @内部结构,%dj.主语.ccat=%%dj.主语.ccat,
+        %dj.连接成分=No,%%dj.连接成分=No,
+        IF %%dj.宾语=是 THEN %dj.宾语=是 ENDIF,      /*~会议顺利进行,我们已经采取了一系列安全措施*/
+        IF %%dj.附加语=Yes THEN %dj.附加语=Yes ENDIF        /*~你看,水热得多快呀*/
+        => CS(!CS/dj C<and> CS//dj)                      /*厂小、设备差 长两米,宽一点五米*/
+
+
+/*-----------dj.特殊句型.BEGIN------------*/
+
+
+/* dj.特殊句型.是字句 */
+
+&& {djshi1} dj-> v<是> np vp :: $.内部结构=是字,%vp.yx=~是,
+        IF %np.语气=疑问 THEN $==%np @语气,$.主题成分=%np ENDIF
+        || %np.语气=疑问
+        => CS(NP/np VP/vp) %NP==%VP @NPER @NNUM                 /*是什么使得他干了这事*/
+        || %vp.主体=%np,IF %np.语义类=人 FALSE,IF %np.语气=疑问 FALSE
+        => CS(R<it> V<be> NP/np R<that> VP/vp)            /*是改革开放的政策调动了他们的积极性*/
+        || %vp.主体=%np,IF %np.语义类=人 TRUE,IF %np.语气=疑问 FALSE
+        => CS(R<it> V<be> NP/np R<who> VP/vp) 
+        || %vp.配价数=2|3,%vp.客体=%np,IF %np.语气=疑问 FALSE
+        => CS(R<it> V<be> NP/np R<that> VP/vp) %VP.VOICE=PASS 
+&& {djshi2} dj-> v<是> np vp u<的> :: $.内部结构=是字,%vp.yx=~是
+        || %vp.主体=%np,%np.语义类=~人,
+           IF %np.连接成分=Yes,%np.连接成分.yx=由于|因为 FALSE
+        => CS(R<it> V<be> NP/np R<that> VP/vp) %VP.PAST=Yes     
+        || %vp.主体=%np,%np.语义类=人,
+           IF %np.连接成分=Yes,%np.连接成分.yx=由于|因为 FALSE
+        => CS(R<it> V<be> NP/np R<who> VP/vp) %VP.PAST=Yes     
+        || %vp.配价数=2|3,%vp.客体=%np,
+           IF %np.连接成分=Yes,%np.连接成分.yx=由于|因为 FALSE
+        => CS(R<it> V<be> NP/np R<that> VP/vp) %VP.VOICE=PASS 
+        /* ~是由于一根火柴引起的 */
+&& {djshi3} dj-> d<不> v<是> np !vp u<的> :: $.内部结构=是字, %np.语义类=人,%vp.yx=~是
+        => CS(R<it> V<be> D<not> NP/np C<who> !VP/vp) %NP.RCASE=SUB,%VP.PAST=Yes     /*不是我把消息告诉他的*/
+&& {djshi4} dj -> np !v<是> ap   ::$.内部结构=主谓,%ap.内部结构=的字,%ap.ccat=v,%ap.中心语.被动=Yes
+        =>CS( NP/np VP/ap ) %VP.VOICE=PASS,%NP==%VP @NNUM @NPER /* 在树林里咬死猎人的狗是被打死的 */
+&& {djshi5} dj -> vp !v<是> ap   ::$.内部结构=主谓,%vp.yx=~有,%vp.内部结构=~单词
+        =>CS( R<it> !V/v AP/ap P<to> VP/vp ) %VP.FORM=RT
+&& {djshi6} dj -> pp !v<是> ap   ::$.内部结构=是字,%pp.yx=在,%pp.宾语.ccat=f,%ap.内部结构=的字,
+        $!=%v @语气,$.语气=陈述,$==%ap @语气
+        =>CS( VP/ap PP/pp )        /*在他的工作中是很难发现什么差错的*/
+
+/* dj.特殊句型.有字句 */
+
+&& {djyou1} dj->v<有> np !vp :: $.内部结构=有字,$!=%vp @语气,$==%np @语气
+        || %np.语义类=人类,IF %np.yx=人,%np.内部结构=单词 FALSE,%vp.主体=%np,%vp.yx=~是,%vp.状语.yx=~和
+        => CS(NP/np !VP/vp)  %NP==%VP @NNUM @NPER    /*有一个人不同意这个想法 ~有时间学英语*/ 
+        || %np.yx=人,%np.内部结构=单词,%vp.主体=%np,%vp.yx=~是,%vp.状语.yx=~和
+        => CS(N<someone> !VP/vp)  %VP.NNUM=SNGL        /*有人不同意这个想法*/ 
+        || %np.语义类=~人类,%vp.yx=~是~问世,%vp.主体=%np
+        => CS(D<there> !V<be> NP/np VP/vp) %V==%NP @NNUM,%VP.FORM=VG      /*有一辆自行车放在小树下*/ 
+          || %np.语义类=~人类,%vp.yx=~是~问世, %vp.配价数=2|3,IF %vp.主体=%np FALSE,%vp.客体=%np 
+        => CS(D<there> !V<be> NP/np VP/vp) %V==%NP @NNUM,%VP.FORM=VN      /*有一辆自行车放在小树下*/ 
+           || %np.语义类=人为事物,%vp.yx=问世   /*最近有一些新电影问世了*/
+        => CS(NP/np !VP/vp) %NP==%VP @NNUM @NPER,%VP.VOICE=PASS
+        || %vp.yx=是,%vp.宾语.内部结构=的字,%vp.宾语.中心语.cpcat=dj
+        => CS(D<there> !V<be> NP/np C<that> CS/vp) %V==%NP @NNUM          /*有一件事是我们没想到的*/ 
+&& {djyou2} dj->v<没有|没> np !vp :: $.内部结构=有字,%vp.主体=%np,$.语气=陈述,%np.语气=陈述,IF %np.yx=人工 FALSE 
+   	/* ~ 假期里工厂没<人工><作了> */
+        => CS(A<No> NP/np !VP/vp)        /*没有一个老师想参加比赛*/ 
+&& {djyou3} dj->v<有> q np !vp :: $.内部结构=有字,%np.个体量词=%q.yx
+        || %np.语义类=人
+        => CS(NP/np !VP/vp)   %NP==%VP @NNUM @NPER       /*有个孩子在北京工作*/ 
+        || %np.语义类=~人,%vp.内部结构=述补
+        => CS(D<There> !V<be> NP/np VP/vp) %V==%NP @NNUM,%VP.FORM=VG      /*有辆自行车放在小树下*/ 
+&& {djyou4} dj->sp vp np !vp :: $.内部结构=有字,$!=%%vp @语气,$==%np @语气,%vp.yx=有,%%vp.主体=%np,%vp.宾语=否,
+            /*%%vp.yx=~是,*/%%vp.状语.yx=~和
+        || %np.语义类=人类,IF %np.yx=人,%np.内部结构=单词 FALSE
+        => CS(NP/np !VP//vp PP/sp)  %NP==%VP @NNUM @NPER   /*计算机房里有很多学生在工作*/
+        || %np.yx=人,%np.内部结构=单词
+        => CS(N<someone> !VP//vp PP/sp)  %VP.NNUM=PLUR       /*全世界都有人踢足球*/
+&& {djyou5} dj->np vp np !vp :: $.内部结构=有字,$!=%%vp @语气,$==%%np @语气,%np.语义类=集体|空间,%vp.yx=有,
+            %%vp.主体=%%np,%vp.宾语=否,/*%%vp.yx=~是,*/%%vp.状语.yx=~和
+        || %%np.语义类=人类,IF %%np.yx=人,%%np.内部结构=单词 FALSE
+        => CS(NP//np !VP//vp PP(P<in> NP/np))  %NP==%VP @NNUM @NPER   /*我们班一半学生是团员*/
+        || %%np.yx=人,%%np.内部结构=单词
+        => CS(N<someone> !VP//vp PP(P<in> NP/np))  %VP.NNUM=PLUR
+&& {djyou6} dj->np v<没有|没> np !vp :: $.内部结构=有字,%np.语义类=空间,%vp.主体=%%np,$.语气=陈述,%%np.语气=陈述,IF %%np.yx=人工 FALSE /* ~ 假期里工厂没<人工><作了> */
+        => CS(A<No> NP//np !VP/vp P<in> NP/np) %NP.NNUM=SNGL,%VP.NNUM=SNGL        /*没有一个老师想参加比赛*/ 
+&& {djyou7} dj->tp np v<没有|没> np !vp :: $.内部结构=有字,%np.语义类=空间,%vp.主体=%%np,$.语气=陈述,%%np.语气=陈述,IF %%np.yx=人工 FALSE /* ~ 假期里工厂没<人工><作了> */
+        => CS(A<No> NP//np !VP/vp P<in> NP/np PP/tp)%NP.NNUM=SNGL,%VP.NNUM=SNGL        /*假期里工厂没人工作了*/
+
+/* dj.特殊句型.存在句 */
+
+&& {djcz1} dj->sp !vp np :: $.内部结构=存在,%vp.yx=有|没有|没|无,%vp.内部结构=单词|附加|状中,%vp.状语.cpcat=~sp,%vp.宾语=否,
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF
+        || %vp.yx=有
+        => CS(D<there> !VP(!V<be> NP/np PP/sp)) %V==%NP @NNUM    /*村子里有很多人 河中有一条船*/
+        => CS(D<there> !VP(!V<be> NP/np DP/sp)) %V==%NP @NNUM    /*附近有池塘  附近有什么*/
+        || %vp.yx=没有|没|无
+        => CS(D<there> !VP(!V<be> D<not> NP/np PP/sp)) %V==%NP @NNUM
+        => CS(D<there> !VP(!V<be> D<not> NP/np DP/sp)) %V==%NP @NNUM
+&& {djcz2} dj->sp !vp mp :: $.内部结构=存在,%vp.yx=有|没有|没|无,%vp.内部结构=单词|附加|状中,%vp.状语.cpcat=~sp,%vp.宾语=否
+        || %vp.yx=有
+        => CS(D<there> !VP(!V<be> NP/mp PP/sp)) %V==%NP @NNUM    /*我的钱包里有五英镑*/
+        || %vp.yx=没有|没|无
+        => CS(D<there> !VP(!V<be> D<not> NP/mp PP/sp)) %V==%NP @NNUM
+&& {djcz3} dj->np !vp np :: $.内部结构=存在,%vp.yx=有|没有|没|无,%vp.内部结构=单词|附加|状中,%vp.状语.cpcat=~sp,%vp.宾语=否,
+        %np.语义类=集体|空间,                                            /*天~<空中有>一架飞机*/
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %%np.语气=疑问 THEN $!=%vp @语气,$==%%np @语气,$.主题成分=%%np ENDIF
+        || %vp.yx=有
+        => CS(D<there> !VP(!V<be> NP//np P<in> NP/np)) %V==%NP @NNUM    /*银行有钱*/
+        => CS(D<there> !VP(!V<be> NP//np P<in> NP/np)) %V==%NP @NNUM    /*银行有钱*/
+        || %vp.yx=没有|没|无
+        => CS(D<there> !VP(!V<be> D<not> NP//np P<in> NP/np)) %V==%NP @NNUM
+&& {djcz4} dj->sp !vp np :: $.内部结构=存在,%vp.宾语=否,%vp.yx=~有~没有~没~无,%vp.内部结构=~单词~述宾~连谓,
+            %vp.状语.cpcat=~pp,%vp.中心语.内部结构=~连谓,
+        IF %np.语气=疑问 THEN $!=%vp @语气,$==%np @语气,$.主题成分=%np ENDIF,
+        IF %vp.内部结构=状中,%vp.中心语.内部结构=单词,%vp.配价数=0 FALSE,
+        IF %np.内部结构=单词 THEN %np.名宾语=是 ENDIF,
+        IF %sp.内部结构=定中,%sp.定语.语义类=构件 FALSE                   /*(他)~手里正拿着我想要看的那本论文集*/
+       || /* || IF %vp.配价数=2|3,%vp.客体=%np FALSE*/%vp.主体=%np
+        => CS(NP/np VP/vp PP/sp) %NP==%VP @NNUM @NPER                             /*树下站着两个小孩*/
+        => CS(NP/np VP/vp DP/sp) %NP==%VP @NNUM @NPER                           /*这里来了一位客人*/
+        || %vp.配价数=2|3,%vp.客体=%np
+        => CS(NP/np VP/vp PP/sp)    %VP==%NP @NNUM,%VP.VOICE=PASS   /*门口放着两把椅子 教室里开了两盏灯*/
+        => CS(NP/np VP/vp DP/sp)    %VP==%NP @NNUM,%VP.VOICE=PASS
+    /*    || IF %vp.内部结构=附加,%vp.附加语.yx=着|了 FALSE
+        => CS(NP/sp !VP/vp NP/np)                                      末班车上挤满了人*/ 
+&& {djcz5} dj->sp !vp q np :: $.内部结构=存在,%vp.内部结构=附加|单词,%vp.状语.cpcat=~sp,IF %vp.内部结构=单词 THEN %vp.yx=有 ENDIF,IF %q.量词子类=个体 THEN %np.个体量词=%q.yx ENDIF
+        || %vp.yx=~有,%q.量词子类=~不定
+        => CS(T<a> NP/np !VP/vp PP/sp)     %NP.NSUBC=NCONT                    /*屋子里坐着位外国人,地上躺着头死猪*/
+        => CS(T<a> NP/np !VP/vp DP/sp)     %NP.NSUBC=NCONT                    
+        => CS(T<a> N/q P<of> NP/np !VP/vp PP/sp)     %NP.NSUBC=NUCNT           /*桌上放着张纸*/
+        => CS(T<a> N/q P<of> NP/np !VP/vp DP/sp)     %NP.NSUBC=NUCNT   
+        || %vp.yx=~有,%q.量词子类=不定
+        => CS(T/q NP/np !VP/vp PP/sp)           %NP.NNUM=%T.TNNUM,%VP==%NP @NNUM     /*屋子里坐着些外国人*/
+        => CS(T/q NP/np !VP/vp DP/sp)          %NP.NNUM=%T.TNNUM,%VP==%NP @NNUM                  
+        || %vp.yx=有,%q.量词子类=~不定  
+        => CS(D<there> !VP(!V<be> T<a> NP/np PP/sp)) %V==%NP @NNUM ,%NP.NSUBC=NCONT       /*屋子里有位外国人*/
+        => CS(D<there> !VP(!V<be> T<a> NP/np DP/sp)) %V==%NP @NNUM ,%NP.NSUBC=NCONT     /*附近有个池塘*/ 
+        => CS(D<there> !VP(!V<be> T<a> N/q P<of> NP/np PP/sp)) %V==%NP @NNUM ,%NP.NSUBC=NUCNT /*桌上有张纸*/
+        => CS(D<there> !VP(!V<be> T<a> N/q P<of> NP/np DP/sp)) %V==%NP @NNUM ,%NP.NSUBC=NUCNT 
+        || %vp.yx=有,%q.量词子类=不定  
+        => CS(D<there> !VP(!V<be> T/q NP/np PP/sp)) %NP.NNUM=%T.TNNUM,%V==%NP @NNUM    /*屋子里有些外国人*/
+        => CS(D<there> !VP(!V<be> T/q NP/np DP/sp)) %NP.NNUM=%T.TNNUM,%V==%NP @NNUM   
+&& {djcz6} dj->np sp !vp np  :: $.内部结构=存在,%vp.内部结构=~单词~述宾,%vp.状语.cpcat=~pp~sp,%vp.宾语.ccat=~n~r,%vp.宾语=否,
+        IF %np.ccat=r,%sp.ccat=r FALSE                                       /* ~我们这里最有才华最有能力的人*/
+        => CS(NP/np !VP/vp NP//np PP/sp) %NP.RCASE=SUB,%NP==%VP @NNUM @NPER     /*他手里正拿着我想要看的那本论文集*/
+&& {djcz7} dj->pp vp np :: $.内部结构=存在,%pp.格标=处所,%pp.yx=~于~从,%vp.宾语=否
+        || %vp.内部结构=单词,%vp.yx=有
+        => CS(D<there> !V<be> NP/np PP/pp) %V==%NP @NNUM    /*沿长江有十几个省*/
+        || %vp.内部结构=附加,%vp.附加语.yx=着,%vp.主体=%np
+        => CS(NP/np !V<be> VP/vp PP/pp) %NP==%V @NNUM @NPER,%VP.FORM=VG /*在教室里坐着几位外国学生*/
+        || %vp.内部结构=附加,%vp.附加语.yx=着,%vp.客体=%np
+        => CS(D<there> !V<be> NP/np PP/pp) %NP==%V @NNUM /*靠墙放着一把椅子 在房间的左边放着一把椅子*/
+&& {djcz8} dj->pp !v u<着> q np :: $.内部结构=存在
+        ||  %np.语义类=人,IF %q.量词子类=个体 THEN %np.个体量词=%q.yx ENDIF
+        => CS(T<a> NP/np !V/v PP/pp)    /*在屋子里坐着位外国人*/
+
+
+/*-----------dj.特殊句型.END------------*/
+
+
+/* 语气词结尾组合 */
+
+/* vp.语气词结尾 */
+
+&& {vpyq1} vp->!vp y<吧> :: $.内部结构=附加,%vp.语气=祈使|陈述,$!=%vp @语气,$.语气=祈使,%y.句末=是,$.附加语=%y
+        =>VP(!VP/vp)      /*再买一本新的吧*/
+&& {vpyq2} vp->!vp y<呢|吗> :: $.内部结构=附加,%vp.语气=疑问|陈述,$!=%vp @语气,$.语气=疑问,%y.句末=是,$.附加语=%y,
+IF %vp.语气=疑问 THEN %vp.语气=疑问 ENDIF
+        =>VP(!VP/vp)
+        =>CS(!CS/vp)      /*何必打电报呢 是吗*/
+
+/* dj.语气词结尾句 */
+
+&& {djyq1} dj->!dj y<了> :: $.内部结构=附加,$.中心语=%dj,
+        IF %dj.附加语=是 THEN $!=%dj @附加语 ENDIF,$.附加语=%y,
+        %dj.内部结构=主谓|存在|附加,%dj.谓语.cpcat=~dj~ap,
+        IF %dj.内部结构=附加,%dj.附加语.ccat=y THEN %dj.附加语.后语=%y.yx ENDIF,
+        IF %dj.谓语=是,%dj.谓语.cpcat=vp THEN %dj.谓语.宾语=Yes,%dj.谓语.宾语.cpcat=~vp ENDIF,
+        IF %dj.谓语=是,%dj.谓语.cpcat=vp,%dj.谓语.内部结构=连谓,%dj.谓语.后谓.内部结构=附加 FALSE,
+        IF %dj.内部结构=附加,%dj.附加语.ccat=y THEN %dj.附加语.后语=%y.yx ENDIF,
+        IF %dj.内部结构=联合,%dj.后项.内部结构=附加,%dj.后项.附加语.ccat=y THEN %dj.后项.附加语.后语=%y.yx ENDIF
+        || %dj.配价数=0
+        =>CS(!CS/dj) %CS.USUBC=~UMOD                           /*她不再是小孩子了*/
+        || %dj.配价数=~0
+        =>CS(!CS/dj) %CS.PERF=Yes,%CS.USUBC=~UMOD
+&& {djyq2} dj->!dj y<的> :: $.内部结构=附加,$.中心语=%dj,
+        IF %dj.附加语=是 THEN $!=%dj @附加语 ENDIF,$.附加语=%y,
+        %dj.内部结构=主谓,%dj.谓语.cpcat=~dj~fj,
+        IF %dj.谓语.yx=是 FALSE,
+        IF %dj.内部结构=主谓,%dj.谓语.内部结构=述宾,%dj.谓语.宾语.yx=是 FALSE,       /*~<我相信他是无罪>的*/
+        IF %dj.内部结构=附加,%dj.附加语.ccat=y THEN %dj.附加语.后语=%y.yx ENDIF,
+        IF %dj.内部结构=联合,%dj.后项.内部结构=附加,%dj.后项.附加语.ccat=y THEN %dj.后项.附加语.后语=%y.yx ENDIF
+        =>CS(!CS/dj)                                             /*他不会这么晚给我打电话的*/
+&& {djyq3} dj->!dj y<啊|呢|吗|呀|吧|么>  :: $.内部结构=附加,$.中心语=%dj,
+        IF %dj.附加语=是 THEN $!=%dj @附加语 ENDIF,$.附加语=%y,%y.句末=是,
+        %dj.语气=疑问|陈述,
+       IF %y.yx=~呢 THEN $!=%dj @语气,$.语气=疑问 ENDIF,
+        IF %dj.语气=疑问 THEN %dj.语气=疑问 ENDIF,
+        IF %dj.内部结构=附加,%dj.附加语.ccat=y THEN %dj.附加语.后语=%y.yx ENDIF,
+        IF %dj.内部结构=联合,%dj.后项.内部结构=附加,%dj.后项.附加语.ccat=y THEN %dj.后项.附加语.后语=%y.yx ENDIF
+        =>CS(!CS/dj)
+&& {djyq4} dj->!dj y<啊|吧>  :: $.内部结构=附加,$.中心语=%dj,
+        IF %dj.附加语=是 THEN $!=%dj @附加语 ENDIF, $.附加语=%y,
+        %dj.语气=祈使|陈述,$!=%dj @语气,$.语气=祈使,%y.句末=是,
+        IF %dj.内部结构=附加,%dj.附加语.ccat=y THEN %dj.附加语.后语=%y.yx ENDIF,
+        IF %dj.内部结构=联合,%dj.后项.内部结构=附加,%dj.后项.附加语.ccat=y THEN %dj.后项.附加语.后语=%y.yx ENDIF
+        =>CS(!CS/dj) %CS.FORM=RT
+&& {djyq5} dj->!dj y<啊|呀>  :: $.内部结构=附加,$.中心语=%dj,
+        IF %dj.附加语=是 THEN $!=%dj @附加语 ENDIF,$.附加语=%y,
+        %dj.语气=感叹|陈述,$!=%dj @语气,$.语气=感叹,%y.句末=是,
+        IF %dj.内部结构=附加,%dj.附加语.ccat=y THEN %dj.附加语.后语=%y.yx ENDIF,
+        IF %dj.内部结构=联合,%dj.后项.内部结构=附加,%dj.后项.附加语.ccat=y THEN %dj.后项.附加语.后语=%y.yx ENDIF
+        =>CS(!CS/dj)
+&& {djyq6} dj->!dj u<的话>  :: $.内部结构=附加,$.附加语=%u,%dj.内部结构=~扩展
+        =>CS( !CS/dj )
+
+
+/* dj.叹词开头句 */
+
+&& {djtc1} dj->e<啊> w<"，"> !dj :: $.标点成分=%w
+        =>CS(N<Ah>  W<","> !CS/dj)     /*啊,这是多么美妙的前景*/
+
+
+/* fj.子句组合规则  */
+
+/* fj.np规则 */
+&& {fjnp1} fj->np w<"，"> vp :: $.标点成分=%w,$.前项=%np,$.后项=%vp,
+        %np.连接成分=Yes,%vp.连接成分=Yes,%np.连接成分.后照应=%vp.连接成分.yx,%vp.连接成分.前照应=%np.连接成分.yx,
+        %np.作连接=是,%vp.作连接=是,%np.作照应=前,%vp.作照应=后        
+        =>CS(NP/np VP/vp) %VP.连接成分.ECAT=~C                                  /*无论什么社会,都是充满矛盾的*/
+        =>CS(NP/np #C%VP VP/vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分
+&& {fjnp2} fj->np w<"，"> fj :: $.标点成分=%w,$.前项=%np,$.后项=%fj,
+        %np.连接成分=Yes,%fj.连接成分=Yes,%np.连接成分.后照应=%fj.连接成分.yx,%fj.连接成分.前照应=%np.连接成分.yx,
+        %np.作连接=是,%fj.作连接=是,%np.作照应=前,%fj.作照应=后  
+        =>CS(NP/np CS/fj) %CS.连接成分.ECAT=~C                          /*无论什么社会,当然特别是阶级社会,都是充满矛盾的*/
+        =>CS(NP/np #C%CS CS/fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分
+
+/* fj.vp规则 */
+&& {fjvp1} fj->vp w<"，"> vp :: $.标点成分=%w,$.前项=%vp,$.后项=%%vp,
+        %vp.连接成分=Yes,%%vp.连接成分=Yes,%vp.连接成分.后照应=%%vp.连接成分.yx,%%vp.连接成分.前照应=%vp.连接成分.yx,
+        %vp.作连接=是,%%vp.作连接=是,%vp.作照应=前,%%vp.作照应=后
+        =>CS(VP/vp W<","> VP//vp) %VP.连接成分.ECAT=~C,%%VP.连接成分.ECAT=~C
+        =>CS(VP/vp W<","> #C%%VP VP//vp) %VP.连接成分.ECAT=~C,%%VP.连接成分.ECAT=C,%C=%%VP.连接成分
+        =>CS(#C%VP VP/vp W<","> VP//vp) %VP.连接成分.ECAT=C,%%VP.连接成分.ECAT=~C,%C=%VP.连接成分
+        =>CS(#C%VP VP/vp W<","> #C%%VP VP//vp) %VP.连接成分.ECAT=C,%%VP.连接成分.ECAT=C,%C=%VP.连接成分,%%C=%%VP.连接成分
+&& {fjvp2} fj->vp w<"，"> vp :: $.标点成分=%w,$.前项=%vp,$.后项=%%vp, %vp.连接成分=No,%%vp.连接成分=No,%vp.内部结构=~单词,%%vp.内部结构=~单词
+        =>CS(VP/vp W<","> VP//vp) %VP.FORM=VG      /*听到这个消息,简直乐坏了我们*/
+&& {fjvp3} fj->vp w<"，"> vp :: $.标点成分=%w,$.前项=%vp,$.后项=%%vp,$==%%vp @连接成分,
+        %vp.连接成分=No,%%vp.连接成分=Yes,%vp.内部结构=~单词
+        =>CS(VP/vp W<","> VP//vp) %%VP.连接成分.ECAT=~C                            /*要想学好一种语言,非下苦功不可*/
+        =>CS(VP/vp W<","> #C%%VP VP//vp) %%VP.连接成分.ECAT=C,%C=%%VP.连接成分
+&& {fjvp4} fj->vp w<"，"> vp :: $.标点成分=%w,$.前项=%vp,$.后项=%%vp,
+        %vp.连接成分=Yes,%%vp.连接成分=No,%%vp.内部结构=~单词
+        =>CS(VP/vp W<","> VP//vp)  %VP.连接成分.ECAT=~C
+        =>CS(#C%VP VP/vp W<","> VP//vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分
+&& {fjvp5} fj->vp w<"，"> dj :: $.标点成分=%w,$.前项=%vp,$.后项=%dj,
+        %vp.连接成分=Yes,%dj.连接成分=No
+        =>CS(VP/vp W<","> CS/dj) %VP.连接成分.ECAT=~C,%VP.FORM=VG          /*如果没有他的帮助，我怎么能完成这个任务*/
+        =>CS(#C%VP VP/vp W<","> CS/dj) %VP.连接成分.ECAT=C,%C=%VP.连接成分,%CS==%VP @FORM @VOICE @PERF @CONT @FUTR @PAST @NNUM @NPER    
+&& {fjvp6} fj->vp w<"，"> dj :: $.标点成分=%w,$.前项=%vp,$.后项=%dj,
+        %vp.连接成分=Yes,%dj.连接成分=Yes,%vp.连接成分.后照应=%dj.连接成分.yx,%dj.连接成分.前照应=%vp.连接成分.yx,
+        %vp.作连接=是,%dj.作连接=是,%vp.作照应=前,%dj.作照应=后
+        =>CS(VP/vp W<","> CS/dj) %VP.连接成分.ECAT=~C, %CS.连接成分.ECAT=~C
+        =>CS(VP/vp W<","> #C%CS CS/dj) %VP.连接成分.ECAT=~C, %CS.连接成分.ECAT=C,%C=%CS.连接成分
+        =>CS(#C%VP VP/vp W<","> CS/dj) %VP.连接成分.ECAT=C,%C=%VP.连接成分,%CS.连接成分.ECAT=~C
+        =>CS(#C%VP VP/vp W<","> #C%CS CS/dj) %VP.连接成分.ECAT=C,%C=%VP.连接成分, %CS.连接成分.ECAT=C,%%C=%CS.连接成分
+&& {fjvp7} fj->vp w<"，"> dj :: $.标点成分=%w,$.前项=%vp,$.后项=%dj,
+        %vp.连接成分=No,%dj.连接成分=Yes,%dj.作连接=是,
+        IF %dj.连接成分.yx=就是,%dj.连接成分.前中后=前 FALSE,
+        IF %vp.内部结构=状中,%vp.状语.兼类=c FALSE
+        =>CS(VP/vp W<","> CS/dj) %CS.连接成分.ECAT=~C                        /*别看他力气小,可是志气并不小*/
+        =>CS(VP/vp W<","> #C%CS CS/dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分
+&& {fjvp8} fj->vp w<"，"> dj :: $.标点成分=%w,$.前项=%vp,$.后项=%dj,
+        %dj.连接成分=No,%vp.连接成分=No,%vp.内部结构=状中,%dj.内部结构=扩展
+        =>CS(CS/dj P<to> VP/vp) %VP.FORM=RT    /*按水平分班,更便于教师因材施教*/
+
+/* fj.ap规则*/
+&& {fjap1} fj->ap w<"，"> vp :: $.标点成分=%w,$.前项=%ap,$.后项=%vp,
+        %ap.连接成分=Yes,%vp.连接成分=Yes,%ap.连接成分.后照应=%vp.连接成分.yx,%vp.连接成分.前照应=%ap.连接成分.yx,
+        %ap.作连接=是,%vp.作连接=是,%ap.作照应=前,%vp.作照应=后
+        =>CS(AP/ap W<","> VP/vp) %AP.连接成分.ECAT=~C, %VP.连接成分.ECAT=~C
+        =>CS(AP/ap W<","> #C%VP VP/vp) %AP.连接成分.ECAT=~C, %VP.连接成分.ECAT=C,%C=%VP.连接成分
+        =>CS(#C%AP AP/ap W<","> VP/vp) %AP.连接成分.ECAT=C,%C=%AP.连接成分,%VP.连接成分.ECAT=~C
+        =>CS(#C%AP AP/ap W<","> #C%VP VP/vp) %AP.连接成分.ECAT=C,%C=%AP.连接成分, %VP.连接成分.ECAT=C,%%C=%VP.连接成分
+
+/* fj.dj规则*/
+
+&& {fjdj0} fj->dj w<"，"> dj :: $.标点成分=%w,$.前项=%dj,$.后项=%%dj,$==%dj @连接成分,
+        %dj.连接成分=Yes,%%dj.连接成分=Yes,%dj.作连接=No,
+        IF %dj.连接成分.后照应=%%dj.连接成分.yx,%%dj.连接成分.前照应=%dj.连接成分.yx FALSE  /*~聪明固然好，但勤奋更好*/
+        =>CS(CS/dj W<","> CS//dj)                            /*孩子们七点就睡着了，但现在他们醒了*/ 
+&& {fjdj1} fj->dj dj :: $.前项=%dj,$.后项=%%dj,
+        %dj.连接成分=Yes,%%dj.连接成分=Yes,%dj.连接成分.后照应=%%dj.连接成分.yx,%%dj.连接成分.前照应=%dj.连接成分.yx,
+        %dj.作连接=是,%%dj.作连接=是,%dj.作照应=前,%%dj.作照应=后,%dj.标点成分=No,%%dj.标点成分=No
+        =>CS(CS/dj CS//dj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=~C
+        =>CS(CS/dj #C%%CS CS//dj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+        =>CS(#C%CS CS/dj CS//dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分,%%CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj #C%%CS CS//dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=C,%%C=%%CS.连接成分
+&& {fjdj2} fj->dj w<"，"> dj :: $.标点成分=%w,$.前项=%dj,$.后项=%%dj,
+        IF %dj.语气=疑问 THEN $==%dj @语气 ENDIF,
+        IF %%dj.语气=疑问 THEN $==%%dj @语气 ENDIF,
+        %dj.连接成分=Yes,%%dj.连接成分=Yes,%dj.连接成分.后照应=%%dj.连接成分.yx,%%dj.连接成分.前照应=%dj.连接成分.yx,
+        %dj.作连接=是,%%dj.作连接=是,%dj.作照应=前,%%dj.作照应=后
+        || IF %dj.连接成分.yx=与其,%%dj.连接成分.yx=不如 FALSE
+        =>CS(CS/dj W<","> CS//dj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=~C
+        =>CS(CS/dj W<","> #C%%CS CS//dj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+        =>CS(#C%CS CS/dj W<","> CS//dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj W<","> #C%%CS CS//dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=C,%%C=%%CS.连接成分
+        || %dj.连接成分.yx=与其,%%dj.连接成分.yx=不如
+        =>CS(CS//dj CS/dj) /*与其数量多而质量差,不如数量少而质量好*/
+&& {fjdj3} fj->dj w<"，"> dj :: $.标点成分=%w,$.前项=%dj,$.后项=%%dj,$==%dj @连接成分,
+        %dj.连接成分=Yes,%%dj.连接成分=No,%dj.作连接=是
+        =>CS(CS/dj W<","> CS//dj) %CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj W<","> CS//dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分
+&& {fjdj4} fj->dj w<"，"> dj :: $.标点成分=%w,$.前项=%dj,$.后项=%%dj,$==%%dj @连接成分,
+        %dj.连接成分=No,%%dj.连接成分=Yes,%%dj.作连接=是
+        =>CS(CS/dj W<","> CS//dj) %%CS.连接成分.ECAT=~C
+        =>CS(CS/dj W<","> #C%%CS CS//dj)  %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+&& {fjdj5} fj->dj w<"，"> dj :: $.标点成分=%w,$.前项=%dj,$.后项=%%dj,IF %%dj.语气=疑问 THEN $.语气=疑问 ENDIF,
+        %dj.连接成分=No,%%dj.连接成分=No
+        || %%dj.主题成分=No
+        =>CS(CS/dj W<","> CS//dj)                                      /*你去不去由你决定,反正我不去。*/
+        || %%dj.主题成分=Yes                  
+        =>CS(CS/dj W<","> #NP%%CS !CS//dj ) %NP=%%CS.主题成分
+        =>CS(CS/dj W<","> #AP%%CS !CS//dj ) %AP=%%CS.主题成分          /*你看,水热得多快呀*/
+        =>CS(CS/dj W<","> #DP%%CS !CS//dj ) %DP=%%CS.主题成分
+&& {fjdj6} fj->dj w<"，"> fj :: $.标点成分=%w,$.前项=%dj,$.后项=%fj,
+        %dj.连接成分=Yes,%fj.连接成分=Yes,%dj.连接成分.后照应=%fj.连接成分.yx,%fj.连接成分.前照应=%dj.连接成分.yx,
+        %dj.作连接=是,%fj.作连接=是,%dj.作照应=前,%fj.作照应=后
+        =>CS(CS/dj W<","> CS/fj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=~C
+        =>CS(CS/dj W<","> #C%%CS CS/fj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+        =>CS(#C%CS CS/dj W<","> CS/fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj W<","> #C%%CS CS/fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=C,%%C=%%CS.连接成分
+&& {fjdj7} fj->dj w<"，"> fj :: $.标点成分=%w,$.前项=%dj,$.后项=%fj,
+        %dj.连接成分=No,%fj.前项.连接成分=Yes,%fj.后项.连接成分=Yes
+        =>CS(CS/dj W<","> CS/fj) /*我们应把产品的质量放在第一位,产品与其数量多而质量差,不如数量少而质量好*/
+&& {fjdj8} fj->dj w<"，"> fj :: $.标点成分=%w,$.前项=%dj,$.后项=%fj,
+        %dj.连接成分=Yes,%fj.前项.连接成分=Yes,%fj.后项.连接成分=Yes
+        =>CS(CS/dj W<","> CS/fj) /*战争总是铁面无情的，或是灭亡，或是在经济方面赶上并超过先进国家*/
+&& {fjdj9} fj->dj w<"，"> vp :: $.标点成分=%w,$.前项=%dj,$.后项=%vp,
+        %dj.连接成分=Yes,%vp.连接成分=Yes,%dj.连接成分.后照应=%vp.连接成分.yx,%vp.连接成分.前照应=%dj.连接成分.yx,
+        %dj.作连接=是,%vp.作连接=是,%dj.作照应=前,%vp.作照应=后
+        || IF %dj.连接成分.yx=不是,%vp.连接成分.yx=就是 FALSE    
+        =>CS(CS/dj W<","> VP/vp) %CS.连接成分.ECAT=~C, %VP.连接成分.ECAT=~C
+        =>CS(CS/dj W<","> #C%VP VP/vp) %CS.连接成分.ECAT=~C, %VP.连接成分.ECAT=C,%C=%VP.连接成分
+        =>CS(#C%CS CS/dj W<","> VP/vp) %CS.连接成分.ECAT=C,%C=%CS.连接成分,%VP.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj W<","> #C%VP VP/vp) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %VP.连接成分.ECAT=C,%%C=%VP.连接成分
+        || %dj.连接成分.yx=不是,%vp.连接成分.yx=就是
+        =>CS(CS/dj W<","> VP/vp)
+&& {fjdja} fj->dj vp :: $.前项=%dj,$.后项=%vp,
+        %dj.连接成分=Yes,%vp.连接成分=Yes,%dj.连接成分.后照应=%vp.连接成分.yx,%vp.连接成分.前照应=%dj.连接成分.yx,
+        %dj.作连接=是,%vp.作连接=是,%dj.作照应=前,%vp.作照应=后,%dj.标点成分=No,%vp.标点成分=No,
+        IF %dj.内部结构=主谓 THEN %vp.主体=%dj.主语 ENDIF,
+        IF %dj.连接成分.yx=不是|一 THEN %vp.连接成分.yx=~就是~就 ENDIF  /*她一看电影就睡觉*/
+        =>CS(CS/dj VP/vp) %CS.连接成分.ECAT=~C, %VP.连接成分.ECAT=~C
+        =>CS(CS/dj #C%VP VP/vp) %CS.连接成分.ECAT=~C, %VP.连接成分.ECAT=C,%C=%VP.连接成分
+        =>CS(#C%CS CS/dj VP/vp) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %VP.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj #C%VP VP/vp) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %VP.连接成分.ECAT=C,%%C=%VP.连接成分
+&& {fjdjb} fj->dj w<"，"> vp :: $.标点成分=%w,$.前项=%dj,$.后项=%vp,
+        %dj.连接成分=Yes,%vp.连接成分=No,%dj.作连接=是,
+        IF %vp.内部结构=状中,%vp.状语=Yes,%dj.连接成分.后照应=%vp.状语.yx FALSE
+        =>CS(CS/dj W<","> VP/vp) %CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj W<","> VP/vp) %CS.连接成分.ECAT=C,%C=%CS.连接成分
+&& {fjdjc} fj->dj w<"，"> vp :: $.标点成分=%w,$.前项=%dj,$.后项=%vp,
+        IF %dj.谓语.内部结构=状中,%dj.谓语.状语.yx=不,%dj.谓语.中心语.yx=是,%vp.内部结构=状中,%vp.状语.yx=就,%vp.中心语.yx=是  FALSE,
+        %dj.连接成分=No,%vp.连接成分=Yes,%vp.作连接=是,%vp.连接成分.yx=~不是
+        =>CS(CS/dj W<","> VP/vp) %VP.连接成分.ECAT=~C                              /*两人初次见面，反倒显得很亲热*/
+        =>CS(CS/dj W<","> #C%VP VP/vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分,%C.YX=~"so as not to"
+        =>CS(CS/dj W<","> #C%VP VP/vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分,%C.YX="so as not to",%VP.FORM=RT
+&& {fjdjd} fj->dj w<"，"> vp :: $.标点成分=%w,$.前项=%dj,$.后项=%vp,
+        %dj.连接成分=No,%vp.连接成分=No,
+IF %dj.谓语.内部结构=状中,%dj.谓语.状语.yx=不,%dj.谓语.中心语.yx=是,%vp.内部结构=状中,%vp.状语.yx=就是 FALSE,
+        IF %dj.谓语.状语.yx=一会儿 THEN %vp.状语.yx=~一会儿 ENDIF,
+        IF %vp.语气=疑问 THEN $==%vp @语气 ENDIF
+        =>CS(CS/dj W<","> VP/vp) %CS==%VP @PERF @CONT @FUTR @PAST @NNUM @NPER    /*大家测试了系统,编写了资料*/
+        =>CS(CS/dj W<"."> CS/vp)                                                 /*事情不急,何必打电报呢?*/
+&& {fjdje} fj->dj w<"，"> ap :: $.标点成分=%w,$.前项=%dj,$.后项=%ap,
+        %dj.连接成分=Yes,%ap.连接成分=Yes,%dj.连接成分.后照应=%ap.连接成分.yx,%ap.连接成分.前照应=%dj.连接成分.yx,
+        %dj.作连接=是,%ap.作连接=是,%dj.作照应=前,%ap.作照应=后
+        =>CS(CS/dj W<","> AP/ap) %CS.连接成分.ECAT=~C, %AP.连接成分.ECAT=~C
+        =>CS(CS/dj W<","> #C%AP AP/ap) %CS.连接成分.ECAT=~C, %AP.连接成分.ECAT=C,%C=%AP.连接成分
+        =>CS(#C%CS CS/dj W<","> AP/ap) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %AP.连接成分.ECAT=~C
+        =>CS(#C%CS CS/dj W<","> #C%AP AP/ap) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %AP.连接成分.ECAT=C,%%C=%AP.连接成分
+&& {fjdjf} fj->dj w<"，"> ap :: $.标点成分=%w,$.前项=%dj,$.后项=%ap,
+        %dj.连接成分=No,%ap.连接成分=Yes,%ap.作连接=是
+        =>CS(CS/dj W<","> AP/ap) %AP.连接成分.ECAT=~C    /*词典太旧了,再买一本新的吧,好在也不太贵*/
+        =>CS(CS/dj W<","> #C%AP AP/ap) %AP.连接成分.ECAT=C,%C=%AP.连接成分 
+&& {fjdjg} fj->dj w<"，"|"、"> ap :: $.标点成分=%w,$.前项=%dj,$.后项=%ap,
+        %dj.连接成分=No,%ap.连接成分=No,%ap.主体=%dj.主语
+        =>CS(CS/dj W<","> AP/ap)                  /*我图的是方便、离家近,而不是为了省钱。*/
+
+/* fj.fj规则*/
+
+&& {fjfj1} fj->fj w<"，"> dj :: $.标点成分=%w,$.前项=%fj,$.后项=%dj,
+        %fj.连接成分=Yes,%dj.连接成分=Yes,%fj.连接成分.后照应=%dj.连接成分.yx,%dj.连接成分.前照应=%fj.连接成分.yx,
+        %fj.作连接=是,%dj.作连接=是,%fj.作照应=前,%dj.作照应=后,
+        IF %fj.后项.连接成分.后照应=%dj.连接成分.yx FALSE
+        =>CS(CS/fj W<","> CS/dj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=~C
+        =>CS(CS/fj W<","> #C%%CS CS/dj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+        =>CS(#C%CS CS/fj W<","> CS/dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/fj W<","> #C%%CS CS/dj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=C,%%C=%%CS.连接成分
+&& {fjfj2} fj->fj w<"，"> dj :: $.标点成分=%w,$.前项=%fj,$.后项=%dj,
+        IF %fj.连接成分=Yes THEN %fj.连接成分.后照应=否 ENDIF,%dj.连接成分=Yes,%dj.作连接=是
+        =>CS(CS/fj W<","> CS/dj) %%CS.连接成分.ECAT=~C
+        =>CS(CS/fj W<","> #C%%CS CS/dj) %%CS.连接成分.ECAT=C,%C=%%CS.连接成分 
+&& {fjfj3} fj->fj w<"，"> dj :: $.标点成分=%w,$.前项=%fj,$.后项=%dj,
+        %fj.连接成分=No,%dj.连接成分=No
+        =>CS(CS/fj W<","> CS/dj)     /*或者把老虎打死，或者被老虎吃掉，两者必居其一*/
+&& {fjfj4} fj->fj w<"，"> fj :: $.标点成分=%w,$.前项=%fj,$.后项=%%fj,
+        %fj.连接成分=Yes,%%fj.连接成分=Yes,%fj.连接成分.后照应=%%fj.连接成分.yx,%%fj.连接成分.前照应=%fj.连接成分.yx,
+        %fj.作连接=是,%%fj.作连接=是,%fj.作照应=前,%%fj.作照应=后
+        =>CS(CS/fj W<","> CS//fj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=~C
+        =>CS(CS/fj W<","> #C%%CS CS//fj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+        =>CS(#C%CS CS/fj W<","> CS//fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/fj W<","> #C%%CS CS//fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=C,%%C=%%CS.连接成分
+        =>CS(CS/fj W<","> CS//fj)
+&& {fjfj5} fj->fj w<";"|"；"> fj :: $.标点成分=%w,$.前项=%fj,$.后项=%%fj,
+        %fj.连接成分=Yes,%%fj.连接成分=Yes,%fj.作连接=是,%%fj.作连接=是,%fj.作照应=前,%%fj.作照应=后
+        =>CS(CS/fj W<";"> CS//fj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=~C
+        =>CS(CS/fj W<";"> #C%%CS CS//fj) %CS.连接成分.ECAT=~C, %%CS.连接成分.ECAT=C,%C=%%CS.连接成分
+        =>CS(#C%CS CS/fj W<";"> CS//fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=~C
+        =>CS(#C%CS CS/fj W<";"> #C%%CS CS//fj) %CS.连接成分.ECAT=C,%C=%CS.连接成分, %%CS.连接成分.ECAT=C,%%C=%%CS.连接成分
+&& {fjfj6} fj->fj w<"，"> vp :: $.标点成分=%w,$.前项=%fj,$.后项=%vp,
+        %vp.连接成分=Yes,%vp.作连接=是
+        =>CS(CS/fj W<","> VP/vp) %VP.连接成分.ECAT=~C
+        =>CS(CS/fj W<","> #C%VP VP/vp) %VP.连接成分.ECAT=C,%C=%VP.连接成分
+&& {fjfj7} fj->fj w<"，"> vp :: $.标点成分=%w,$.前项=%fj,$.后项=%vp,
+        %fj.连接成分=No,%vp.连接成分=No
+        =>CS(CS/fj W<","> VP/vp)      /*我病得不轻,一个月没起床,今天总算活过来了*/
+&& {fjfj8} fj->fj w<"，"> ap :: $.标点成分=%w,$.前项=%fj,$.后项=%ap 
+        || %fj.连接成分=No,%ap.连接成分=Yes 
+        =>CS(CS/fj W<","> AP/ap) %AP.连接成分.ECAT=~C /*词典太旧了,再买一本新的吧,好在也不太贵*/
+        =>CS(CS/fj W<","> #C%AP AP/ap) %AP.连接成分.ECAT=C,%C=%AP.连接成分
+        || %fj.连接成分=No,%ap.连接成分=No 
+        =>CS(CS/fj W<","> AP/ap)    /*最近我常常胸闷,但是不头晕,有时有一点恶心*/
+
+
+
+/* zj.加上"。！？"的完整句子 */
+
+&& {zj0} zj->!vp w<"。">       :: %vp.语气=陈述|祈使,%vp.连接成分.ccat=~c, 
+        IF %vp.语气=陈述 THEN %vp.标点成分=Yes ENDIF 
+        => SS(!VP/vp W<".">)  %VP.NPER=2                                              /*在世界史上，从未有过这样的冲突。*/
+&& {zj01} zj->!vp w<"？">       :: %vp.语气=陈述|疑问,%vp.连接成分.ccat=~c, 
+IF %vp.语气=陈述 THEN $!=%vp @语气,$.语气=疑问 ENDIF
+        => SS(!VP/vp W<"?">)  %VP.NPER=2                                              /*要再来一杯咖啡吗？*/
+&& {zj1} zj->!dj w<"。">       :: %dj.语气=陈述|感叹|祈使,%dj.连接成分.ccat=~c,
+        IF %dj.内部结构=主谓,%dj.主语.内部结构=的字,%dj.谓语.ccat=a THEN %dj.谓语.内部结构=~单词 ENDIF 
+        => SS(!CS/dj W<".">)                                                          /*~<他们的房间没有我们的>大。*/
+                                                                                    /*~<你说的>有趣。*/
+&& {zj2} zj->!dj w<"!"|"！"> :: %dj.语气=陈述|感叹|祈使,IF %dj.语气=感叹|祈使 ELSE $!=%dj @语气,$.语气=感叹 ENDIF
+        || $.主题成分=No
+        =>SS(!CS/dj W<"!">)
+        || $.主题成分=Yes
+        =>SS(#NP%CS !CS/dj W<"!">) %NP=%CS.主题成分
+        =>SS(#AP%CS !CS/dj W<"!">) %AP=%CS.主题成分
+        =>SS(#DP%CS !CS/dj W<"!">) %DP=%CS.主题成分
+&& {zj3} zj->!dj w<"?"|"？"> :: %dj.语气=陈述|疑问,$!=%dj @语气,$.语气=疑问,
+        IF %dj.语气=疑问 THEN %dj.语气=疑问 ENDIF,
+        IF $.主题成分=Yes,$.主题成分=[ccat:r,代词子类:rc,代补语:否,代状语:否,代谓语:否] THEN $.主题成分.语气=疑问 ENDIF
+        || $.主题成分=No
+        =>SS(#U%CS !CS/dj W<"?">) %CS.YX=~be,%CS.AUXV=Yes
+        =>SS(#V%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes
+      || $.主题成分=Yes,%dj.内部结构=~存在,                                    /*~他的工厂里有多少党员？*/        
+           IF %dj.内部结构=主谓|是字 THEN %dj.主题成分=%dj.主语 ENDIF,    
+           IF %dj.内部结构=扩展|附加 THEN %dj.主题成分=%dj.中心语.主语 ENDIF       /*姑娘们中谁唱得最好*/
+        =>SS(!CS/dj W<"?">)                                                        /*~这座塔有多少年了？*/
+        || $.主题成分=Yes,
+           IF %dj.内部结构=主谓|是字,%dj.主题成分=%dj.主语 FALSE,
+           IF %dj.内部结构=扩展|附加,%dj.主题成分=%dj.中心语.主语 FALSE
+        =>SS(#NP%CS #U%CS !CS/dj W<"?">) %CS.YX=~be,%CS.AUXV=Yes,%NP=%CS.主题成分
+        =>SS(#NP%CS #V%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes,%NP=%CS.主题成分
+        =>SS(#AP%CS #U%CS !CS/dj W<"?">) %CS.YX=~be,%CS.AUXV=Yes,%AP=%CS.主题成分
+        =>SS(#AP%CS #V%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes,%AP=%CS.主题成分
+        =>SS(#DP%CS #U%CS !CS/dj W<"?">) %CS.YX=~be,%CS.AUXV=Yes,%DP=%CS.主题成分
+        =>SS(#DP%CS #V%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes,%DP=%CS.主题成分
+        =>SS(#D%CS #U%CS !CS/dj W<"?">) %CS.YX=~be,%CS.AUXV=Yes,%D=%CS.主题成分
+        =>SS(#D%CS #V%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes,%D=%CS.主题成分
+        =>SS(#T%CS #U%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes,%T=%CS.主题成分
+        =>SS(#T%CS #V%CS !CS/dj W<"?">) %CS.YX=be,%CS.AUXV=Yes,%T=%CS.主题成分
+&& {zj4} zj->!fj w<"。">     :: %fj.语气=陈述
+        =>SS(!CS/fj W<".">)
+&& {zj5} zj->!fj w<"!"|"！"> :: %fj.语气=陈述|感叹|祈使,IF %fj.语气=感叹|祈使 ELSE $!=%fj @语气,$.语气=感叹 ENDIF
+        =>SS(!CS/fj W<"!">)
+&& {zj6} zj->!fj w<"?"|"？"> :: %fj.语气=疑问|陈述,$!=%fj @语气,$.语气=疑问,IF %fj.语气=疑问 THEN %fj.语气=疑问 ENDIF
+        =>SS(!CS/fj W<"?">)
+&& {zj7} zj->!ap w<"!"|"！"> :: %ap.语气=感叹|祈使|陈述
+        =>SS(!AP/ap W<"!">)
+&& {zj8} zj->!vp w<"!"|"！">  :: %vp.语气=陈述|感叹|祈使,IF %vp.语气=感叹|祈使 ELSE $!=%vp @语气,$.语气=感叹 ENDIF,
+        IF %vp.附加语=Yes THEN %vp.附加语.yx=~了 ENDIF
+        =>SS(!VP/vp W<"!">)  %VP.NPER=2,%VP.FORM=RT
+&& {zj9} zj->!vp u<了> w<"!"|"！">  :: %vp.语气=陈述|感叹|祈使,IF %vp.语气=感叹|祈使 ELSE $!=%vp @语气,$.语气=感叹 ENDIF
+        =>SS(!VP/vp W<"!">)  %VP.NPER=2
+&& {zja} zj->!vp w<"?"|"？"> :: %vp.语气=疑问|陈述,IF %vp.语气=疑问 THEN %vp.语气=疑问 ENDIF
+        =>SS(#DP%VP #U%VP !VP/vp W<"?">) %VP.YX=~be,%VP.AUXV=Yes,%DP=%VP.主题成分
+        =>SS(#DP%VP #V%VP !VP/vp W<"?">) %VP.YX=be,%VP.AUXV=Yes,%DP=%VP.主题成分  /*什么时候发生了这个事故*/
+        =>SS(#NP%VP #U%VP !VP/vp W<"?">) %VP.YX=~be,%VP.AUXV=Yes,%NP=%VP.主题成分
+        =>SS(#NP%VP #V%VP !VP/vp W<"?">) %VP.YX=be,%VP.AUXV=Yes,%NP=%VP.主题成分   
+        =>SS(#AP%VP #U%VP !VP/vp W<"?">) %VP.YX=~be,%VP.AUXV=Yes,%AP=%VP.主题成分  /*到纽约有多远*/ 
+        =>SS(#AP%VP #V%VP !VP/vp W<"?">) %VP.YX=be,%VP.AUXV=Yes,%AP=%VP.主题成分  
+        =>SS(!CS/vp W<"?">)
+&& {zjb} zj->!np w<"!"|"！">  :: %np.语气=陈述|感叹|祈使,IF %np.语气=感叹|祈使 ELSE $!=%np @语气,$.语气=感叹 ENDIF
+        || IF %np.语气=陈述 FALSE,%np.语义类=人,%np.复数=No
+        =>SS(!NP/np R<he> V<be> W<"!">)  
+        || IF %np.语气=陈述 FALSE,%np.复数=Yes
+        =>SS(!NP/np R<they> V<be> W<"!">)  %V.NNUM=PLUR
+        || IF %np.语气=陈述 FALSE,%np.语义类=~人,%np.复数=No
+        =>SS(!NP/np R<it> V<be> W<"!">)  
+        || %np.语气=陈述
+        =>SS(!NP/np W<"!">)
+
+/* ----------- */
+
+&& {wlbd} np->n<网络> !v<表达>
+   	=>NP(!N<expression> P<on> N<network>)  
+&& {npdzrsh} np -> n<学生> !n<人数> ::$.内部结构=粘合定中,$.定语=%n,$.中心语=%%n
+	=>NP( T<the> !N<number> P<of> N/n ) %%N.NNUM=PLUR
+&& {syrs} np -> v<使用> !n<人数> ::$.内部结构=粘合定中,$.定语=%n,$.中心语=%%n
+	=>NP( T<the> !N<number> P<of> N<user> ) %%N.NNUM=PLUR
+&& {zheyidian} np->r<这|那> !m<一点>
+   	=>NP(T/r !N<point>)
+&& {djdui} dj -> np !v<对> np ::$.内部结构=主谓,$.主语=%np,$.谓语=%v,%np.语义类=人类,%%np.语义类=人类,%v.客体=%%np,%v.宾语=%%np
+	=>CS( NP/np !P/v NP//np )
+&& {gallupmd} np->n<盖洛普> !n<民调> 
+   	=>NP(N/n !N//n)
+&& {xianghao} dj->np !v<向好>
+   	=>CS(NP/np !V<become> A<better>)
+&& {nptpnp} np->tp !np
+   	=>NP(NP/np P<on> NP/tp)
+&& {tpttp} tp->t !tp
+   	=>NP(N/t !NP/tp)
+&& {lingmp} mp->r<另> !mp
+   	=>NP(A<other> !M/mp)
+&& {zaitp} tp->p<在> tp
+	=> PP(P<in> NP/tp)
+&& {jiang} vp->p<将> np !v pp :: %v.体谓准=体
+	=> VP(!V/v NP/np PP/pp)
+&& {djvpshi2} dj -> tp !v<是> np :: $.内部结构=主谓,$.主语=%tp  /* 1992年是我们艰苦拼搏的一年 */
+	|| %tp.量词子类=时量
+	=>CS( NP/tp !V<be> !NP/np ) %V.VRFLX=VS
+&& {vpshigy/是关于农村生活的} vp -> !v<是> pp u<的>   ::$.内部结构=述宾,%pp.yx=关于,$.连接成分=No
+	=>VP( !V/v PP/pp )
+&& {vpshide1} vp -> !v<是> vp u<的>   ::$.内部结构=是字,IF %vp.内部结构=单词 THEN %vp.助动词=NO ELSE %vp.yx=~有 ENDIF,$.附加语=%u,$==%vp @否定 @被动,$.连接成分=No
+	|| {vpshide1.1} %vp.yx=~用
+	=>VP( !VP/vp ) $.PAST=YES
+	|| {vpshide1.2} %vp.yx=用,%vp.内部结构=状中,%vp.状语.yx=没
+	=>VP( !V<be> D<not> A<useful> )
+	|| {vpshide1.3} %vp.yx=用,%vp.内部结构=状中,%vp.状语.yx=不
+	=>VP( !V<be> D<not> PP( P<in> N<use> ) )
+&& {djshide0} dj -> np !v<是> np vp u<的>   ::$.内部结构=是字,%vp.配价数=2|3,%vp.内部结构=述补,%vp.宾语=No,$.主语=%np,$.谓语=%v,%vp.主体=%%np,%vp.客体=%np
+	=>CS( NP/np !VP/vp P<by> NP//np ) %NP.RCASE=SUB,%VP.NNUM=%NP.NNUM,%VP.PAST=YES,%VP.VOICE=PASS
+&& {djshide2} dj -> np !v<是> vp u<的> np   ::$.内部结构=是字,%vp.配价数=2|3,%vp.主体=%np,%vp.客体=%%np,%vp.内部结构=~述宾,%vp.宾语=No,$.主语=%np,$.谓语=%v
+	=>CS( NP/np !VP/vp NP//np ) %NP.RCASE=SUB,%VP.PAST=YES
+&& {djshide3} dj -> np !v<是> dj u<的>   ::$.内部结构=主谓,%dj.内部结构=主谓,%dj.谓语.宾语=No,%dj.谓语.汉语词类=v,%dj.谓语.客体=%np,$.连接成分=No,IF %dj.语气=疑问,%dj.主题成分=Yes THEN $!=%v @语气 @主题成分,$==%dj @语气 @主题成分 ENDIF,IF %np.语气=疑问,%np.主题成分=Yes THEN $!=%v @语气 @主题成分,$==%np @语气 @主题成分 ENDIF
+	=>CS( !CS/dj NP/np ) %CS.PERF=YES
+&& {djshide4/是想家想的} dj -> dj !v<是> vp vp u<的>   ::%vp==%%vp @yx @客体,%vp.内部结构=述宾
+	=>CS( C<that> CS/dj !V<be> C<because> P<of> VP/vp )
+&& {djywshi} dj -> !dj( np !vp ) w<"，"> v<是> d<不> v<是>   ::$.内部结构=扩展,$!=%dj @语气,$.语气=疑问
+	=>CS( CS/dj( NP/np !VP/vp ) )
+&& {nplhshi} np -> v<是> !np c<而> c<不是> np   ::$.内部结构=联合,%np.语义类=%%np.语义类
+	=>NP( !NP/np C<but> D<not> NP//np ) %NP.RCASE=%%NP.RCASE
+&& {djnpshivp} dj->np v<是> vp
+   	=> CS(NP/np V<be> VP/vp) %VP.FORM=VG
+&& {vplwlai1} vp -> vp v<来> !vp   ::$.内部结构=连谓,%vp.内部结构=述宾|单词,%vp.yx=~要,%%vp.内部结构=~状中,%vp.yx=~有,IF %%vp.内部结构=单词,%%vp.兼类=u|y FALSE,%vp.助动词=NO,%vp.yx=~会
+	|| %vp.yx=~让
+	=>VP( !VP/vp P<to> VP//vp ) %%VP.FORM=RT,$==%VP @FORM @PAST @FUTR @CONT @PERF @VOICE
+	|| %vp.yx=让
+	=>VP( !VP/vp VP//vp ) %%VP.FORM=RT,$==%VP @FORM @PAST @FUTR @CONT @PERF @VOICE
+&& {vplwlai2} vp -> v<去|来> !v 
+	=> VP(!V//v)
